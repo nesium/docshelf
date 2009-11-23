@@ -18,6 +18,7 @@
 @implementation FlexHelpViewerApp
 
 - (void)awakeFromNib{
+	m_selectedNode = nil;
 	m_history = [[NSMutableArray alloc] init];
 	m_historyIndex = 0;
 	m_appDelegate = [[AppDelegate alloc] init];
@@ -121,10 +122,10 @@
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object 
 	change:(NSDictionary *)change context:(void *)context{
-	if ([[object selectedObjects] count] < 1){
-		[self loadPage:@"about:blank"];
-		return;
-	}
+//	if ([[object selectedObjects] count] < 1){
+//		[self loadPage:@"about:blank"];
+//		return;
+//	}
 	NSObject *selection = [object valueForKeyPath:@"selection.self"];
 	if ([selection isMemberOfClass:[ClassNode class]]){
 		[self loadPageForClassNode:(ClassNode *)selection];
@@ -164,11 +165,13 @@
 }
 
 - (void)loadPageForClassNode:(ClassNode *)aNode{
+	if (m_selectedNode == aNode || aNode == nil)
+		return;
+	m_selectedNode = aNode;
 	NSMutableString *html = [NSMutableString stringWithContentsOfFile:[[NSBundle mainBundle] 
 		pathForResource:@"class" ofType:@"html"] encoding:NSUTF8StringEncoding error:nil];
 	[html replaceOccurrencesOfString:@"%BODY%" withString:[aNode htmlString] 
 		options:0 range:(NSRange){0, [html length]}];
-	NSLog(@"%@", html);
 	[[m_webView mainFrame] loadHTMLString:html 
 		baseURL:[NSURL fileURLWithPath:[[NSBundle mainBundle] resourcePath]]];
 }

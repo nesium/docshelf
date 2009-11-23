@@ -34,6 +34,7 @@
 	FlexDocsParser *m_parser;
 	NSMutableArray *m_history;
 	NSUInteger m_historyIndex;
+	AbstractNode *m_selectedNode;
 }
 - (IBAction)updateFilter:(id)sender;
 - (IBAction)navigateInHistory:(id)sender;
