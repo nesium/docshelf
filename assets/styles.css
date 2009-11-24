@@ -34,12 +34,14 @@ h2{
 	margin-left: -20px;
 	margin-right: -20px;
 	padding: 5px 20px;
+	margin-bottom: 0;
 }
 
 h3{
 	font-family: HelveticaNeue-Light, 'Helvetica Neue Light', 'Helvetica Neue', Arial, Helvetica, sans-serif;
 	font-weight: 300;
 	font-size: 18px;
+	margin-top: 30px;
 }
 
 a{
@@ -66,7 +68,7 @@ div.MainContent hr{
 hr{
 	height: 1px;
 	background-color: #d0d0d0;
-	margin: 30px -20px;
+	margin: 30px -20px 0;
 	border: 0;
 	border-bottom: 1px solid #fff;
 }

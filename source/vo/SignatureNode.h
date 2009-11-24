@@ -14,4 +14,9 @@
 }
 @property (retain) NSString *signature;
 @property (retain) NSNumber *isInherited;
+@property (nonatomic, readonly) NSString *anchor;
+
+- (NSSet *)children;
+- (NSUInteger)numChildren;
+- (BOOL)isLeaf;
 @end

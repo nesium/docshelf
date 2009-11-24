@@ -24,17 +24,31 @@ NSInteger sortSubnodes(id num1, id num2, void *context){
 
 - (NSSet *)methodNodes{
 	return [self.signatureNodes filteredSetUsingPredicate:[NSPredicate predicateWithFormat:
-		@"SELF.class = %@", [FunctionNode class]]];
+		@"class = %@ AND isInherited = NO", [FunctionNode class]]];
 }
 
 - (NSSet *)propertyNodes{
 	return [self.signatureNodes filteredSetUsingPredicate:[NSPredicate predicateWithFormat: 
-		@"SELF.class = %@", [VariableNode class]]];
+		@"class = %@ AND isInherited = NO", [VariableNode class]]];
 }
 
 - (NSSet *)eventNodes{
 	return [self.signatureNodes filteredSetUsingPredicate:[NSPredicate predicateWithFormat: 
-		@"SELF.class = %@", [EventNode class]]];
+		@"class = %@ AND isInherited = NO", [EventNode class]]];
+}
+
+- (NSSet *)children{
+	return [self.entities filteredSetUsingPredicate:[NSPredicate predicateWithFormat:
+		@"(class = %@ OR class = %@ OR class = %@) AND isInherited = NO", 
+		[FunctionNode class], [VariableNode class], [EventNode class]]];
+}
+
+- (NSUInteger)numChildren{
+	return [[self children] count];
+}
+
+- (BOOL)isLeaf{
+	return [self numChildren] < 1;
 }
 
 - (NSString *)htmlString{
@@ -52,7 +66,7 @@ NSInteger sortSubnodes(id num1, id num2, void *context){
 		[htmlString appendString:@"<h2>Methods</h2>"];
 	}
 	for (NSUInteger i = 0; i < numNodes; i++){
-		AbstractNode *node = [methodNodes objectAtIndex:i];
+		SignatureNode *node = [methodNodes objectAtIndex:i];
 		[htmlString appendString:[node htmlString]];
 		if (i < numNodes - 1)
 			[htmlString appendString:@"<hr />"];
@@ -65,7 +79,7 @@ NSInteger sortSubnodes(id num1, id num2, void *context){
 		[htmlString appendString:@"<h2>Properties</h2>"];
 	}
 	for (NSUInteger i = 0; i < numNodes; i++){
-		AbstractNode *node = [propertyNodes objectAtIndex:i];
+		SignatureNode *node = [propertyNodes objectAtIndex:i];
 		[htmlString appendString:[node htmlString]];
 		if (i < numNodes - 1)
 			[htmlString appendString:@"<hr />"];
@@ -78,7 +92,7 @@ NSInteger sortSubnodes(id num1, id num2, void *context){
 		[htmlString appendString:@"<h2>Events</h2>"];
 	}
 	for (NSUInteger i = 0; i < numNodes; i++){
-		AbstractNode *node = [eventNodes objectAtIndex:i];
+		SignatureNode *node = [eventNodes objectAtIndex:i];
 		[htmlString appendString:[node htmlString]];
 		if (i < numNodes - 1)
 			[htmlString appendString:@"<hr />"];

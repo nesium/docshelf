@@ -13,9 +13,26 @@
 @dynamic signature;
 @dynamic isInherited;
 
+- (NSSet *)children{
+	return nil;
+}
+
+- (NSUInteger)numChildren{
+	return 0;
+}
+
+- (BOOL)isLeaf{
+	return YES;
+}
+
+- (NSString *)anchor{
+	return [[NSURL URLWithString:self.filepath] fragment];
+}
+
 - (NSString *)htmlString{
 	NSMutableString *htmlString = [NSMutableString string];
-	if (self.signature != nil) 
+	[htmlString appendFormat:@"<a name='%@'></a>", self.anchor];
+	if (self.signature != nil)
 		[htmlString appendFormat:@"<h3>%@</h3>", self.signature];
 	if (self.detail != nil)
 		[htmlString appendString:self.detail];

@@ -92,7 +92,7 @@
 	
 	[m_contentsController addObserver:self forKeyPath:@"selection" 
 		options:0 context:NULL];
-	[m_signatureController addObserver:self forKeyPath:@"selection" 
+	[m_treeController addObserver:self forKeyPath:@"selection" 
 		options:0 context:NULL];
 	
 	[m_mainWindow setDelegate:m_appDelegate];
@@ -126,10 +126,20 @@
 //		[self loadPage:@"about:blank"];
 //		return;
 //	}
-	NSObject *selection = [object valueForKeyPath:@"selection.self"];
-	if ([selection isMemberOfClass:[ClassNode class]]){
-		[self loadPageForClassNode:(ClassNode *)selection];
-		[self recordHistoryItem:(ClassNode *)selection];
+	if (object == m_contentsController){
+		NSObject *selection = [object valueForKeyPath:@"selection.self"];
+		if ([selection isMemberOfClass:[ClassNode class]]){
+			[self loadPageForClassNode:(ClassNode *)selection];
+			[self recordHistoryItem:(ClassNode *)selection];
+		}
+	}else if (object == m_treeController){
+		if ([[m_treeController selectedObjects] count] == 0)
+			return;
+		NSObject *selection = [object valueForKeyPath:@"selection.self"];
+		
+		WebScriptObject *window = [m_webView windowScriptObject];
+		[window evaluateWebScript:[NSString stringWithFormat:@"location.href='#%@';", 
+			[(SignatureNode *)selection anchor]]];
 	}
 }
 

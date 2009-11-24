@@ -18,4 +18,8 @@
 - (NSSet *)methodNodes;
 - (NSSet *)propertyNodes;
 - (NSSet *)eventNodes;
+
+- (NSSet *)children;
+- (NSUInteger)numChildren;
+- (BOOL)isLeaf;
 @end

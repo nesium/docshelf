@@ -13,6 +13,8 @@
 		2C53676510B9C38300D9C0E4 /* inherit-arrow.gif in Resources */ = {isa = PBXBuildFile; fileRef = 2C53676410B9C38300D9C0E4 /* inherit-arrow.gif */; };
 		2C53681210B9D14600D9C0E4 /* RSVerticallyCenteredTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C53681110B9D14600D9C0E4 /* RSVerticallyCenteredTextFieldCell.m */; };
 		2C662FBF10B8D5A000D7232B /* NameTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C662FBE10B8D5A000D7232B /* NameTransformer.m */; };
+		2C6D218D10BC97B3004A6A12 /* HeadlineCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C6D218C10BC97B3004A6A12 /* HeadlineCell.m */; };
+		2C6D222010BCA4F0004A6A12 /* MultiCellTableColumn.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C6D221F10BCA4F0004A6A12 /* MultiCellTableColumn.m */; };
 		2C71F8AC0DD8A73200270C0F /* EventNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C71F8AB0DD8A73200270C0F /* EventNode.m */; };
 		2C7E38A110BA1148005B403B /* h2_background.gif in Resources */ = {isa = PBXBuildFile; fileRef = 2C7E38A010BA1148005B403B /* h2_background.gif */; };
 		2C803FCB0DE0DD8A0081D5D5 /* event.gif in Resources */ = {isa = PBXBuildFile; fileRef = 2C803FC90DE0DD8A0081D5D5 /* event.gif */; };
@@ -63,6 +65,10 @@
 		2C53681110B9D14600D9C0E4 /* RSVerticallyCenteredTextFieldCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSVerticallyCenteredTextFieldCell.m; sourceTree = "<group>"; };
 		2C662FBD10B8D5A000D7232B /* NameTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NameTransformer.h; sourceTree = "<group>"; };
 		2C662FBE10B8D5A000D7232B /* NameTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NameTransformer.m; sourceTree = "<group>"; };
+		2C6D218B10BC97B3004A6A12 /* HeadlineCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HeadlineCell.h; sourceTree = "<group>"; };
+		2C6D218C10BC97B3004A6A12 /* HeadlineCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HeadlineCell.m; sourceTree = "<group>"; };
+		2C6D221E10BCA4F0004A6A12 /* MultiCellTableColumn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MultiCellTableColumn.h; sourceTree = "<group>"; };
+		2C6D221F10BCA4F0004A6A12 /* MultiCellTableColumn.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MultiCellTableColumn.m; sourceTree = "<group>"; };
 		2C71F8AA0DD8A73200270C0F /* EventNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventNode.h; sourceTree = "<group>"; };
 		2C71F8AB0DD8A73200270C0F /* EventNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventNode.m; sourceTree = "<group>"; };
 		2C7E38A010BA1148005B403B /* h2_background.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = h2_background.gif; sourceTree = "<group>"; };
@@ -258,6 +264,8 @@
 		2CEE30B70DD6696E00CC762E /* util */ = {
 			isa = PBXGroup;
 			children = (
+				2C6D218B10BC97B3004A6A12 /* HeadlineCell.h */,
+				2C6D218C10BC97B3004A6A12 /* HeadlineCell.m */,
 				2C53681010B9D14600D9C0E4 /* RSVerticallyCenteredTextFieldCell.h */,
 				2C53681110B9D14600D9C0E4 /* RSVerticallyCenteredTextFieldCell.m */,
 				2CEE30B80DD6698100CC762E /* NodeClassToIconTransformer.h */,
@@ -266,6 +274,8 @@
 				2CF4C3DB0DE216C2005BE65F /* InheritedToColorTransformer.m */,
 				2C662FBD10B8D5A000D7232B /* NameTransformer.h */,
 				2C662FBE10B8D5A000D7232B /* NameTransformer.m */,
+				2C6D221E10BCA4F0004A6A12 /* MultiCellTableColumn.h */,
+				2C6D221F10BCA4F0004A6A12 /* MultiCellTableColumn.m */,
 			);
 			path = util;
 			sourceTree = "<group>";
@@ -425,6 +435,8 @@
 				2CC3919410B7745D00C35BD8 /* NSManagedObjectContext+Extensions.m in Sources */,
 				2C662FBF10B8D5A000D7232B /* NameTransformer.m in Sources */,
 				2C53681210B9D14600D9C0E4 /* RSVerticallyCenteredTextFieldCell.m in Sources */,
+				2C6D218D10BC97B3004A6A12 /* HeadlineCell.m in Sources */,
+				2C6D222010BCA4F0004A6A12 /* MultiCellTableColumn.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
