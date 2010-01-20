@@ -9,17 +9,14 @@
 #import <Cocoa/Cocoa.h>
 #import "AbstractXMLTreeParser.h"
 #import "ClassDetailParser.h"
-#import "PackageNode.h"
-#import "FunctionNode.h"
-#import "ClassNode.h"
-#import "InterfaceNode.h"
-#import "VariableNode.h"
 
 
 @interface PackageDetailParser : AbstractXMLTreeParser{
-	PackageNode *m_packageNode;
-	NSManagedObjectContext *m_context;
+	NSString *m_name;
 }
-- (id)initWithPackageNode:(PackageNode *)node filename:(NSString *)filename 
-	context:(NSManagedObjectContext *)context;
+- (NSString *)name;
+- (NSArray *)globalFunctions;
+- (NSArray *)classes;
+- (NSArray *)interfaces;
+- (NSArray *)constants;
 @end

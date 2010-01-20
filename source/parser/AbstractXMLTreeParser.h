@@ -7,28 +7,33 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import "AbstractNode.h"
+#import "FHVImportContext.h"
+#import "NSString+FHVUtils.h"
 
 
 @interface AbstractXMLTreeParser : NSObject{
 	NSString *m_filePath;
+	NSURL *m_fileURL;
 	NSXMLDocument *m_xmlTree;
+	FHVImportContext *m_context;
 }
-- (id)initWithFile:(NSString *)file;
-- (void)parse;
-- (id)objectValue;
+- (id)initWithFile:(NSString *)file context:(FHVImportContext *)context;
 @end
 
 @interface AbstractXMLTreeParser (Protected)
-- (void)parseTree;
 - (NSXMLElement *)firstNodeForXPath:(NSString *)query ofElement:(NSXMLElement *)elem;
 - (NSXMLElement *)summaryTable;
 - (NSXMLElement *)summaryTableForType:(NSString *)type;
 - (NSArray *)rowsForSummaryTable:(NSXMLElement *)table;
 - (void)handleParsingError:(NSError *)error;
-- (NSDictionary *)componentsForSummaryTableRow:(NSXMLElement *)row;
-- (NSSet *)summaryTable:(NSXMLElement *)table toNodes:(Class)nodeClass 
-	context:(NSManagedObjectContext *)context;
-- (NSSet *)summaryTableOfType:(NSString *)type toNodes:(Class)nodeClass 
-	context:(NSManagedObjectContext *)context;
+- (NSMutableDictionary *)componentsForSummaryTableRow:(NSXMLElement *)row;
+- (NSArray *)summaryTableToObjects:(NSXMLElement *)table;
+- (NSArray *)summaryTableOfTypeToObjects:(NSString *)type;
+@end
+
+
+@interface AbstractXMLTreeParser (Protected)
+- (NSString *)_prepareAttributesInElement:(NSXMLElement *)elem;
+- (NSString *)_detailStringForLinkName:(NSString *)linkName;
+- (NSString *)_urlToIdent:(NSURL *)url;
 @end

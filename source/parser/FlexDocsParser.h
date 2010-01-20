@@ -10,18 +10,19 @@
 #import "AbstractXMLTreeParser.h"
 #import "PackageSummaryParser.h"
 #import "PackageDetailParser.h"
-#import "PackageNode.h"
+#import "FHVClassParserOperation.h"
+#import "FHVImportContext.h"
+#import "utils.h"
+#import "SQLiteImporter.h"
 
 
-@interface FlexDocsParser : NSObject 
-{
+@interface FlexDocsParser : NSObject{
 	NSString *m_path;
-	NSManagedObjectContext *m_context;
+	NSOperationQueue *m_classParsingQueue;
+	FHVImportContext *m_context;
+	SQLiteImporter *m_importer;
 }
-
 @property (retain) NSString *path;
-
 - (id)initWithPath:(NSString *)path;
 - (void)parse;
-
 @end

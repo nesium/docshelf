@@ -8,12 +8,10 @@
 
 #import <Cocoa/Cocoa.h>
 #import <WebKit/WebKit.h>
-#import "PackageNode.h"
 #import "AbstractXMLTreeParser.h"
 
 
 @interface PackageSummaryParser : AbstractXMLTreeParser{
-	NSManagedObjectContext *m_context;
 }
-- (id)initWithFile:(NSString *)file context:(NSManagedObjectContext *)context;
+- (NSArray *)packages;
 @end

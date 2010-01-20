@@ -10,7 +10,7 @@
 
 @interface FlexHelpViewerApp (Private)
 - (void)loadPage:(NSString *)urlString;
-- (void)parseFlexDocs;
+- (void)_parseDocsAtPath:(NSString *)aPath;
 - (void)startHelpViewer;
 @end
 
@@ -18,27 +18,26 @@
 @implementation FlexHelpViewerApp
 
 - (void)awakeFromNib{
-	m_selectedNode = nil;
 	m_history = [[NSMutableArray alloc] init];
 	m_historyIndex = 0;
 	m_appDelegate = [[AppDelegate alloc] init];
 	[NSApp setDelegate:m_appDelegate];
-	if (![[NSFileManager defaultManager] fileExistsAtPath:[[m_appDelegate persistentStoreURL] path]]){
-		[self parseFlexDocs];
-		return;
-	}
+//	if (![[NSFileManager defaultManager] fileExistsAtPath:[[m_appDelegate persistentStoreURL] path]]){
+//		[self parseFlexDocs];
+//		return;
+//	}
 	[self startHelpViewer];
 }
 
 - (IBAction)updateFilter:(id)sender{
 	if (![[m_searchField stringValue] length]){
-		[m_contentsController setFilterPredicate:nil];
-		[m_contentsController setSelectionIndex:0];
+//		[m_contentsController setFilterPredicate:nil];
+//		[m_contentsController setSelectionIndex:0];
 		return;
 	}
-	[m_contentsController setFilterPredicate:[NSPredicate predicateWithFormat:@"name CONTAINS[cd] %@", 
-		[m_searchField stringValue]]];
-	[m_contentsController setSelectionIndex:0];
+//	[m_contentsController setFilterPredicate:[NSPredicate predicateWithFormat:@"name CONTAINS[cd] %@", 
+//		[m_searchField stringValue]]];
+//	[m_contentsController setSelectionIndex:0];
 }
 
 - (void)controlTextDidChange:(NSNotification *)aNotification{
@@ -46,37 +45,39 @@
 }
 
 - (IBAction)navigateInHistory:(id)sender{
-	if ([(NSSegmentedControl *)sender selectedSegment] == 0){
-		m_historyIndex--;
-		[self selectAndLoadClassNode:[m_history objectAtIndex:m_historyIndex]];
-	}else{
-		m_historyIndex++;
-		[self selectAndLoadClassNode:[m_history objectAtIndex:m_historyIndex]];
-	}
-	[self updateBackForwardControl];
+//	if ([(NSSegmentedControl *)sender selectedSegment] == 0){
+//		m_historyIndex--;
+//		[self selectAndLoadClassNode:[m_history objectAtIndex:m_historyIndex]];
+//	}else{
+//		m_historyIndex++;
+//		[self selectAndLoadClassNode:[m_history objectAtIndex:m_historyIndex]];
+//	}
+//	[self updateBackForwardControl];
 }
 
-- (void)parseFlexDocs{
+- (void)_parseDocsAtPath:(NSString *)aPath{
 	NSConnection *conn = [NSConnection defaultConnection];
 	[conn setRootObject:self];
 	[conn registerName:@"com.nesium.FlexHelpViewer"];
-
 	[m_importWindow makeKeyAndOrderFront:self];
 	[m_importWindow center];
-	
-//	NSString *path = [[[NSBundle mainBundle] resourcePath] 
-//		stringByAppendingPathComponent:@"flexdocs"];
-	NSString *path = @"/Users/mb/Desktop/flexdocs";
-	
-	m_parser = [[FlexDocsParser alloc] initWithPath:path];
+	m_parser = [[FlexDocsParser alloc] initWithPath:aPath];
 	[NSThread detachNewThreadSelector:@selector(parse) toTarget:m_parser withObject:nil];
 }
 
-- (void)startHelpViewer{
+- (IBAction)addDocSet:(id)sender{
+	NSOpenPanel *op = [NSOpenPanel openPanel];
+	[op setAllowsMultipleSelection:NO];
+	[op setCanChooseFiles:NO];
+	[op setCanChooseDirectories:YES];
+	[op beginSheetModalForWindow:m_mainWindow 
+		completionHandler:^(NSInteger result){
+			if (result == NSFileHandlingPanelCancelButton) return;
+			[self _parseDocsAtPath:[[[op URLs] objectAtIndex:0] path]];
+		}];
+}
 
-//	NSArray *all = [[m_appDelegate managedObjectContext] fetchObjectsForEntityName:@"PackageNode" 
-//		withPredicate:nil];
-	
+- (void)startHelpViewer{
 	[m_webView setResourceLoadDelegate:self];
 	[m_webView setPolicyDelegate:self];
 	[m_searchField setDelegate:self];
@@ -85,10 +86,10 @@
 	
 	NSEntityDescription *entityDescription = [NSEntityDescription
 		entityForName:[ClassNode className] inManagedObjectContext:[m_appDelegate managedObjectContext]];
-	NSFetchRequest *request = [[NSFetchRequest alloc] init];
+	NSFetchRequest *request = nil; //[[NSFetchRequest alloc] init];
 	[request setEntity:entityDescription];
 	NSError *error = nil;
-	NSArray *all = [[m_appDelegate managedObjectContext] executeFetchRequest:request error:&error];
+	//NSArray *all = [[m_appDelegate managedObjectContext] executeFetchRequest:request error:&error];
 	
 	[m_contentsController addObserver:self forKeyPath:@"selection" 
 		options:0 context:NULL];
@@ -97,7 +98,7 @@
 	
 	[m_mainWindow setDelegate:m_appDelegate];
 	//[m_contentsController setManagedObjectContext:[m_appDelegate managedObjectContext]];
-	[m_contentsController setContent:all];
+//	[m_contentsController setContent:all];
 //	NSLog(@"%@", [m_contentsController arrangedObjects]);
 	[m_mainWindow makeKeyAndOrderFront:self];
 }
@@ -202,6 +203,10 @@
 	[m_backForwardSegmentedCell setEnabled:(m_historyIndex > 0) forSegment:0];
 	[m_backForwardSegmentedCell setEnabled:([m_history count] && m_historyIndex < [m_history count] - 1) 
 		forSegment:1];
+}
+
+- (IBAction)focusGlobalSearchField:(id)sender{
+	[m_mainWindow makeFirstResponder:m_searchField];
 }
 
 

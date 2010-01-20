@@ -9,10 +9,7 @@
 #import <Cocoa/Cocoa.h>
 #import <WebKit/WebKit.h>
 #import "FlexDocsParser.h"
-#import "AppDelegate.h"
-#import "SignatureNode.h"
-#import "ClassNode.h"
-#import "FunctionNode.h"
+#import "FHVAppDelegate.h"
 #import "NSManagedObjectContext+Extensions.h"
 
 @interface FlexHelpViewerApp : NSObject{
@@ -30,22 +27,20 @@
 	IBOutlet NSSearchField *m_searchField;
 	IBOutlet NSSegmentedCell *m_backForwardSegmentedCell;
 	
-	AppDelegate *m_appDelegate;
 	FlexDocsParser *m_parser;
 	NSMutableArray *m_history;
 	NSUInteger m_historyIndex;
-	AbstractNode *m_selectedNode;
 }
 - (IBAction)updateFilter:(id)sender;
 - (IBAction)navigateInHistory:(id)sender;
+- (IBAction)focusGlobalSearchField:(id)sender;
+- (IBAction)addDocSet:(id)sender;
 
 - (void)setStatusMessage:(NSString *)message;
 - (void)setProgressIsIndeterminate:(BOOL)bFlag;
 - (void)setProgress:(double)progress;
 - (void)setMaxProgressValue:(double)value;
 - (void)parsingComplete;
-- (void)loadPageForClassNode:(ClassNode *)aNode;
-- (void)selectAndLoadClassNode:(ClassNode *)aNode;
-- (void)recordHistoryItem:(ClassNode *)aNode;
+//- (void)recordHistoryItem:(ClassNode *)aNode;
 - (void)updateBackForwardControl;
 @end

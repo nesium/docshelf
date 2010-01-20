@@ -8,10 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 #import "AbstractXMLTreeParser.h"
-#import "ClassNode.h"
-#import "FunctionNode.h"
-#import "EventNode.h"
-#import "VariableNode.h"
+#import "utils.h"
 
 typedef enum _ASScope{
 	PublicScope,
@@ -20,8 +17,13 @@ typedef enum _ASScope{
 
 
 @interface ClassDetailParser : AbstractXMLTreeParser{
-	ClassNode *m_classNode;
-	NSManagedObjectContext *m_context;
+	NSString *m_name;
+	NSString *m_ident;
 }
-- (id)initWithClassNode:(ClassNode *)node context:(NSManagedObjectContext *)context;
+- (NSString *)name;
+- (NSString *)ident;
+- (NSString *)detail;
+- (NSArray *)methodsWithScope:(ASScope)scope;
+- (NSArray *)propertiesWithScope:(ASScope)scope constants:(BOOL)parseConstants;
+- (NSArray *)events;
 @end

@@ -9,91 +9,93 @@
 #import "ClassDetailParser.h"
 
 @interface ClassDetailParser (Private)
-- (void)parseDetail;
-- (void)parseMethodTableWithScope:(ASScope)scope;
-- (void)parsePropertyTableWithScope:(ASScope)scope constants:(BOOL)parseConstants;
-- (void)parseEventTable;
-- (NSString *)detailStringForLinkName:(NSString *)linkName;
-- (void)dispatchStatusMessage:(NSString *)message;
-- (NSArray *)rowsForClassSummaryTable:(NSString *)tableId;
+- (NSString *)_detailStringForLinkName:(NSString *)linkName;
+- (NSArray *)_rowsForClassSummaryTable:(NSString *)tableId;
+- (NSString *)_prepareAttributesInElement:(NSXMLElement *)elem;
 @end
 
 
 @implementation ClassDetailParser
 
-- (id)initWithClassNode:(ClassNode *)node context:(NSManagedObjectContext *)context{
-	if (self = [super initWithFile:node.filepath]){
-		m_classNode = [node retain];
-		m_context = [context retain];
+- (id)initWithFile:(NSString *)file context:(FHVImportContext *)context{
+	m_name = nil;
+	if (self = [super initWithFile:file context:context]){
+		if ([[[file lastPathComponent] lowercaseString] isEqualToString:@"package.html"])
+			m_name = nil;
+		else{
+			m_name = [[[self firstNodeForXPath:@"/html/body/div[@id='banner'][1]/table[@class='titleTable'][1]//h1[1]" 
+				ofElement:nil] stringValue] retain];
+		}
+		m_ident = [[file packageNameByResolvingAgainstBasePath:context.path] retain];
 	}
 	return self;
 }
 
 - (void)dealloc{
-	[m_classNode release];
-	[m_context release];
+	[m_name release];
+	[m_ident release];
 	[super dealloc];
 }
 
-- (void)parseTree{
-	[self dispatchStatusMessage:[NSString stringWithFormat:@"%@::%@", m_classNode.parent.name,
-		m_classNode.name]];
-	[self parseDetail];
-	[self parseMethodTableWithScope:PublicScope];
-	[self parseMethodTableWithScope:ProtectedScope];
-	[self parsePropertyTableWithScope:PublicScope constants:NO];
-	[self parsePropertyTableWithScope:ProtectedScope constants:NO];
-	[self parsePropertyTableWithScope:PublicScope constants:YES];
-	[self parseEventTable];
+- (NSString *)name{
+	return m_name;
 }
 
-- (void)parseDetail{
-	m_classNode.detail = [[self firstNodeForXPath:@"/html/body/div[@class='MainContent'][1]" ofElement:nil] 
-		XMLStringWithOptions:0]; //NSXMLNodePrettyPrint | NSXMLDocumentTidyHTML
+- (NSString *)ident{
+	return m_ident;
 }
 
-- (void)parseMethodTableWithScope:(ASScope)scope{
+- (NSString *)detail{
+	NSXMLElement *detailElem = [self firstNodeForXPath:@"/html/body/div[@class='MainContent'][1]" 
+		ofElement:nil];
+	return [self _prepareAttributesInElement:detailElem];
+}
+
+- (NSArray *)methodsWithScope:(ASScope)scope{
 	NSString *tableId = scope == PublicScope 
 		? @"summaryTableMethod" 
 		: @"summaryTableProtectedMethod";
 	
 	NSString *signatureExpr = @"./td/div[@class='summarySignature'][1]";
 	NSString *summaryExpr = @"./td/div[@class='summaryTableDescription'][1]";
-	NSString *ownerExpr = @"./td[@class='summaryTableOwnerCol'][1]";
+	NSString *ownerExpr = @"./td[@class='summaryTableOwnerCol'][1]/a[1]";
 	NSString *signatureLinkExpr = @"./a[@class='signatureLink'][1]";
 	NSCharacterSet *set = [NSCharacterSet whitespaceAndNewlineCharacterSet];
 	
-	NSArray *rows = [self rowsForClassSummaryTable:tableId];
-	NSMutableSet *methods = [[NSMutableSet alloc] initWithCapacity:[rows count]];
+	NSArray *rows = [self _rowsForClassSummaryTable:tableId];
+	NSMutableArray *methods = [NSMutableArray arrayWithCapacity:[rows count]];
 	for (NSXMLElement *row in rows){
 		NSXMLElement *signature = [self firstNodeForXPath:signatureExpr ofElement:row];
 		NSXMLElement *summary = [self firstNodeForXPath:summaryExpr ofElement:row];
 		NSXMLElement *owner = [self firstNodeForXPath:ownerExpr ofElement:row];
-		NSString *signatureLink = [[[self firstNodeForXPath:signatureLinkExpr ofElement:signature] 
-			attributeForName:@"href"] stringValue];
+		NSXMLElement *signatureLink = [self firstNodeForXPath:signatureLinkExpr ofElement:signature];
+		NSString *signatureLinkHref = [[signatureLink attributeForName:@"href"] stringValue];
 		
-		NSURL *linkURL = [NSURL URLWithString:signatureLink 
-			relativeToURL:[NSURL URLWithString:m_classNode.filepath]];
-		BOOL isInheritated = ![[[owner stringValue] 
-			stringByTrimmingCharactersInSet:set] isEqualToString:m_classNode.name];
+		NSURL *linkURL = [NSURL URLWithString:signatureLinkHref relativeToURL:m_fileURL];
+		BOOL isInherited = owner != nil;
+		NSURL *implementorURL = nil;
 		
-		FunctionNode *method = [[FunctionNode alloc] 
-			initWithManagedObjectContext:m_context];
-		if (!isInheritated) method.detail = [self detailStringForLinkName:signatureLink];
-		method.filepath = [linkURL absoluteString];
-		method.signature = [[signature stringValue] stringByTrimmingCharactersInSet:set];
-		method.summary = [[summary stringValue] 
-			stringByTrimmingCharactersInSet:set];	
-		method.isInherited = [NSNumber numberWithBool:isInheritated];
-		method.parent = m_classNode;
+		if (isInherited){
+			implementorURL = [NSURL URLWithString:[[owner attributeForName:@"href"] stringValue] 
+				relativeToURL:m_fileURL];
+//			NSLog(@"%@", [[implementorURL absoluteString] 
+//				packageNameByResolvingAgainstBasePath:m_context.path]);
+		}
+		
+		NSDictionary *method = [NSDictionary dictionaryWithObjectsAndKeys: 
+			[self _urlToIdent:linkURL], @"ident", 
+			[signatureLink stringValue], @"name", 
+			[self _prepareAttributesInElement:signature], @"signature", 
+			[[summary stringValue] stringByTrimmingCharactersInSet:set], @"summary", 
+			[NSNumber numberWithBool:isInherited], @"inherited", 
+			(isInherited ? nil : [self _detailStringForLinkName:signatureLinkHref]), @"detail", 
+			nil];
 		[methods addObject:method];
-		[method release];
 	}
-	[m_classNode addEntities:methods];
-	[methods release];
+	return methods;
 }
 
-- (void)parsePropertyTableWithScope:(ASScope)scope constants:(BOOL)parseConstants{
+- (NSArray *)propertiesWithScope:(ASScope)scope constants:(BOOL)parseConstants{
 	NSString *tableId = @"summaryTableConstant";
 	if (!parseConstants){
 		tableId = scope == PublicScope 
@@ -107,46 +109,46 @@
 	NSString *summaryExpr = @"./div[@class='summaryTableDescription'][1]";
 	NSCharacterSet *set = [NSCharacterSet whitespaceAndNewlineCharacterSet];
 	
-	NSArray *rows = [self rowsForClassSummaryTable:tableId];
-	NSMutableSet *properties = [[NSMutableSet alloc] initWithCapacity:[rows count]];
+	NSArray *rows = [self _rowsForClassSummaryTable:tableId];
+	NSMutableArray *properties = [NSMutableArray arrayWithCapacity:[rows count]];
 	for (NSXMLElement *row in rows){
 		NSXMLElement *signatureContainer = [self firstNodeForXPath:signatureExpr ofElement:row];
-		NSString *signatureLink = [[[self firstNodeForXPath:signatureLinkExpr 
-			ofElement:signatureContainer] attributeForName:@"href"] stringValue];
+		NSXMLElement *signatureLink = [self firstNodeForXPath:signatureLinkExpr 
+			ofElement:signatureContainer];
+		NSString *signatureLinkHref = [[signatureLink attributeForName:@"href"] stringValue];
+		
 		NSXMLElement *summary = [self firstNodeForXPath:summaryExpr ofElement:signatureContainer];
 		[summary detach];
 		NSXMLElement *owner = [self firstNodeForXPath:ownerExpr ofElement:row];
 		
-		NSURL *linkURL = [NSURL URLWithString:signatureLink 
-			relativeToURL:[NSURL URLWithString:m_classNode.filepath]];
-		BOOL isInherited = ![[[owner stringValue] 
-			stringByTrimmingCharactersInSet:set] isEqualToString:m_classNode.name];
+		NSURL *linkURL = [NSURL URLWithString:signatureLinkHref 
+			relativeToURL:[NSURL URLWithString:m_filePath]];
+		BOOL isInherited = m_name != nil && ![[[owner stringValue] 
+			stringByTrimmingCharactersInSet:set] isEqualToString:m_name];
 		
-		VariableNode *property = [[VariableNode alloc] 
-			initWithManagedObjectContext:m_context];
-		property.filepath = [linkURL absoluteString];
-		property.summary = [[summary stringValue] stringByTrimmingCharactersInSet:set];
-		property.signature = [[signatureContainer stringValue] stringByTrimmingCharactersInSet:set];
-		property.isInherited = [NSNumber numberWithBool:isInherited];
-		property.isConstant = [NSNumber numberWithBool:parseConstants];
-		property.parent = m_classNode;
-		if (!isInherited) property.detail = [self detailStringForLinkName:signatureLink];
+		NSDictionary *property = [NSDictionary dictionaryWithObjectsAndKeys:
+			[self _urlToIdent:linkURL], @"ident", 
+			[signatureLink stringValue], @"name", 
+			[[summary stringValue] stringByTrimmingCharactersInSet:set], @"summary", 
+			[self _prepareAttributesInElement:signatureLink], @"signature", 
+			[NSNumber numberWithBool:isInherited], @"inherited", 
+			[NSNumber numberWithBool:parseConstants], @"constant", 
+			(isInherited ? nil : [self _detailStringForLinkName:signatureLinkHref]), @"detail", 
+			nil];
 		[properties addObject:property];
-		[property release];
 	}
-	[m_classNode addEntities:properties];
-	[properties release];
+	return properties;
 }
 
-- (void)parseEventTable{
+- (NSArray *)events{
 	NSString *signatureExpr = @"./td/div[@class='summarySignature'][1]";
 	NSString *summaryExpr = @"./td[starts-with(@class, 'summaryTableDescription')][1]";
 	NSString *ownerExpr = @"./td[@class='summaryTableOwnerCol'][1]";
 	NSString *signatureLinkExpr = @"./a[@class='signatureLink'][1]";
 	NSCharacterSet *set = [NSCharacterSet whitespaceAndNewlineCharacterSet];
 
-	NSArray *rows = [self rowsForClassSummaryTable:@"summaryTableEvent"];
-	NSMutableSet *events = [[NSMutableSet alloc] initWithCapacity:[rows count]];
+	NSArray *rows = [self _rowsForClassSummaryTable:@"summaryTableEvent"];
+	NSMutableArray *events = [NSMutableArray arrayWithCapacity:[rows count]];
 	for (NSXMLElement *row in rows){
 		NSXMLElement *signature = [self firstNodeForXPath:signatureExpr ofElement:row];
 		NSXMLElement *summary = [self firstNodeForXPath:summaryExpr ofElement:row];
@@ -155,35 +157,32 @@
 			attributeForName:@"href"] stringValue];
 		
 		NSURL *linkURL = [NSURL URLWithString:signatureLink 
-			relativeToURL:[NSURL URLWithString:m_classNode.filepath]];
+			relativeToURL:[NSURL URLWithString:m_filePath]];
 		BOOL isInherited = ![[[owner stringValue] 
-			stringByTrimmingCharactersInSet:set] isEqualToString:m_classNode.name];
+			stringByTrimmingCharactersInSet:set] isEqualToString:m_name];
 		
-		EventNode *event = [[EventNode alloc] 
-			initWithManagedObjectContext:m_context];
-		event.signature = [[signature stringValue] stringByTrimmingCharactersInSet:set];
-		event.filepath = [linkURL absoluteString];
-		event.summary = [[summary stringValue] 
-			stringByTrimmingCharactersInSet:set];
-		event.isInherited = [NSNumber numberWithBool:isInherited];
-		event.parent = m_classNode;
-		if (!isInherited) event.detail = [self detailStringForLinkName:signatureLink];
+		NSDictionary *event = [NSDictionary dictionaryWithObjectsAndKeys: 
+			[self _prepareAttributesInElement:signature], @"signature", 
+			[self _urlToIdent:linkURL], @"ident", 
+			[[summary stringValue] stringByTrimmingCharactersInSet:set], @"summary", 
+			[NSNumber numberWithBool:isInherited], @"inherited", 
+			(isInherited ? nil : [self _detailStringForLinkName:signatureLink]), @"detail", 
+			nil];
 		[events addObject:event];
-		[event release];
 	}
-	[m_classNode addEntities:events];
-	[events release];
+	return events;
 }
 
-- (void)dispatchStatusMessage:(NSString *)message{
-	[[NSNotificationCenter defaultCenter] postNotificationName:@"parsingStatusChangeNotification" 
-		object:self userInfo:[NSDictionary dictionaryWithObject:
-			[NSString stringWithFormat:@"Indexing %@", message] forKey:@"message"]];
-}
+- (NSArray *)_rowsForClassSummaryTable:(NSString *)tableId{
+	NSString *summaryTableExp = m_name == nil 
+		? @"/html/body/div[@class='MainContent'][1]//table[@id='%@'][1]" 
+		: @"/html/body/div/table[@id='%@'][1]";
 
-- (NSArray *)rowsForClassSummaryTable:(NSString *)tableId{
 	NSXMLElement *table = [self firstNodeForXPath:[NSString 
-		stringWithFormat:@"/html/body/div/table[@id='%@'][1]", tableId] ofElement:nil];
+		stringWithFormat:summaryTableExp, tableId] ofElement:nil];
+//	if (!table){
+//		NSLog(@"%@ - %@ - %@", tableId, m_name, m_filePath);
+//	}
 	//remove header
 	NSXMLElement *headerRow = [self firstNodeForXPath:@"./tr[1]" ofElement:table];
 	[headerRow detach];
@@ -191,13 +190,4 @@
 	NSArray *rows = [table nodesForXPath:@"./tr" error:&error];
 	return rows;
 }
-
-- (NSString *)detailStringForLinkName:(NSString *)linkName{
-	NSString *detailExpr = @"/html/body/div/a[@name='%@'][1]/following-sibling::div[@class='detailBody'][1]";
-	NSXMLElement *detail = [self firstNodeForXPath:
-		[NSString stringWithFormat:detailExpr, [linkName substringFromIndex:1]] 
-		ofElement:nil];
-	return [detail XMLStringWithOptions:NSXMLNodePrettyPrint | NSXMLDocumentTidyHTML];
-}
-
 @end

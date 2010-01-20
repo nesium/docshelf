@@ -7,8 +7,9 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "RSVerticallyCenteredTextFieldCell.h"
 
 
-@interface HeadlineCell : NSTextFieldCell{
+@interface HeadlineCell : RSVerticallyCenteredTextFieldCell{
 }
 @end

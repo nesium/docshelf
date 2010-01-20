@@ -7,17 +7,8 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import "InterfaceNode.h"
-#import "ClassNode.h"
-#import "VariableNode.h"
-#import "FunctionNode.h"
-#import "PackageNode.h"
-#import "EventNode.h"
 
-
-@interface NodeClassToIconTransformer : NSObject 
-{
+@interface NodeClassToIconTransformer : NSObject{
 
 }
-
 @end
