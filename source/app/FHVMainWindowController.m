@@ -156,6 +156,7 @@ static HeadlineCell *g_headlineCell = nil;
 			blue:0.455 alpha:1.000]];
 	}else{
 		[cell setTextColor:[NSColor blackColor]];
+		[cell setImage:[m_docSetModel imageForItem:item]];
 	}
 }
 

@@ -36,4 +36,5 @@
 - (NSURL *)URLForImageWithName:(NSString *)imageName;
 - (NSString *)anchorForItem:(id)item;
 - (void)setFilterString:(NSString *)filter;
+- (NSImage *)imageForItem:(id)item;
 @end

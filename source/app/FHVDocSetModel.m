@@ -208,6 +208,30 @@
 	[m_searchQueue addOperation:m_searchOp];
 }
 
+- (NSImage *)imageForItem:(id)item{
+	NSString *imageName = @"method";
+	FHVItemType itemType = [[item objectForKey:@"itemType"] intValue];
+	if (itemType == kItemTypePackage){
+		imageName = @"package";
+	}else if (itemType == kItemTypeClass){
+		imageName = [[item objectForKey:@"type"] intValue] == kClassTypeInterface 
+			? @"interface" : @"class";
+	}else{
+		FHVSignatureType sigType = [[item objectForKey:@"type"] intValue];
+		FHVSignatureParentType sigParentType = [[item objectForKey:@"parentType"] intValue];
+		if (sigType == kSigTypeFunction){
+			imageName = sigParentType == kSigParentTypeClass ? @"method" : @"function";
+		}else if (sigType == kSigTypeVariable){
+			imageName = @"property";
+		}else if (sigType == kSigTypeConstant){
+			imageName = @"constant";
+		}else if (sigType == kSigTypeEvent){
+			imageName = @"event";
+		}
+	}
+	return [NSImage imageNamed:[NSString stringWithFormat:@"%@.png", imageName]];
+}
+
 
 
 #pragma mark -

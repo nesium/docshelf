@@ -18,14 +18,19 @@
 		2C53676510B9C38300D9C0E4 /* inherit-arrow.gif in Resources */ = {isa = PBXBuildFile; fileRef = 2C53676410B9C38300D9C0E4 /* inherit-arrow.gif */; };
 		2C53681210B9D14600D9C0E4 /* RSVerticallyCenteredTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C53681110B9D14600D9C0E4 /* RSVerticallyCenteredTextFieldCell.m */; };
 		2C64D50C11028577008D90E0 /* utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C64D50B11028577008D90E0 /* utils.m */; };
-		2C662FBF10B8D5A000D7232B /* NameTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C662FBE10B8D5A000D7232B /* NameTransformer.m */; };
 		2C6D218D10BC97B3004A6A12 /* HeadlineCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C6D218C10BC97B3004A6A12 /* HeadlineCell.m */; };
 		2C6D222010BCA4F0004A6A12 /* MultiCellTableColumn.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C6D221F10BCA4F0004A6A12 /* MultiCellTableColumn.m */; };
 		2C7E38A110BA1148005B403B /* h2_background.gif in Resources */ = {isa = PBXBuildFile; fileRef = 2C7E38A010BA1148005B403B /* h2_background.gif */; };
-		2C803FCB0DE0DD8A0081D5D5 /* event.gif in Resources */ = {isa = PBXBuildFile; fileRef = 2C803FC90DE0DD8A0081D5D5 /* event.gif */; };
-		2C803FCC0DE0DD8A0081D5D5 /* method.gif in Resources */ = {isa = PBXBuildFile; fileRef = 2C803FCA0DE0DD8A0081D5D5 /* method.gif */; };
-		2C803FDF0DE0DF410081D5D5 /* property.gif in Resources */ = {isa = PBXBuildFile; fileRef = 2C803FDE0DE0DF410081D5D5 /* property.gif */; };
 		2C85E50C1107B6F8001920A7 /* FHVDocSetSearchOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C85E50B1107B6F8001920A7 /* FHVDocSetSearchOperation.m */; };
+		2C85E66C1107E19F001920A7 /* method.png in Resources */ = {isa = PBXBuildFile; fileRef = 2C85E66B1107E19F001920A7 /* method.png */; };
+		2C85E6711107E21F001920A7 /* HBImageAndTextCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C85E6701107E21F001920A7 /* HBImageAndTextCell.m */; };
+		2C85E6AA1107E585001920A7 /* class.png in Resources */ = {isa = PBXBuildFile; fileRef = 2C85E6A31107E585001920A7 /* class.png */; };
+		2C85E6AB1107E585001920A7 /* constant.png in Resources */ = {isa = PBXBuildFile; fileRef = 2C85E6A41107E585001920A7 /* constant.png */; };
+		2C85E6AC1107E585001920A7 /* event.png in Resources */ = {isa = PBXBuildFile; fileRef = 2C85E6A51107E585001920A7 /* event.png */; };
+		2C85E6AD1107E585001920A7 /* function.png in Resources */ = {isa = PBXBuildFile; fileRef = 2C85E6A61107E585001920A7 /* function.png */; };
+		2C85E6AE1107E585001920A7 /* interface.png in Resources */ = {isa = PBXBuildFile; fileRef = 2C85E6A71107E585001920A7 /* interface.png */; };
+		2C85E6AF1107E585001920A7 /* package.png in Resources */ = {isa = PBXBuildFile; fileRef = 2C85E6A81107E585001920A7 /* package.png */; };
+		2C85E6B01107E585001920A7 /* property.png in Resources */ = {isa = PBXBuildFile; fileRef = 2C85E6A91107E585001920A7 /* property.png */; };
 		2C8DC60E10FFF5D000DA41C9 /* PackageSummaryParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CFCB4510DD4F4FB0090049E /* PackageSummaryParser.m */; };
 		2C910165110646790031698D /* FHVDocSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C910164110646790031698D /* FHVDocSet.m */; };
 		2C910259110659C60031698D /* FHVMainWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C910258110659C60031698D /* FHVMainWindowController.m */; };
@@ -35,14 +40,8 @@
 		2CCFC17F110500590019F014 /* schema.sql in Resources */ = {isa = PBXBuildFile; fileRef = 2CCFC17E110500590019F014 /* schema.sql */; };
 		2CCFC1B2110512990019F014 /* SQLiteImporter.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CCFC1B1110512990019F014 /* SQLiteImporter.m */; };
 		2CEE304B0DD65FC700CC762E /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2CEE304A0DD65FC700CC762E /* WebKit.framework */; };
-		2CEE30A50DD668D300CC762E /* class.gif in Resources */ = {isa = PBXBuildFile; fileRef = 2CEE30A10DD668D300CC762E /* class.gif */; };
-		2CEE30A60DD668D300CC762E /* constant.gif in Resources */ = {isa = PBXBuildFile; fileRef = 2CEE30A20DD668D300CC762E /* constant.gif */; };
-		2CEE30A70DD668D300CC762E /* function.gif in Resources */ = {isa = PBXBuildFile; fileRef = 2CEE30A30DD668D300CC762E /* function.gif */; };
-		2CEE30A80DD668D300CC762E /* interface.gif in Resources */ = {isa = PBXBuildFile; fileRef = 2CEE30A40DD668D300CC762E /* interface.gif */; };
 		2CEE30BA0DD6698100CC762E /* NodeClassToIconTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CEE30B90DD6698100CC762E /* NodeClassToIconTransformer.m */; };
-		2CEE30BC0DD66B8100CC762E /* package.gif in Resources */ = {isa = PBXBuildFile; fileRef = 2CEE30BB0DD66B8100CC762E /* package.gif */; };
 		2CEFC3CC0DDF3B3100F92DC6 /* FHVAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CEFC3CB0DDF3B3100F92DC6 /* FHVAppDelegate.m */; };
-		2CF4C3DC0DE216C2005BE65F /* InheritedToColorTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CF4C3DB0DE216C2005BE65F /* InheritedToColorTransformer.m */; };
 		2CF5FB860DD5BCB40049C53D /* FlexDocsParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CF5FB850DD5BCB40049C53D /* FlexDocsParser.m */; };
 		2CFCB7BE0DD52CDA0090049E /* AbstractXMLTreeParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CFCB7BD0DD52CDA0090049E /* AbstractXMLTreeParser.m */; };
 		8D11072A0486CEB800E47090 /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 29B97318FDCFA39411CA2CEA /* MainMenu.nib */; };
@@ -73,18 +72,23 @@
 		2C53681110B9D14600D9C0E4 /* RSVerticallyCenteredTextFieldCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSVerticallyCenteredTextFieldCell.m; sourceTree = "<group>"; };
 		2C64D50A11028577008D90E0 /* utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = utils.h; sourceTree = "<group>"; };
 		2C64D50B11028577008D90E0 /* utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = utils.m; sourceTree = "<group>"; };
-		2C662FBD10B8D5A000D7232B /* NameTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NameTransformer.h; sourceTree = "<group>"; };
-		2C662FBE10B8D5A000D7232B /* NameTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NameTransformer.m; sourceTree = "<group>"; };
 		2C6D218B10BC97B3004A6A12 /* HeadlineCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HeadlineCell.h; sourceTree = "<group>"; };
 		2C6D218C10BC97B3004A6A12 /* HeadlineCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HeadlineCell.m; sourceTree = "<group>"; };
 		2C6D221E10BCA4F0004A6A12 /* MultiCellTableColumn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MultiCellTableColumn.h; sourceTree = "<group>"; };
 		2C6D221F10BCA4F0004A6A12 /* MultiCellTableColumn.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MultiCellTableColumn.m; sourceTree = "<group>"; };
 		2C7E38A010BA1148005B403B /* h2_background.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = h2_background.gif; sourceTree = "<group>"; };
-		2C803FC90DE0DD8A0081D5D5 /* event.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = event.gif; sourceTree = "<group>"; };
-		2C803FCA0DE0DD8A0081D5D5 /* method.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = method.gif; sourceTree = "<group>"; };
-		2C803FDE0DE0DF410081D5D5 /* property.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = property.gif; sourceTree = "<group>"; };
 		2C85E50A1107B6F8001920A7 /* FHVDocSetSearchOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FHVDocSetSearchOperation.h; sourceTree = "<group>"; };
 		2C85E50B1107B6F8001920A7 /* FHVDocSetSearchOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FHVDocSetSearchOperation.m; sourceTree = "<group>"; };
+		2C85E66B1107E19F001920A7 /* method.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = method.png; sourceTree = "<group>"; };
+		2C85E66F1107E21F001920A7 /* HBImageAndTextCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBImageAndTextCell.h; sourceTree = "<group>"; };
+		2C85E6701107E21F001920A7 /* HBImageAndTextCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBImageAndTextCell.m; sourceTree = "<group>"; };
+		2C85E6A31107E585001920A7 /* class.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = class.png; sourceTree = "<group>"; };
+		2C85E6A41107E585001920A7 /* constant.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = constant.png; sourceTree = "<group>"; };
+		2C85E6A51107E585001920A7 /* event.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = event.png; sourceTree = "<group>"; };
+		2C85E6A61107E585001920A7 /* function.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = function.png; sourceTree = "<group>"; };
+		2C85E6A71107E585001920A7 /* interface.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = interface.png; sourceTree = "<group>"; };
+		2C85E6A81107E585001920A7 /* package.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = package.png; sourceTree = "<group>"; };
+		2C85E6A91107E585001920A7 /* property.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = property.png; sourceTree = "<group>"; };
 		2C910163110646790031698D /* FHVDocSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FHVDocSet.h; sourceTree = "<group>"; };
 		2C910164110646790031698D /* FHVDocSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FHVDocSet.m; sourceTree = "<group>"; };
 		2C910257110659C60031698D /* FHVMainWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FHVMainWindowController.h; sourceTree = "<group>"; };
@@ -98,17 +102,10 @@
 		2CCFC1B0110512990019F014 /* SQLiteImporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SQLiteImporter.h; sourceTree = "<group>"; };
 		2CCFC1B1110512990019F014 /* SQLiteImporter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SQLiteImporter.m; sourceTree = "<group>"; };
 		2CEE304A0DD65FC700CC762E /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = /System/Library/Frameworks/WebKit.framework; sourceTree = "<absolute>"; };
-		2CEE30A10DD668D300CC762E /* class.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = class.gif; sourceTree = "<group>"; };
-		2CEE30A20DD668D300CC762E /* constant.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = constant.gif; sourceTree = "<group>"; };
-		2CEE30A30DD668D300CC762E /* function.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = function.gif; sourceTree = "<group>"; };
-		2CEE30A40DD668D300CC762E /* interface.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = interface.gif; sourceTree = "<group>"; };
 		2CEE30B80DD6698100CC762E /* NodeClassToIconTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NodeClassToIconTransformer.h; sourceTree = "<group>"; };
 		2CEE30B90DD6698100CC762E /* NodeClassToIconTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NodeClassToIconTransformer.m; sourceTree = "<group>"; };
-		2CEE30BB0DD66B8100CC762E /* package.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = package.gif; sourceTree = "<group>"; };
 		2CEFC3CA0DDF3B3100F92DC6 /* FHVAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FHVAppDelegate.h; sourceTree = "<group>"; };
 		2CEFC3CB0DDF3B3100F92DC6 /* FHVAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FHVAppDelegate.m; sourceTree = "<group>"; };
-		2CF4C3DA0DE216C2005BE65F /* InheritedToColorTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InheritedToColorTransformer.h; sourceTree = "<group>"; };
-		2CF4C3DB0DE216C2005BE65F /* InheritedToColorTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InheritedToColorTransformer.m; sourceTree = "<group>"; };
 		2CF55D480DD6FFAC00FB13C7 /* ClassDetailParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ClassDetailParser.h; sourceTree = "<group>"; };
 		2CF55D490DD6FFAC00FB13C7 /* ClassDetailParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ClassDetailParser.m; sourceTree = "<group>"; };
 		2CF5FB840DD5BCB40049C53D /* FlexDocsParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlexDocsParser.h; sourceTree = "<group>"; };
@@ -121,9 +118,9 @@
 		2CFCB4540DD4F54C0090049E /* FlexHelpViewerApp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FlexHelpViewerApp.m; sourceTree = "<group>"; };
 		2CFCB7BC0DD52CDA0090049E /* AbstractXMLTreeParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AbstractXMLTreeParser.h; sourceTree = "<group>"; };
 		2CFCB7BD0DD52CDA0090049E /* AbstractXMLTreeParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AbstractXMLTreeParser.m; sourceTree = "<group>"; };
-		32CA4F630368D1EE00C91783 /* FlexHelpViewer_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlexHelpViewer_Prefix.pch; sourceTree = "<group>"; };
+		32CA4F630368D1EE00C91783 /* EarthDocs_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EarthDocs_Prefix.pch; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		8D1107320486CEB800E47090 /* FlexHelpViewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FlexHelpViewer.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8D1107320486CEB800E47090 /* EarthDocs.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EarthDocs.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -176,7 +173,7 @@
 		19C28FACFE9D520D11CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				8D1107320486CEB800E47090 /* FlexHelpViewer.app */,
+				8D1107320486CEB800E47090 /* EarthDocs.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -196,7 +193,7 @@
 		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
 			isa = PBXGroup;
 			children = (
-				32CA4F630368D1EE00C91783 /* FlexHelpViewer_Prefix.pch */,
+				32CA4F630368D1EE00C91783 /* EarthDocs_Prefix.pch */,
 				29B97316FDCFA39411CA2CEA /* main.m */,
 			);
 			name = "Other Sources";
@@ -248,16 +245,16 @@
 		2CEE30A00DD668D300CC762E /* icons */ = {
 			isa = PBXGroup;
 			children = (
+				2C85E6A31107E585001920A7 /* class.png */,
+				2C85E6A41107E585001920A7 /* constant.png */,
+				2C85E6A51107E585001920A7 /* event.png */,
+				2C85E6A61107E585001920A7 /* function.png */,
+				2C85E6A71107E585001920A7 /* interface.png */,
+				2C85E6A81107E585001920A7 /* package.png */,
+				2C85E6A91107E585001920A7 /* property.png */,
+				2C85E66B1107E19F001920A7 /* method.png */,
 				2C7E38A010BA1148005B403B /* h2_background.gif */,
 				2C53676410B9C38300D9C0E4 /* inherit-arrow.gif */,
-				2C803FDE0DE0DF410081D5D5 /* property.gif */,
-				2C803FC90DE0DD8A0081D5D5 /* event.gif */,
-				2C803FCA0DE0DD8A0081D5D5 /* method.gif */,
-				2CEE30BB0DD66B8100CC762E /* package.gif */,
-				2CEE30A10DD668D300CC762E /* class.gif */,
-				2CEE30A20DD668D300CC762E /* constant.gif */,
-				2CEE30A30DD668D300CC762E /* function.gif */,
-				2CEE30A40DD668D300CC762E /* interface.gif */,
 			);
 			path = icons;
 			sourceTree = "<group>";
@@ -265,16 +262,14 @@
 		2CEE30B70DD6696E00CC762E /* util */ = {
 			isa = PBXGroup;
 			children = (
+				2C85E66F1107E21F001920A7 /* HBImageAndTextCell.h */,
+				2C85E6701107E21F001920A7 /* HBImageAndTextCell.m */,
 				2C6D218B10BC97B3004A6A12 /* HeadlineCell.h */,
 				2C6D218C10BC97B3004A6A12 /* HeadlineCell.m */,
 				2C53681010B9D14600D9C0E4 /* RSVerticallyCenteredTextFieldCell.h */,
 				2C53681110B9D14600D9C0E4 /* RSVerticallyCenteredTextFieldCell.m */,
 				2CEE30B80DD6698100CC762E /* NodeClassToIconTransformer.h */,
 				2CEE30B90DD6698100CC762E /* NodeClassToIconTransformer.m */,
-				2CF4C3DA0DE216C2005BE65F /* InheritedToColorTransformer.h */,
-				2CF4C3DB0DE216C2005BE65F /* InheritedToColorTransformer.m */,
-				2C662FBD10B8D5A000D7232B /* NameTransformer.h */,
-				2C662FBE10B8D5A000D7232B /* NameTransformer.m */,
 				2C6D221E10BCA4F0004A6A12 /* MultiCellTableColumn.h */,
 				2C6D221F10BCA4F0004A6A12 /* MultiCellTableColumn.m */,
 				2C64D50A11028577008D90E0 /* utils.h */,
@@ -326,9 +321,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		8D1107260486CEB800E47090 /* FlexHelpViewer */ = {
+		8D1107260486CEB800E47090 /* EarthDocs */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "FlexHelpViewer" */;
+			buildConfigurationList = C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "EarthDocs" */;
 			buildPhases = (
 				8D1107290486CEB800E47090 /* Resources */,
 				8D11072C0486CEB800E47090 /* Sources */,
@@ -339,10 +334,10 @@
 			);
 			dependencies = (
 			);
-			name = FlexHelpViewer;
+			name = EarthDocs;
 			productInstallPath = "$(HOME)/Applications";
 			productName = FlexHelpViewer;
-			productReference = 8D1107320486CEB800E47090 /* FlexHelpViewer.app */;
+			productReference = 8D1107320486CEB800E47090 /* EarthDocs.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -350,14 +345,14 @@
 /* Begin PBXProject section */
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
-			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "FlexHelpViewer" */;
+			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "EarthDocs" */;
 			compatibilityVersion = "Xcode 3.1";
 			hasScannedForEncodings = 1;
 			mainGroup = 29B97314FDCFA39411CA2CEA /* FlexHelpViewer */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				8D1107260486CEB800E47090 /* FlexHelpViewer */,
+				8D1107260486CEB800E47090 /* EarthDocs */,
 			);
 		};
 /* End PBXProject section */
@@ -369,20 +364,20 @@
 			files = (
 				8D11072A0486CEB800E47090 /* MainMenu.nib in Resources */,
 				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
-				2CEE30A50DD668D300CC762E /* class.gif in Resources */,
-				2CEE30A60DD668D300CC762E /* constant.gif in Resources */,
-				2CEE30A70DD668D300CC762E /* function.gif in Resources */,
-				2CEE30A80DD668D300CC762E /* interface.gif in Resources */,
-				2CEE30BC0DD66B8100CC762E /* package.gif in Resources */,
-				2C803FCB0DE0DD8A0081D5D5 /* event.gif in Resources */,
-				2C803FCC0DE0DD8A0081D5D5 /* method.gif in Resources */,
-				2C803FDF0DE0DF410081D5D5 /* property.gif in Resources */,
 				2C53671310B9BC9500D9C0E4 /* styles.css in Resources */,
 				2C53671810B9BD7600D9C0E4 /* class.html in Resources */,
 				2C53676510B9C38300D9C0E4 /* inherit-arrow.gif in Resources */,
 				2C7E38A110BA1148005B403B /* h2_background.gif in Resources */,
 				2CCFC17F110500590019F014 /* schema.sql in Resources */,
 				2C91025E11065A100031698D /* MainWindow.xib in Resources */,
+				2C85E66C1107E19F001920A7 /* method.png in Resources */,
+				2C85E6AA1107E585001920A7 /* class.png in Resources */,
+				2C85E6AB1107E585001920A7 /* constant.png in Resources */,
+				2C85E6AC1107E585001920A7 /* event.png in Resources */,
+				2C85E6AD1107E585001920A7 /* function.png in Resources */,
+				2C85E6AE1107E585001920A7 /* interface.png in Resources */,
+				2C85E6AF1107E585001920A7 /* package.png in Resources */,
+				2C85E6B01107E585001920A7 /* property.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -414,9 +409,7 @@
 				2CF5FB860DD5BCB40049C53D /* FlexDocsParser.m in Sources */,
 				2CEE30BA0DD6698100CC762E /* NodeClassToIconTransformer.m in Sources */,
 				2CEFC3CC0DDF3B3100F92DC6 /* FHVAppDelegate.m in Sources */,
-				2CF4C3DC0DE216C2005BE65F /* InheritedToColorTransformer.m in Sources */,
 				2CC3919410B7745D00C35BD8 /* NSManagedObjectContext+Extensions.m in Sources */,
-				2C662FBF10B8D5A000D7232B /* NameTransformer.m in Sources */,
 				2C53681210B9D14600D9C0E4 /* RSVerticallyCenteredTextFieldCell.m in Sources */,
 				2C6D218D10BC97B3004A6A12 /* HeadlineCell.m in Sources */,
 				2C6D222010BCA4F0004A6A12 /* MultiCellTableColumn.m in Sources */,
@@ -432,6 +425,7 @@
 				2C910259110659C60031698D /* FHVMainWindowController.m in Sources */,
 				2C9102D1110664F90031698D /* FHVDocSetModel.m in Sources */,
 				2C85E50C1107B6F8001920A7 /* FHVDocSetSearchOperation.m in Sources */,
+				2C85E6711107E21F001920A7 /* HBImageAndTextCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -474,10 +468,10 @@
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = FlexHelpViewer_Prefix.pch;
+				GCC_PREFIX_HEADER = EarthDocs_Prefix.pch;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
-				PRODUCT_NAME = FlexHelpViewer;
+				PRODUCT_NAME = EarthDocs;
 			};
 			name = Debug;
 		};
@@ -488,10 +482,10 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = FlexHelpViewer_Prefix.pch;
+				GCC_PREFIX_HEADER = EarthDocs_Prefix.pch;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
-				PRODUCT_NAME = FlexHelpViewer;
+				PRODUCT_NAME = EarthDocs;
 			};
 			name = Release;
 		};
@@ -526,7 +520,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "FlexHelpViewer" */ = {
+		C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "EarthDocs" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C01FCF4B08A954540054247B /* Debug */,
@@ -535,7 +529,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "FlexHelpViewer" */ = {
+		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "EarthDocs" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C01FCF4F08A954540054247B /* Debug */,
