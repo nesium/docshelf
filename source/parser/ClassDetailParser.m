@@ -9,9 +9,7 @@
 #import "ClassDetailParser.h"
 
 @interface ClassDetailParser (Private)
-- (NSString *)_detailStringForLinkName:(NSString *)linkName;
 - (NSArray *)_rowsForClassSummaryTable:(NSString *)tableId;
-- (NSString *)_prepareAttributesInElement:(NSXMLElement *)elem;
 @end
 
 
@@ -23,8 +21,11 @@
 		if ([[[file lastPathComponent] lowercaseString] isEqualToString:@"package.html"])
 			m_name = nil;
 		else{
-			m_name = [[[self firstNodeForXPath:@"/html/body/div[@id='banner'][1]/table[@class='titleTable'][1]//h1[1]" 
-				ofElement:nil] stringValue] retain];
+			NSString *signatureExpr = @"/html/body/div[@class='MainContent'][1]/table[@class='classHeaderTable'][1]/tr/td[@class='classSignature'][1]";
+			NSString *classSignature = [[[self firstNodeForXPath:signatureExpr ofElement:nil] stringValue] 
+				stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+			NSArray *parts = [classSignature componentsSeparatedByString:@" "];
+			m_name = [[parts objectAtIndex:[parts count] - 1] retain];
 		}
 		m_ident = [[file packageNameByResolvingAgainstBasePath:context.path] retain];
 	}
@@ -125,12 +126,11 @@
 			relativeToURL:[NSURL URLWithString:m_filePath]];
 		BOOL isInherited = m_name != nil && ![[[owner stringValue] 
 			stringByTrimmingCharactersInSet:set] isEqualToString:m_name];
-		
 		NSDictionary *property = [NSDictionary dictionaryWithObjectsAndKeys:
 			[self _urlToIdent:linkURL], @"ident", 
 			[signatureLink stringValue], @"name", 
 			[[summary stringValue] stringByTrimmingCharactersInSet:set], @"summary", 
-			[self _prepareAttributesInElement:signatureLink], @"signature", 
+			[signatureContainer stringValue], @"signature", 
 			[NSNumber numberWithBool:isInherited], @"inherited", 
 			[NSNumber numberWithBool:parseConstants], @"constant", 
 			(isInherited ? nil : [self _detailStringForLinkName:signatureLinkHref]), @"detail", 
@@ -162,6 +162,7 @@
 			stringByTrimmingCharactersInSet:set] isEqualToString:m_name];
 		
 		NSDictionary *event = [NSDictionary dictionaryWithObjectsAndKeys: 
+			[signature stringValue], @"name", 
 			[self _prepareAttributesInElement:signature], @"signature", 
 			[self _urlToIdent:linkURL], @"ident", 
 			[[summary stringValue] stringByTrimmingCharactersInSet:set], @"summary", 
@@ -177,12 +178,9 @@
 	NSString *summaryTableExp = m_name == nil 
 		? @"/html/body/div[@class='MainContent'][1]//table[@id='%@'][1]" 
 		: @"/html/body/div/table[@id='%@'][1]";
-
+	
 	NSXMLElement *table = [self firstNodeForXPath:[NSString 
 		stringWithFormat:summaryTableExp, tableId] ofElement:nil];
-//	if (!table){
-//		NSLog(@"%@ - %@ - %@", tableId, m_name, m_filePath);
-//	}
 	//remove header
 	NSXMLElement *headerRow = [self firstNodeForXPath:@"./tr[1]" ofElement:table];
 	[headerRow detach];

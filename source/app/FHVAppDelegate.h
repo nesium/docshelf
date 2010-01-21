@@ -9,11 +9,15 @@
 #import <Cocoa/Cocoa.h>
 #import "FHVDocSetModel.h"
 #import "FHVMainWindowController.h"
+#import "FlexDocsParser.h"
 
 
 @interface FHVAppDelegate : NSObject{
 	FHVDocSetModel *m_docSetModel;
 	FHVMainWindowController *m_mainWindowController;
+	IBOutlet NSWindow *m_importWindow;
+	IBOutlet NSProgressIndicator *m_progressIndicator;
+	IBOutlet NSTextField *m_progressLabel;
 }
 - (NSString *)applicationSupportFolder;
 @end

@@ -165,6 +165,8 @@
 			continue;
 		}
 		NSURL *url = [NSURL URLWithString:[srcAttrib stringValue] relativeToURL:m_fileURL];
+		if ([[[url resourceSpecifier] lastPathComponent] isEqualToString:@"inherit-arrow.gif"])
+			continue;
 		NSString *imagePath = [url absoluteString];
 		NSString *ident = [m_context identForImageWithPath:imagePath];
 		if (!ident){

@@ -9,6 +9,7 @@
 #import <Cocoa/Cocoa.h>
 #import "FHVImportContext.h"
 #import "NSString+FHVUtils.h"
+#import "utils.h"
 
 
 @interface AbstractXMLTreeParser : NSObject{
@@ -29,10 +30,6 @@
 - (NSMutableDictionary *)componentsForSummaryTableRow:(NSXMLElement *)row;
 - (NSArray *)summaryTableToObjects:(NSXMLElement *)table;
 - (NSArray *)summaryTableOfTypeToObjects:(NSString *)type;
-@end
-
-
-@interface AbstractXMLTreeParser (Protected)
 - (NSString *)_prepareAttributesInElement:(NSXMLElement *)elem;
 - (NSString *)_detailStringForLinkName:(NSString *)linkName;
 - (NSString *)_urlToIdent:(NSURL *)url;

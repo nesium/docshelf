@@ -91,3 +91,31 @@ div.listing pre{
 	font: 10px Monaco;
 	padding: 10px 10px 0 10px;
 }
+
+div.detailBody span.label{
+	font-weight: bold;
+}
+
+div.detailBody code span.label{
+	font-weight: normal;
+}
+
+div.detailBody table{
+	margin-top: 10px;
+	margin-bottom: 15px;
+	border-top: 1px solid #d0d0d0;
+	border-left: 1px solid #d0d0d0;
+	border-right: 1px solid #fff;
+	border-bottom: 1px solid #fff;
+	background-color: #E9E9E9;
+	padding: 5px;
+}
+
+div.detailBody table td:first-child{
+	width: 0px;
+}
+
+div.detailBody table tr:nth-child(2n){
+	height: 0;
+	line-height: 0;
+}

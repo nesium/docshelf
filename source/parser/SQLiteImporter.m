@@ -99,29 +99,31 @@
 }
 
 - (void)saveSignatureNodes:(NSArray *)nodes withParentType:(FHVSignatureParentType)parentType 
-	parentId:(NSNumber *)parentId nodeType:(FHVSignatureType)nodeType{
+	parentId:(NSNumber *)parentId parentName:(NSString *)parentName nodeType:(FHVSignatureType)nodeType{
 	for (NSDictionary *node in nodes){
-		[self saveSignatureNode:node withParentType:parentType parentId:parentId nodeType:nodeType];
+		[self saveSignatureNode:node withParentType:parentType parentId:parentId 
+			parentName:parentName nodeType:nodeType];
 	}
 }
 
 - (void)saveSignatureNode:(NSDictionary *)attribs withParentType:(FHVSignatureParentType)parentType 
-	parentId:(NSNumber *)parentId nodeType:(FHVSignatureType)nodeType{
+	parentId:(NSNumber *)parentId parentName:(NSString *)parentName nodeType:(FHVSignatureType)nodeType{
 	if (nodeType == kSigTypeVariable && [[attribs objectForKey:@"constant"] boolValue] == YES)
 		nodeType = kSigTypeConstant;
 	sqlite3_stmt *stmt;
 	sqlite3_prepare_v2(m_db, "INSERT INTO `fhv_signatures` \
-(`parent_id`, `parent_type`, `ident`, `name`, `signature`, `summary`, `detail`, `inherited`, `type`) \
-VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", -1, &stmt, 0);
+(`parent_id`, `parent_type`, `parent_name`, `ident`, `name`, `signature`, `summary`, `detail`, `inherited`, `type`) \
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", -1, &stmt, 0);
 	sqlite3_bind_int64(stmt, 1, [parentId longLongValue]);
 	sqlite3_bind_int(stmt, 2, parentType);
-	sqlite3_bind_text(stmt, 3, [[attribs objectForKey:@"ident"] UTF8String], -1, SQLITE_STATIC);
-	sqlite3_bind_text(stmt, 4, [[attribs objectForKey:@"name"] UTF8String], -1, SQLITE_STATIC);
-	sqlite3_bind_text(stmt, 5, [[attribs objectForKey:@"signature"] UTF8String], -1, SQLITE_STATIC);
-	sqlite3_bind_text(stmt, 6, [[attribs objectForKey:@"summary"] UTF8String], -1, SQLITE_STATIC);
-	sqlite3_bind_text(stmt, 7, [[attribs objectForKey:@"detail"] UTF8String], -1, SQLITE_STATIC);
-	sqlite3_bind_int(stmt, 8, [[attribs objectForKey:@"inherited"] intValue]);
-	sqlite3_bind_int(stmt, 9, nodeType);
+	sqlite3_bind_text(stmt, 3, [parentName UTF8String], -1, SQLITE_STATIC);
+	sqlite3_bind_text(stmt, 4, [[attribs objectForKey:@"ident"] UTF8String], -1, SQLITE_STATIC);
+	sqlite3_bind_text(stmt, 5, [[attribs objectForKey:@"name"] UTF8String], -1, SQLITE_STATIC);
+	sqlite3_bind_text(stmt, 6, [[attribs objectForKey:@"signature"] UTF8String], -1, SQLITE_STATIC);
+	sqlite3_bind_text(stmt, 7, [[attribs objectForKey:@"summary"] UTF8String], -1, SQLITE_STATIC);
+	sqlite3_bind_text(stmt, 8, [[attribs objectForKey:@"detail"] UTF8String], -1, SQLITE_STATIC);
+	sqlite3_bind_int(stmt, 9, [[attribs objectForKey:@"inherited"] intValue]);
+	sqlite3_bind_int(stmt, 10, nodeType);
 	if (!sqlite3_step(stmt) == SQLITE_DONE){
 		NSLog(@"Could not save signature node %@ to database", [attribs objectForKey:@"name"]);
 	}

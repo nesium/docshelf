@@ -51,7 +51,8 @@ FlexHelpViewerApp *m_connectionProxy;
 	NSUInteger i = 0;
 	NSAutoreleasePool *innerPool = [[NSAutoreleasePool alloc] init];
 	for (NSMutableDictionary *package in packages){
-		NSNumber *dbId = [m_importer savePackageWithName:[package objectForKey:@"name"] 
+		NSString *packageName = [package objectForKey:@"name"];
+		NSNumber *dbId = [m_importer savePackageWithName:packageName 
 			summary:[package objectForKey:@"summary"]];
 		[package setObject:dbId forKey:@"dbid"];
 		
@@ -79,9 +80,11 @@ FlexHelpViewerApp *m_connectionProxy;
 				stringByAppendingPathComponent:@"package.html"];
 			ClassDetailParser *classParser = [[ClassDetailParser alloc] initWithFile:path context:m_context];
 			[m_importer saveSignatureNodes:[classParser methodsWithScope:PublicScope] 
-				withParentType:kSigParentTypePackage parentId:dbId nodeType:kSigTypeFunction];
+				withParentType:kSigParentTypePackage parentId:dbId parentName:packageName 
+				nodeType:kSigTypeFunction];
 			[m_importer saveSignatureNodes:[classParser propertiesWithScope:PublicScope constants:YES] 
-				withParentType:kSigParentTypePackage parentId:dbId nodeType:kSigTypeVariable];
+				withParentType:kSigParentTypePackage parentId:dbId parentName:packageName 
+				nodeType:kSigTypeVariable];
 			[classParser release];
 		}
 		[m_connectionProxy setProgress:((double)++i/((double)[packages count]/100.0))];

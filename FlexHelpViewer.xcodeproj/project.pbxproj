@@ -25,6 +25,7 @@
 		2C803FCB0DE0DD8A0081D5D5 /* event.gif in Resources */ = {isa = PBXBuildFile; fileRef = 2C803FC90DE0DD8A0081D5D5 /* event.gif */; };
 		2C803FCC0DE0DD8A0081D5D5 /* method.gif in Resources */ = {isa = PBXBuildFile; fileRef = 2C803FCA0DE0DD8A0081D5D5 /* method.gif */; };
 		2C803FDF0DE0DF410081D5D5 /* property.gif in Resources */ = {isa = PBXBuildFile; fileRef = 2C803FDE0DE0DF410081D5D5 /* property.gif */; };
+		2C85E50C1107B6F8001920A7 /* FHVDocSetSearchOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C85E50B1107B6F8001920A7 /* FHVDocSetSearchOperation.m */; };
 		2C8DC60E10FFF5D000DA41C9 /* PackageSummaryParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CFCB4510DD4F4FB0090049E /* PackageSummaryParser.m */; };
 		2C910165110646790031698D /* FHVDocSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C910164110646790031698D /* FHVDocSet.m */; };
 		2C910259110659C60031698D /* FHVMainWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C910258110659C60031698D /* FHVMainWindowController.m */; };
@@ -82,6 +83,8 @@
 		2C803FC90DE0DD8A0081D5D5 /* event.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = event.gif; sourceTree = "<group>"; };
 		2C803FCA0DE0DD8A0081D5D5 /* method.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = method.gif; sourceTree = "<group>"; };
 		2C803FDE0DE0DF410081D5D5 /* property.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = property.gif; sourceTree = "<group>"; };
+		2C85E50A1107B6F8001920A7 /* FHVDocSetSearchOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FHVDocSetSearchOperation.h; sourceTree = "<group>"; };
+		2C85E50B1107B6F8001920A7 /* FHVDocSetSearchOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FHVDocSetSearchOperation.m; sourceTree = "<group>"; };
 		2C910163110646790031698D /* FHVDocSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FHVDocSet.h; sourceTree = "<group>"; };
 		2C910164110646790031698D /* FHVDocSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FHVDocSet.m; sourceTree = "<group>"; };
 		2C910257110659C60031698D /* FHVMainWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FHVMainWindowController.h; sourceTree = "<group>"; };
@@ -291,6 +294,8 @@
 				2C910258110659C60031698D /* FHVMainWindowController.m */,
 				2C9102CF110664F90031698D /* FHVDocSetModel.h */,
 				2C9102D0110664F90031698D /* FHVDocSetModel.m */,
+				2C85E50A1107B6F8001920A7 /* FHVDocSetSearchOperation.h */,
+				2C85E50B1107B6F8001920A7 /* FHVDocSetSearchOperation.m */,
 			);
 			path = app;
 			sourceTree = "<group>";
@@ -426,6 +431,7 @@
 				2C910165110646790031698D /* FHVDocSet.m in Sources */,
 				2C910259110659C60031698D /* FHVMainWindowController.m in Sources */,
 				2C9102D1110664F90031698D /* FHVDocSetModel.m in Sources */,
+				2C85E50C1107B6F8001920A7 /* FHVDocSetSearchOperation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

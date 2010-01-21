@@ -41,30 +41,35 @@
 			NSArray *protectedProperties = [classDetailParser propertiesWithScope:ProtectedScope constants:NO];
 			NSArray *publicConstants = [classDetailParser propertiesWithScope:PublicScope constants:YES];
 			NSArray *events = [classDetailParser events];
+			NSString *clazzName = [clazz objectForKey:@"name"];
 			
-			NSNumber *dbId = [m_context.importer saveClassWithName:[clazz objectForKey:@"name"] 
-				summary:[clazz objectForKey:@"summary"] 
-				ident:[classDetailParser ident] 
-				detail:[classDetailParser detail] 
-				type:[[clazz objectForKey:@"type"] intValue] 
-				packageId:[clazz objectForKey:@"packageId"]];
-			
-			if ([publicMethods count] == 0){
-				NSLog(@"num methods: %d - %@", [publicMethods count], [clazz objectForKey:@"name"]);
+			// we synchronize here because of the shortcoming of sqlite3_last_insert_rowid
+			// if we insert in multiple threads simultaneously we could read the wrong rowid
+			@synchronized (m_context.importer){
+				NSNumber *dbId = [m_context.importer saveClassWithName:clazzName 
+					summary:[clazz objectForKey:@"summary"] 
+					ident:[classDetailParser ident] 
+					detail:[classDetailParser detail] 
+					type:[[clazz objectForKey:@"type"] intValue] 
+					packageId:[clazz objectForKey:@"packageId"]];
+				
+				if ([publicMethods count] == 0){
+					NSLog(@"num methods: %d - %@", [publicMethods count], [clazz objectForKey:@"name"]);
+				}
+				
+				[m_context.importer saveSignatureNodes:publicMethods withParentType:kSigParentTypeClass 
+					parentId:dbId parentName:clazzName nodeType:kSigTypeFunction];
+				[m_context.importer saveSignatureNodes:protectedMethods withParentType:kSigParentTypeClass 
+					parentId:dbId parentName:clazzName nodeType:kSigTypeFunction];
+				[m_context.importer saveSignatureNodes:publicProperties withParentType:kSigParentTypeClass 
+					parentId:dbId parentName:clazzName nodeType:kSigTypeVariable];
+				[m_context.importer saveSignatureNodes:protectedProperties withParentType:kSigParentTypeClass 
+					parentId:dbId parentName:clazzName nodeType:kSigTypeVariable];
+				[m_context.importer saveSignatureNodes:publicConstants withParentType:kSigParentTypeClass 
+					parentId:dbId parentName:clazzName nodeType:kSigTypeVariable];
+				[m_context.importer saveSignatureNodes:events withParentType:kSigParentTypeClass 
+					parentId:dbId parentName:clazzName nodeType:kSigTypeEvent];
 			}
-			
-			[m_context.importer saveSignatureNodes:publicMethods withParentType:kSigParentTypeClass 
-				parentId:dbId nodeType:kSigTypeFunction];
-			[m_context.importer saveSignatureNodes:protectedMethods withParentType:kSigParentTypeClass 
-				parentId:dbId nodeType:kSigTypeFunction];
-			[m_context.importer saveSignatureNodes:publicProperties withParentType:kSigParentTypeClass 
-				parentId:dbId nodeType:kSigTypeVariable];
-			[m_context.importer saveSignatureNodes:protectedProperties withParentType:kSigParentTypeClass 
-				parentId:dbId nodeType:kSigTypeVariable];
-			[m_context.importer saveSignatureNodes:publicConstants withParentType:kSigParentTypeClass 
-				parentId:dbId nodeType:kSigTypeVariable];
-			[m_context.importer saveSignatureNodes:events withParentType:kSigParentTypeClass 
-				parentId:dbId nodeType:kSigTypeEvent];
 			
 			[classDetailParser release];
 			m_notifier();

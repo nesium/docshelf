@@ -38,7 +38,7 @@ typedef enum _FHVClassType{
 - (NSNumber *)saveClassWithName:(NSString *)name summary:(NSString *)summary ident:(NSString *)ident 
 	detail:(NSString *)detail type:(FHVClassType)type packageId:(NSNumber *)packageId;
 - (void)saveSignatureNodes:(NSArray *)nodes withParentType:(FHVSignatureParentType)parentType 
-	parentId:(NSNumber *)parentId nodeType:(FHVSignatureType)nodeType;
+	parentId:(NSNumber *)parentId parentName:(NSString *)parentName nodeType:(FHVSignatureType)nodeType;
 - (void)saveSignatureNode:(NSDictionary *)attribs withParentType:(FHVSignatureParentType)parentType 
-	parentId:(NSNumber *)parentId nodeType:(FHVSignatureType)nodeType;
+	parentId:(NSNumber *)parentId parentName:(NSString *)parentName nodeType:(FHVSignatureType)nodeType;
 @end
