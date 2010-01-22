@@ -10,7 +10,7 @@
 #import "FHVDocSet.h"
 #import "NSString+FHVUtils.h"
 #import "SQLiteImporter.h"
-#import "FHVDocSetSearchOperation.h"
+#import "FHVSearchWorker.h"
 
 
 @interface FHVDocSetModel : NSObject{
@@ -20,11 +20,13 @@
 	NSArray *m_currentData;
 	NSArray *m_selectionData;
 	NSString *m_detailData;
+	NSString *m_lastSearchTerm;
 	NSDictionary *m_selectedItem;
+	NSMutableArray *m_searchResults;
 	BOOL m_showsInheritedSignatures;
-	NSOperationQueue *m_searchQueue;
-	FHVDocSetSearchOperation *m_searchOp;
 	BOOL m_inSearchMode;
+	FHVSearchWorker *m_searchWorker;
+	NSConnection *m_searchWorkerConnection;
 }
 @property (readonly) NSArray *currentData;
 @property (readonly) NSArray *selectionData;

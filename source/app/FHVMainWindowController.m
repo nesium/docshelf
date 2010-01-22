@@ -18,6 +18,7 @@
 
 @interface FHVMainWindowController (Private)
 - (void)_jumpToAnchor:(NSString *)anchor;
+- (BOOL)_itemWantsHeaderCell:(NSDictionary *)item;
 @end
 
 
@@ -29,6 +30,7 @@
 - (id)initWithWindowNibName:(NSString *)windowNibName docSetModel:(FHVDocSetModel *)docSetModel{
 	if (self = [super initWithWindowNibName:windowNibName]){
 		m_docSetModel = docSetModel;
+		m_outlineViewUpdateDelayed = NO;
 	}
 	return self;
 }
@@ -94,7 +96,8 @@
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object 
 	change:(NSDictionary *)change context:(void *)context{
 	if ((int)context == 1){
-		[self performSelector:@selector(_reloadOutlineView:) withObject:m_outlineView afterDelay:0.0];
+		if (m_outlineViewUpdateDelayed) return;
+		[self performSelector:@selector(_reloadOutlineView:) withObject:m_outlineView afterDelay:1.0/20.0];
 	}else if ((int)context == 2){
 		[self performSelector:@selector(_reloadOutlineView:) withObject:m_selectionOutlineView 
 			afterDelay:0.0];
@@ -151,29 +154,32 @@ static HeadlineCell *g_headlineCell = nil;
 
 - (void)outlineView:(NSOutlineView *)outlineView willDisplayCell:(id)cell 
 	forTableColumn:(NSTableColumn *)tableColumn item:(id)item{
-	if ([[item objectForKey:@"inherited"] boolValue] || [cell isMemberOfClass:[HeadlineCell class]]){
+	BOOL itemWantsHeaderCell = [self _itemWantsHeaderCell:item];
+	if ([[item objectForKey:@"inherited"] boolValue] || itemWantsHeaderCell){
 		[cell setTextColor:[NSColor colorWithCalibratedRed:0.455 green:0.455 
 			blue:0.455 alpha:1.000]];
 	}else{
 		[cell setTextColor:[NSColor blackColor]];
+	}
+	if (!itemWantsHeaderCell){
 		[cell setImage:[m_docSetModel imageForItem:item]];
 	}
 }
 
 - (NSCell *)outlineView:(NSOutlineView *)outlineView 
 	dataCellForTableColumn:(NSTableColumn *)tableColumn item:(id)item{
-	if ([[item objectForKey:@"children"] count] < 1)
+	if (![self _itemWantsHeaderCell:item])
 		return [tableColumn dataCell];
-	
 	if (g_headlineCell == nil){
 		g_headlineCell = [[HeadlineCell alloc] init];
-		[g_headlineCell setFont: [NSFont boldSystemFontOfSize: 11.0]];
+		[g_headlineCell setFont:[NSFont boldSystemFontOfSize:11.0]];
+		[g_headlineCell setLineBreakMode:NSLineBreakByTruncatingTail];
 	}
 	return g_headlineCell;
 }
 
 - (BOOL)outlineView:(NSOutlineView *)outlineView shouldSelectItem:(id)item{
-	return [[item objectForKey:@"children"] count] < 1;
+	return ![self _itemWantsHeaderCell:item];
 }
 
 - (void)outlineViewSelectionDidChange:(NSNotification *)notification{
@@ -182,6 +188,33 @@ static HeadlineCell *g_headlineCell = nil;
 	}else if ([notification object] == m_selectionOutlineView){
 		[self _jumpToAnchor:[m_docSetModel anchorForItem:[m_selectionOutlineView 
 			itemAtRow:[m_selectionOutlineView selectedRow]]]];
+	}
+}
+
+- (CGFloat)outlineView:(NSOutlineView *)outlineView heightOfRowByItem:(id)item{
+	return [self _itemWantsHeaderCell:item] ? 19.0 : 17.0;
+}
+
+- (void)outlineViewArrowLeftKeyWasPressed:(NSOutlineView *)outlineView{
+	if (outlineView == m_selectionOutlineView){
+		[[self window] makeFirstResponder:m_outlineView];
+	}
+}
+
+- (void)outlineViewArrowRightKeyWasPressed:(NSOutlineView *)outlineView{
+	if (outlineView == m_outlineView){
+		[[self window] makeFirstResponder:m_selectionOutlineView];
+	}
+}
+
+- (void)outlineViewDidBecomeFirstResponder:(NSOutlineView *)outlineView{
+	if ([outlineView selectedRow] != -1)
+		return;
+	for (int i = 0; i < [outlineView numberOfRows]; i++){
+		if ([self outlineView:outlineView shouldSelectItem:[outlineView itemAtRow:i]]){
+			[outlineView selectRowIndexes:[NSIndexSet indexSetWithIndex:i] byExtendingSelection:NO];
+			return;
+		}
 	}
 }
 
@@ -227,7 +260,17 @@ static HeadlineCell *g_headlineCell = nil;
 }
 
 - (void)_reloadOutlineView:(NSOutlineView *)anOutlineView{
+	if (anOutlineView == m_selectionOutlineView){
+		[anOutlineView deselectAll:nil];
+	}else{
+		m_outlineViewUpdateDelayed = NO;
+	}
 	[anOutlineView reloadData];
 	[anOutlineView expandItem:nil expandChildren:YES];
+}
+
+- (BOOL)_itemWantsHeaderCell:(NSDictionary *)item{
+	return [item objectForKey:@"children"] != nil || 
+		[[item objectForKey:@"itemType"] intValue] == kItemTypePackage;
 }
 @end

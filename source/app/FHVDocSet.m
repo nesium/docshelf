@@ -16,8 +16,10 @@ NSString *sqlite3_column_nsstring(sqlite3_stmt *stmt, int col){
 @interface FHVDocSet (Private)
 - (BOOL)_open;
 - (BOOL)_close;
-- (NSArray *)_fetchClasses:(NSString *)whereClause includeDetail:(BOOL)includeDetail;
-- (NSArray *)_fetchSignatures:(NSString *)whereClause includeDetail:(BOOL)includeDetail;
+- (NSArray *)_fetchClasses:(NSString *)whereClause includeDetail:(BOOL)includeDetail 
+	cancelCondition:(BOOL *)cancelCondition;
+- (NSArray *)_fetchSignatures:(NSString *)whereClause includeDetail:(BOOL)includeDetail 
+	limit:(NSInteger)limit cancelCondition:(BOOL *)cancelCondition;
 @end
 
 
@@ -72,31 +74,37 @@ NSString *sqlite3_column_nsstring(sqlite3_stmt *stmt, int col){
 }
 
 - (NSArray *)allClasses{
-	return [self _fetchClasses:nil includeDetail:NO];
+	return [self _fetchClasses:nil includeDetail:NO cancelCondition:NULL];
+}
+
+- (NSArray *)allGlobalSignatures{
+	return [self _fetchSignatures:[NSString stringWithFormat:@"`parent_type` = %d", 
+		kSigParentTypePackage] includeDetail:NO limit:-1 cancelCondition:NULL];
 }
 
 - (NSArray *)signaturesWithParentId:(NSNumber *)parentId includeInherited:(BOOL)bFlag{
-	NSString *whereClause = [NSString stringWithFormat:@"`parent_id` = %qu", 
-		[parentId longLongValue]];
+	NSString *whereClause = [NSString stringWithFormat:@"`parent_id` = %qu AND `parent_type` = %d", 
+		[parentId longLongValue], kSigParentTypeClass];
 	if (!bFlag) whereClause = [whereClause stringByAppendingFormat:@" AND `inherited` = %d", bFlag];
-	return [self _fetchSignatures:whereClause includeDetail:YES];
+	return [self _fetchSignatures:whereClause includeDetail:YES limit:-1 cancelCondition:NULL];
 }
 
 - (NSDictionary *)classWithId:(NSNumber *)dbId{
 	NSArray *classes = [self _fetchClasses:[NSString stringWithFormat:@"`id` = %qu", 
-		[dbId longLongValue]] includeDetail:YES];
+		[dbId longLongValue]] includeDetail:YES cancelCondition:NULL];
 	if ([classes count] == 0) return nil;
 	return [classes objectAtIndex:0];
 }
 
-- (NSArray *)classesFilteredByExpression:(NSString *)filter{
+- (NSArray *)classesFilteredByExpression:(NSString *)filter cancelCondition:(BOOL *)cancelCondition{
 	return [self _fetchClasses:[NSString stringWithFormat:@"`name` LIKE '%@'", filter] 
-		includeDetail:NO];
+		includeDetail:NO cancelCondition:cancelCondition];
 }
 
-- (NSArray *)signaturesFilteredByExpression:(NSString *)filter{
-	return [self _fetchSignatures:[NSString stringWithFormat:@"`name` LIKE '%@' AND `inherited` = 0", filter] 
-		includeDetail:NO];
+- (NSArray *)signaturesFilteredByExpression:(NSString *)filter 
+	cancelCondition:(BOOL *)cancelCondition{
+	return [self _fetchSignatures:[NSString stringWithFormat:@"`name` LIKE '%@' AND `inherited` = 0", 
+		filter] includeDetail:NO limit:300 cancelCondition:cancelCondition];
 }
 
 
@@ -104,7 +112,8 @@ NSString *sqlite3_column_nsstring(sqlite3_stmt *stmt, int col){
 #pragma mark -
 #pragma mark Private methods
 
-- (NSArray *)_fetchClasses:(NSString *)whereClause includeDetail:(BOOL)includeDetail{
+- (NSArray *)_fetchClasses:(NSString *)whereClause includeDetail:(BOOL)includeDetail 
+	cancelCondition:(BOOL *)cancelCondition{
 	NSMutableArray *classes = [NSMutableArray array];
 	NSString *sql = @"SELECT `id`, `package_id`, `ident`, `name`, `summary`, `type`";
 	if (includeDetail) sql = [sql stringByAppendingString:@", `detail`"];
@@ -113,7 +122,7 @@ NSString *sqlite3_column_nsstring(sqlite3_stmt *stmt, int col){
 	sql = [sql stringByAppendingString:@" ORDER BY `package_id`, `name`"];
 	sqlite3_stmt *stmt;
 	sqlite3_prepare(m_db, [sql UTF8String], -1, &stmt, 0);
-	while (sqlite3_step(stmt) == SQLITE_ROW){
+	while (sqlite3_step(stmt) == SQLITE_ROW && (cancelCondition == NULL || *cancelCondition != YES)){
 		NSDictionary *clazz = [NSDictionary dictionaryWithObjectsAndKeys: 
 			m_index, @"docSetId", 
 			[NSNumber numberWithInt:kItemTypeClass], @"itemType", 
@@ -131,17 +140,19 @@ NSString *sqlite3_column_nsstring(sqlite3_stmt *stmt, int col){
 	return classes;
 }
 
-- (NSArray *)_fetchSignatures:(NSString *)whereClause includeDetail:(BOOL)includeDetail{
+- (NSArray *)_fetchSignatures:(NSString *)whereClause includeDetail:(BOOL)includeDetail 
+	limit:(NSInteger)limit cancelCondition:(BOOL *)cancelCondition{
 	NSMutableArray *signatures = [NSMutableArray array];
 	NSString *sql = @"SELECT \
 `id`, `parent_id`, `parent_type`, `ident`, `name`, `signature`, `summary`, `inherited`, `type`, `parent_name`"; 
 	if (includeDetail) sql = [sql stringByAppendingString:@", `detail`"];
 	sql = [sql stringByAppendingString:@" FROM `fhv_signatures`"];
 	if (whereClause != nil) sql = [NSString stringWithFormat:@"%@ WHERE %@", sql, whereClause];
-	sql = [sql stringByAppendingString:@" ORDER BY `type`, `name`"];
+	if (limit == -1) sql = [sql stringByAppendingString:@" ORDER BY `type`, `name`"];
+	else sql = [sql stringByAppendingFormat:@" LIMIT %d", limit];
 	sqlite3_stmt *stmt;
 	sqlite3_prepare(m_db, [sql UTF8String], -1, &stmt, 0);
-	while (sqlite3_step(stmt) == SQLITE_ROW){
+	while (sqlite3_step(stmt) == SQLITE_ROW && (cancelCondition == NULL || *cancelCondition != YES)){
 		NSDictionary *sig = [NSDictionary dictionaryWithObjectsAndKeys: 
 			m_index, @"docSetId", 
 			[NSNumber numberWithInt:kItemTypeSignature], @"itemType", 

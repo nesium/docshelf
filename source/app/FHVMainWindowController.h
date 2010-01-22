@@ -17,6 +17,8 @@
 	IBOutlet NSOutlineView *m_selectionOutlineView;
 	IBOutlet WebView *m_webView;
 	IBOutlet NSSearchField *m_searchField;
+	NSTimeInterval m_lastOutlineViewUpdateTime;
+	BOOL m_outlineViewUpdateDelayed;
 	FHVDocSetModel *m_docSetModel;
 }
 - (id)initWithWindowNibName:(NSString *)windowNibName docSetModel:(FHVDocSetModel *)docSetModel;

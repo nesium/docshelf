@@ -8,11 +8,12 @@
 
 #import <Cocoa/Cocoa.h>
 #import "sqlite3.h"
+#import "SQLiteImporter.h"
 
 typedef enum _FHVItemType{
-	kItemTypePackage = 0, 
-	kItemTypeClass = 1, 
-	kItemTypeSignature = 2
+	kItemTypePackage = 1, 
+	kItemTypeClass = 2, 
+	kItemTypeSignature = 3
 } FHVItemType;
 
 
@@ -26,8 +27,9 @@ typedef enum _FHVItemType{
 - (NSString *)imagePath;
 - (NSArray *)allPackages;
 - (NSArray *)allClasses;
-- (NSArray *)classesFilteredByExpression:(NSString *)filter;
-- (NSArray *)signaturesFilteredByExpression:(NSString *)filter;
+- (NSArray *)allGlobalSignatures;
+- (NSArray *)classesFilteredByExpression:(NSString *)filter cancelCondition:(BOOL *)cancelCondition;
+- (NSArray *)signaturesFilteredByExpression:(NSString *)filter cancelCondition:(BOOL *)cancelCondition;
 - (NSArray *)signaturesWithParentId:(NSNumber *)parentId includeInherited:(BOOL)bFlag;
 - (NSDictionary *)classWithId:(NSNumber *)dbId;
 @end

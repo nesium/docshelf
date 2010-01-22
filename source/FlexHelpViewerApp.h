@@ -10,7 +10,6 @@
 #import <WebKit/WebKit.h>
 #import "FlexDocsParser.h"
 #import "FHVAppDelegate.h"
-#import "NSManagedObjectContext+Extensions.h"
 
 @interface FlexHelpViewerApp : NSObject{
 	IBOutlet NSWindow *m_importWindow;

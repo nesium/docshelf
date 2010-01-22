@@ -27,5 +27,4 @@ CREATE TABLE "fhv_signatures" (
 "type" INTEGER DEFAULT NULL);
 
 CREATE INDEX "idx_classes_name" ON "fhv_classes" ("name");
-CREATE INDEX "idx_signatures_name" ON "fhv_signatures" ("name");
-CREATE INDEX "idx_signatures_parent_id" ON "fhv_signatures" ("parent_id");
+CREATE INDEX "idx_signatures_sorting" ON "fhv_signatures" ("parent_id","parent_type","name","inherited","type");

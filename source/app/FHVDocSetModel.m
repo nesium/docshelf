@@ -39,19 +39,27 @@
 		m_detailData = nil;
 		m_selectedItem = nil;
 		m_showsInheritedSignatures = YES;
-		m_searchQueue = nil;
-		m_searchOp = nil;
 		m_inSearchMode = NO;
+		m_searchResults = nil;
+		m_lastSearchTerm = nil;
 		[self _loadDocSets];
-		[self _mergeDocSetsData];
+		m_searchWorkerConnection = [[NSConnection alloc] init];
+		[m_searchWorkerConnection setRootObject:self];
+		[m_searchWorkerConnection registerName:@"com.nesium.FlexHelpViewer.searchWorkerConnection"];
+		m_searchWorker = [[FHVSearchWorker alloc] initWithDocSets:m_docSets];
+		[m_searchWorker start];
+		[NSThread detachNewThreadSelector:@selector(_mergeDocSetsData) toTarget:self withObject:nil];
 	}
 	return self;
 }
 
 - (void)dealloc{
+	[m_mainData release];
+	[m_searchResults release];
+	[m_searchWorker release];
+	[m_searchWorkerConnection release];
 	[m_path release];
 	[m_docSets release];
-	[m_currentData release];
 	[super dealloc];
 }
 
@@ -187,25 +195,27 @@
 }
 
 - (void)setFilterString:(NSString *)filter{
-	if (m_searchQueue){
-		[m_searchOp removeObserver:self forKeyPath:@"isFinished"];
-		[m_searchQueue cancelAllOperations];
-		[m_searchQueue release];
-		m_searchQueue = nil;
-	}
+	if (filter == m_lastSearchTerm || [m_lastSearchTerm isEqualToString:filter])
+		return;
+	
+	[NSObject cancelPreviousPerformRequestsWithTarget:m_searchWorker];
+	[m_searchWorker cancelSearch];
+	[m_lastSearchTerm release];
+	m_lastSearchTerm = [filter copy];
+	
 	if (filter == nil){
 		m_inSearchMode = NO;
 		[self willChangeValueForKey:@"currentData"];
-		[m_currentData release];
-		m_currentData = [m_mainData retain];
+		[m_searchResults release];
+		m_searchResults = nil;
+		m_currentData = m_mainData;
 		[self didChangeValueForKey:@"currentData"];
 		return;
 	}
+	
 	m_inSearchMode = YES;
-	m_searchQueue = [[NSOperationQueue alloc] init];
-	m_searchOp = [[FHVDocSetSearchOperation alloc] initWithDocSets:m_docSets filter:filter];
-	[m_searchOp addObserver:self forKeyPath:@"isFinished" options:0 context:NULL];
-	[m_searchQueue addOperation:m_searchOp];
+	[m_searchWorker performSelector:@selector(performSearchWithTerm:) withObject:filter 
+		afterDelay:0.2];
 }
 
 - (NSImage *)imageForItem:(id)item{
@@ -235,20 +245,6 @@
 
 
 #pragma mark -
-#pragma mark KVO methods
-
--(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change 
-	context:(void *)context
-{
-	if (object == m_searchOp){
-		[self performSelectorOnMainThread:@selector(_searchResultsAvailable:) 
-			withObject:m_searchOp.searchResults waitUntilDone:NO];
-	}
-}
-
-
-
-#pragma mark -
 #pragma mark Private methods
 
 - (void)_loadDocSets{
@@ -267,6 +263,8 @@
 }
 
 - (void)_mergeDocSetsData{
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	
 	NSArray *docSets = m_docSets;
 	NSMutableArray *allPackages = [NSMutableArray array];
 	NSMutableDictionary *allClasses = [NSMutableDictionary dictionary];
@@ -282,6 +280,16 @@
 				[allClasses setObject:children forKey:classPackageName];
 			}
 			[children addObject:clazz];
+		}
+		NSArray *globalSignatures = [docSet allGlobalSignatures];
+		for (NSDictionary *sig in globalSignatures){
+			NSString *sigPackageName = [sig objectForKey:@"parentName"];
+			NSMutableArray *children = [allClasses objectForKey:sigPackageName];
+			if (!children){
+				children = [NSMutableArray array];
+				[allClasses setObject:children forKey:sigPackageName];
+			}
+			[children addObject:sig];
 		}
 	}
 	
@@ -311,11 +319,16 @@
 		[immutablePackage release];
 		[immutableChildren release];
 	}
-	[self willChangeValueForKey:@"currentData"];
-	[m_currentData release];
 	[m_mainData release];
-	m_currentData = [mergedData copy];
-	m_mainData = [m_currentData retain];
+	m_mainData = [mergedData copy];
+	[self performSelectorOnMainThread:@selector(_docSetDataMerged) withObject:nil waitUntilDone:NO];
+	
+	[pool release];
+}
+
+- (void)_docSetDataMerged{
+	[self willChangeValueForKey:@"currentData"];
+	m_currentData = m_mainData;
 	[self didChangeValueForKey:@"currentData"];
 }
 
@@ -348,12 +361,34 @@
 	return htmlString;
 }
 
-- (void)_searchResultsAvailable:(NSArray *)results{
-	NSLog(@"hello!");
+
+
+#pragma mark -
+#pragma mark FHVSearchWorkerProtocol methods
+
+- (void)searchDidStart{
+	NSLog(@"searchDidStart");
+	[self willChangeValueForKey:@"currentData"];
+	[m_searchResults release];
+	NSMutableArray *children = [NSMutableArray array];
+	NSMutableDictionary *headerNode = [NSMutableDictionary dictionary];
+	[headerNode setObject:@"Searching ..." forKey:@"name"];
+	[headerNode setObject:children forKey:@"children"];
+	m_searchResults = [[NSArray alloc] initWithObjects:headerNode, nil];
+	m_currentData = m_searchResults;
+	[self didChangeValueForKey:@"currentData"];
+}
+
+- (void)searchResultsAvailable:(NSArray *)results{
 	NSAssert([NSThread isMainThread], @"Not on main thread");
 	[self willChangeValueForKey:@"currentData"];
-	[m_currentData release];
-	m_currentData = [results copy];
+	NSMutableArray *children = [[m_searchResults objectAtIndex:0] objectForKey:@"children"];
+	[children addObjectsFromArray:results];
 	[self didChangeValueForKey:@"currentData"];
+}
+
+- (void)searchDidEnd{
+	NSLog(@"searchDidEnd");
+	[[m_searchResults objectAtIndex:0] setObject:@"Search Results" forKey:@"name"];
 }
 @end

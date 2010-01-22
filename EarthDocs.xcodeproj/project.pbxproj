@@ -21,9 +21,7 @@
 		2C6D218D10BC97B3004A6A12 /* HeadlineCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C6D218C10BC97B3004A6A12 /* HeadlineCell.m */; };
 		2C6D222010BCA4F0004A6A12 /* MultiCellTableColumn.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C6D221F10BCA4F0004A6A12 /* MultiCellTableColumn.m */; };
 		2C7E38A110BA1148005B403B /* h2_background.gif in Resources */ = {isa = PBXBuildFile; fileRef = 2C7E38A010BA1148005B403B /* h2_background.gif */; };
-		2C85E50C1107B6F8001920A7 /* FHVDocSetSearchOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C85E50B1107B6F8001920A7 /* FHVDocSetSearchOperation.m */; };
 		2C85E66C1107E19F001920A7 /* method.png in Resources */ = {isa = PBXBuildFile; fileRef = 2C85E66B1107E19F001920A7 /* method.png */; };
-		2C85E6711107E21F001920A7 /* HBImageAndTextCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C85E6701107E21F001920A7 /* HBImageAndTextCell.m */; };
 		2C85E6AA1107E585001920A7 /* class.png in Resources */ = {isa = PBXBuildFile; fileRef = 2C85E6A31107E585001920A7 /* class.png */; };
 		2C85E6AB1107E585001920A7 /* constant.png in Resources */ = {isa = PBXBuildFile; fileRef = 2C85E6A41107E585001920A7 /* constant.png */; };
 		2C85E6AC1107E585001920A7 /* event.png in Resources */ = {isa = PBXBuildFile; fileRef = 2C85E6A51107E585001920A7 /* event.png */; };
@@ -36,9 +34,11 @@
 		2C910259110659C60031698D /* FHVMainWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C910258110659C60031698D /* FHVMainWindowController.m */; };
 		2C91025E11065A100031698D /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2C91025C11065A100031698D /* MainWindow.xib */; };
 		2C9102D1110664F90031698D /* FHVDocSetModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C9102D0110664F90031698D /* FHVDocSetModel.m */; };
-		2CC3919410B7745D00C35BD8 /* NSManagedObjectContext+Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CC3919310B7745D00C35BD8 /* NSManagedObjectContext+Extensions.m */; };
+		2CAE7DF6110A149700D5767F /* FHVNiceIndentationOutlineView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CAE7DF5110A149700D5767F /* FHVNiceIndentationOutlineView.m */; };
+		2CAE7E83110A2FFF00D5767F /* FHVSearchWorker.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CAE7E82110A2FFF00D5767F /* FHVSearchWorker.m */; };
 		2CCFC17F110500590019F014 /* schema.sql in Resources */ = {isa = PBXBuildFile; fileRef = 2CCFC17E110500590019F014 /* schema.sql */; };
 		2CCFC1B2110512990019F014 /* SQLiteImporter.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CCFC1B1110512990019F014 /* SQLiteImporter.m */; };
+		2CE366111108B6FD00F582E9 /* ImageAndTextCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CE366101108B6FD00F582E9 /* ImageAndTextCell.m */; };
 		2CEE304B0DD65FC700CC762E /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2CEE304A0DD65FC700CC762E /* WebKit.framework */; };
 		2CEE30BA0DD6698100CC762E /* NodeClassToIconTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CEE30B90DD6698100CC762E /* NodeClassToIconTransformer.m */; };
 		2CEFC3CC0DDF3B3100F92DC6 /* FHVAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CEFC3CB0DDF3B3100F92DC6 /* FHVAppDelegate.m */; };
@@ -77,11 +77,7 @@
 		2C6D221E10BCA4F0004A6A12 /* MultiCellTableColumn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MultiCellTableColumn.h; sourceTree = "<group>"; };
 		2C6D221F10BCA4F0004A6A12 /* MultiCellTableColumn.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MultiCellTableColumn.m; sourceTree = "<group>"; };
 		2C7E38A010BA1148005B403B /* h2_background.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = h2_background.gif; sourceTree = "<group>"; };
-		2C85E50A1107B6F8001920A7 /* FHVDocSetSearchOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FHVDocSetSearchOperation.h; sourceTree = "<group>"; };
-		2C85E50B1107B6F8001920A7 /* FHVDocSetSearchOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FHVDocSetSearchOperation.m; sourceTree = "<group>"; };
 		2C85E66B1107E19F001920A7 /* method.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = method.png; sourceTree = "<group>"; };
-		2C85E66F1107E21F001920A7 /* HBImageAndTextCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBImageAndTextCell.h; sourceTree = "<group>"; };
-		2C85E6701107E21F001920A7 /* HBImageAndTextCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBImageAndTextCell.m; sourceTree = "<group>"; };
 		2C85E6A31107E585001920A7 /* class.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = class.png; sourceTree = "<group>"; };
 		2C85E6A41107E585001920A7 /* constant.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = constant.png; sourceTree = "<group>"; };
 		2C85E6A51107E585001920A7 /* event.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = event.png; sourceTree = "<group>"; };
@@ -96,11 +92,15 @@
 		2C91025D11065A100031698D /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/MainWindow.xib; sourceTree = "<group>"; };
 		2C9102CF110664F90031698D /* FHVDocSetModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FHVDocSetModel.h; sourceTree = "<group>"; };
 		2C9102D0110664F90031698D /* FHVDocSetModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FHVDocSetModel.m; sourceTree = "<group>"; };
-		2CC3919210B7745D00C35BD8 /* NSManagedObjectContext+Extensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSManagedObjectContext+Extensions.h"; sourceTree = "<group>"; };
-		2CC3919310B7745D00C35BD8 /* NSManagedObjectContext+Extensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSManagedObjectContext+Extensions.m"; sourceTree = "<group>"; };
+		2CAE7DF4110A149700D5767F /* FHVNiceIndentationOutlineView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FHVNiceIndentationOutlineView.h; sourceTree = "<group>"; };
+		2CAE7DF5110A149700D5767F /* FHVNiceIndentationOutlineView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FHVNiceIndentationOutlineView.m; sourceTree = "<group>"; };
+		2CAE7E81110A2FFF00D5767F /* FHVSearchWorker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FHVSearchWorker.h; sourceTree = "<group>"; };
+		2CAE7E82110A2FFF00D5767F /* FHVSearchWorker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FHVSearchWorker.m; sourceTree = "<group>"; };
 		2CCFC17E110500590019F014 /* schema.sql */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = schema.sql; path = Resources/schema.sql; sourceTree = "<group>"; };
 		2CCFC1B0110512990019F014 /* SQLiteImporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SQLiteImporter.h; sourceTree = "<group>"; };
 		2CCFC1B1110512990019F014 /* SQLiteImporter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SQLiteImporter.m; sourceTree = "<group>"; };
+		2CE3660F1108B6FD00F582E9 /* ImageAndTextCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageAndTextCell.h; sourceTree = "<group>"; };
+		2CE366101108B6FD00F582E9 /* ImageAndTextCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageAndTextCell.m; sourceTree = "<group>"; };
 		2CEE304A0DD65FC700CC762E /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = /System/Library/Frameworks/WebKit.framework; sourceTree = "<absolute>"; };
 		2CEE30B80DD6698100CC762E /* NodeClassToIconTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NodeClassToIconTransformer.h; sourceTree = "<group>"; };
 		2CEE30B90DD6698100CC762E /* NodeClassToIconTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NodeClassToIconTransformer.m; sourceTree = "<group>"; };
@@ -226,8 +226,6 @@
 			children = (
 				2C1987AB1101F4E000C3A1BD /* NSString+FHVUtils.h */,
 				2C1987AC1101F4E000C3A1BD /* NSString+FHVUtils.m */,
-				2CC3919210B7745D00C35BD8 /* NSManagedObjectContext+Extensions.h */,
-				2CC3919310B7745D00C35BD8 /* NSManagedObjectContext+Extensions.m */,
 			);
 			name = categories;
 			sourceTree = "<group>";
@@ -262,8 +260,8 @@
 		2CEE30B70DD6696E00CC762E /* util */ = {
 			isa = PBXGroup;
 			children = (
-				2C85E66F1107E21F001920A7 /* HBImageAndTextCell.h */,
-				2C85E6701107E21F001920A7 /* HBImageAndTextCell.m */,
+				2CE3660F1108B6FD00F582E9 /* ImageAndTextCell.h */,
+				2CE366101108B6FD00F582E9 /* ImageAndTextCell.m */,
 				2C6D218B10BC97B3004A6A12 /* HeadlineCell.h */,
 				2C6D218C10BC97B3004A6A12 /* HeadlineCell.m */,
 				2C53681010B9D14600D9C0E4 /* RSVerticallyCenteredTextFieldCell.h */,
@@ -274,6 +272,8 @@
 				2C6D221F10BCA4F0004A6A12 /* MultiCellTableColumn.m */,
 				2C64D50A11028577008D90E0 /* utils.h */,
 				2C64D50B11028577008D90E0 /* utils.m */,
+				2CAE7DF4110A149700D5767F /* FHVNiceIndentationOutlineView.h */,
+				2CAE7DF5110A149700D5767F /* FHVNiceIndentationOutlineView.m */,
 			);
 			path = util;
 			sourceTree = "<group>";
@@ -289,8 +289,8 @@
 				2C910258110659C60031698D /* FHVMainWindowController.m */,
 				2C9102CF110664F90031698D /* FHVDocSetModel.h */,
 				2C9102D0110664F90031698D /* FHVDocSetModel.m */,
-				2C85E50A1107B6F8001920A7 /* FHVDocSetSearchOperation.h */,
-				2C85E50B1107B6F8001920A7 /* FHVDocSetSearchOperation.m */,
+				2CAE7E81110A2FFF00D5767F /* FHVSearchWorker.h */,
+				2CAE7E82110A2FFF00D5767F /* FHVSearchWorker.m */,
 			);
 			path = app;
 			sourceTree = "<group>";
@@ -409,7 +409,6 @@
 				2CF5FB860DD5BCB40049C53D /* FlexDocsParser.m in Sources */,
 				2CEE30BA0DD6698100CC762E /* NodeClassToIconTransformer.m in Sources */,
 				2CEFC3CC0DDF3B3100F92DC6 /* FHVAppDelegate.m in Sources */,
-				2CC3919410B7745D00C35BD8 /* NSManagedObjectContext+Extensions.m in Sources */,
 				2C53681210B9D14600D9C0E4 /* RSVerticallyCenteredTextFieldCell.m in Sources */,
 				2C6D218D10BC97B3004A6A12 /* HeadlineCell.m in Sources */,
 				2C6D222010BCA4F0004A6A12 /* MultiCellTableColumn.m in Sources */,
@@ -424,8 +423,9 @@
 				2C910165110646790031698D /* FHVDocSet.m in Sources */,
 				2C910259110659C60031698D /* FHVMainWindowController.m in Sources */,
 				2C9102D1110664F90031698D /* FHVDocSetModel.m in Sources */,
-				2C85E50C1107B6F8001920A7 /* FHVDocSetSearchOperation.m in Sources */,
-				2C85E6711107E21F001920A7 /* HBImageAndTextCell.m in Sources */,
+				2CE366111108B6FD00F582E9 /* ImageAndTextCell.m in Sources */,
+				2CAE7DF6110A149700D5767F /* FHVNiceIndentationOutlineView.m in Sources */,
+				2CAE7E83110A2FFF00D5767F /* FHVSearchWorker.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
