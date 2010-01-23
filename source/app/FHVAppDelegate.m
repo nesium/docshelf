@@ -15,6 +15,13 @@
 
 @implementation FHVAppDelegate
 
++ (void)initialize{
+	NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+	[dict setObject:[NSNumber numberWithInt:kFHVDocSetSearchModePrefix] forKey:@"FHVDocSetSearchMode"];
+	[dict setObject:[NSNumber numberWithBool:YES] forKey:@"FHVDocSetShowsInheritedSignatures"];
+	[[NSUserDefaults standardUserDefaults] registerDefaults:dict];
+}
+
 - (NSString *)applicationSupportFolder{
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, 
 		NSUserDomainMask, YES);

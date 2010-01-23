@@ -10,6 +10,7 @@
 #import "FHVDocSetModel.h"
 #import "FHVMainWindowController.h"
 #import "FlexDocsParser.h"
+#import "Constants.h"
 
 
 @interface FHVAppDelegate : NSObject{

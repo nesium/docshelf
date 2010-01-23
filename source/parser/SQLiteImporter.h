@@ -8,23 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 #import "sqlite3.h"
-
-typedef enum _FHVSignatureParentType{
-	kSigParentTypePackage = 0, 
-	kSigParentTypeClass = 1
-} FHVSignatureParentType;
-
-typedef enum _FHVSignatureType{
-	kSigTypeFunction = 0, 
-	kSigTypeVariable = 1, 
-	kSigTypeConstant = 2, 
-	kSigTypeEvent = 3
-} FHVSignatureType;
-
-typedef enum _FHVClassType{
-	kClassTypeClass = 0, 
-	kClassTypeInterface = 1
-} FHVClassType;
+#import "Constants.h"
 
 
 @interface SQLiteImporter : NSObject {

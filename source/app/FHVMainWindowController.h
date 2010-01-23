@@ -9,9 +9,9 @@
 #import <Cocoa/Cocoa.h>
 #import <WebKit/WebKit.h>
 #import "FHVDocSetModel.h"
-#import "FHVDocSet.h"
 #import "HeadlineCell.h"
 #import "Filterbar.h"
+#import "Constants.h"
 
 
 @interface FHVMainWindowController : NSWindowController{

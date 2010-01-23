@@ -106,6 +106,7 @@
 		2CB33D3D110B3ADC00A7C238 /* FilterbarGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FilterbarGroup.m; sourceTree = "<group>"; };
 		2CB33D3E110B3ADC00A7C238 /* FilterbarGroupItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FilterbarGroupItem.h; sourceTree = "<group>"; };
 		2CB33D3F110B3ADC00A7C238 /* FilterbarGroupItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FilterbarGroupItem.m; sourceTree = "<group>"; };
+		2CB33EC0110B5A0100A7C238 /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		2CCFC17E110500590019F014 /* schema.sql */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = schema.sql; path = Resources/schema.sql; sourceTree = "<group>"; };
 		2CCFC1B0110512990019F014 /* SQLiteImporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SQLiteImporter.h; sourceTree = "<group>"; };
 		2CCFC1B1110512990019F014 /* SQLiteImporter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SQLiteImporter.m; sourceTree = "<group>"; };
@@ -324,6 +325,7 @@
 				2C9102D0110664F90031698D /* FHVDocSetModel.m */,
 				2CAE7E81110A2FFF00D5767F /* FHVSearchWorker.h */,
 				2CAE7E82110A2FFF00D5767F /* FHVSearchWorker.m */,
+				2CB33EC0110B5A0100A7C238 /* Constants.h */,
 			);
 			path = app;
 			sourceTree = "<group>";

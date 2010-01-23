@@ -35,19 +35,21 @@
 
 - (id)initWithDocSetPath:(NSString *)path{
 	if (self = [super init]){
+		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 		m_path = [path copy];
 		m_docSets = nil;
 		m_currentData = nil;
 		m_selectionData = nil;
 		m_detailData = nil;
 		m_selectedItem = nil;
-		m_showsInheritedSignatures = YES;
+		m_showsInheritedSignatures = [[defaults objectForKey:@"FHVDocSetShowsInheritedSignatures"] 
+			boolValue];
 		m_inSearchMode = NO;
 		m_searchResults = nil;
 		m_lastSearchTerm = nil;
 		m_detailSelectionIndex = -1;
 		m_detailSelectionAnchor = nil;
-		m_searchMode = kFHVDocSetSearchModeContains;
+		m_searchMode = [[defaults objectForKey:@"FHVDocSetSearchMode"] intValue];
 		[self _loadDocSets];
 		m_searchWorkerConnection = [[NSConnection alloc] init];
 		[m_searchWorkerConnection setRootObject:self];
@@ -210,6 +212,9 @@
 }
 
 - (void)setShowsInheritedSignatures:(BOOL)bFlag{
+	if (m_showsInheritedSignatures == bFlag) return;
+	[[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithBool:bFlag] 
+		forKey:@"FHVDocSetShowsInheritedSignatures"];
 	m_showsInheritedSignatures = bFlag;
 	[self selectFirstLevelItem:m_selectedItem];
 }
@@ -241,6 +246,8 @@
 - (void)setSearchMode:(FHVDocSetSearchMode)mode{
 	if (m_searchMode == mode) return;
 	m_searchMode = mode;
+	[[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithInt:mode] 
+		forKey:@"FHVDocSetSearchMode"];
 	if (!m_inSearchMode) return;
 	[NSObject cancelPreviousPerformRequestsWithTarget:self];
 	[self performSelector:@selector(_performSearchWithTerm:) withObject:m_lastSearchTerm 

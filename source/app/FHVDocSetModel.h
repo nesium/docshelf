@@ -9,8 +9,8 @@
 #import <Cocoa/Cocoa.h>
 #import "FHVDocSet.h"
 #import "NSString+FHVUtils.h"
-#import "SQLiteImporter.h"
 #import "FHVSearchWorker.h"
+#import "Constants.h"
 
 @interface FHVDocSetModel : NSObject{
 	NSString *m_path;

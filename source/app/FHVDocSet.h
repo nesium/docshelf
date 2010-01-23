@@ -8,19 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 #import "sqlite3.h"
-#import "SQLiteImporter.h"
-
-typedef enum _FHVItemType{
-	kItemTypePackage = 1, 
-	kItemTypeClass = 2, 
-	kItemTypeSignature = 3
-} FHVItemType;
-
-typedef enum _FHVDocSetSearchMode{
-	kFHVDocSetSearchModeContains = 0,
-	kFHVDocSetSearchModePrefix = 1, 
-	kFHVDocSetSearchModeExact = 2
-} FHVDocSetSearchMode;
+#import "Constants.h"
 
 
 @interface FHVDocSet : NSObject{

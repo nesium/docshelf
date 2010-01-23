@@ -337,12 +337,14 @@ static HeadlineCell *g_headlineCell = nil;
 	NSRect contentViewBounds = [[self.window contentView] bounds];
 	NSRect filterBarBounds = [m_filterBar bounds];
 	if (bFlag){
+		NSLog(@"add filter bar");
 		[m_outerSplitView setFrame:(NSRect){-1, 0, NSWidth(contentViewBounds) + 1, 
 			NSHeight(contentViewBounds) - NSHeight(filterBarBounds) + 1}];
 		[m_filterBar setFrame:(NSRect){0, NSHeight(contentViewBounds) - NSHeight(filterBarBounds), 
 			NSWidth(contentViewBounds), NSHeight(filterBarBounds)}];
 		[[self.window contentView] addSubview:m_filterBar];
 	}else{
+		NSLog(@"remove filterbar");
 		[m_filterBar removeFromSuperview];
 		[m_outerSplitView setFrame:NSInsetRect(contentViewBounds, -1, -1)];
 	}
