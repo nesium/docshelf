@@ -15,7 +15,7 @@
 - (FHVDocSet *)_docSetForItem:(id)item;
 - (NSString *)_classHTMLStringWithClassNode:(NSDictionary *)classNode 
 	signatures:(NSArray *)signatures;
-- (void)_searchResultsAvailable:(NSArray *)results;
+- (void)_updateDetailSelectionIndex:(NSNumber *)idToLookFor;
 @end
 
 
@@ -25,7 +25,10 @@
 			selectionData=m_selectionData, 
 			detailData=m_detailData, 
 			showsInheritedSignatures=m_showsInheritedSignatures, 
-			inSearchMode=m_inSearchMode;
+			inSearchMode=m_inSearchMode, 
+			detailSelectionIndex=m_detailSelectionIndex, 
+			detailSelectionAnchor=m_detailSelectionAnchor, 
+			searchMode=m_searchMode;
 
 #pragma mark -
 #pragma mark Initialization & Deallocation
@@ -42,6 +45,9 @@
 		m_inSearchMode = NO;
 		m_searchResults = nil;
 		m_lastSearchTerm = nil;
+		m_detailSelectionIndex = -1;
+		m_detailSelectionAnchor = nil;
+		m_searchMode = kFHVDocSetSearchModeContains;
 		[self _loadDocSets];
 		m_searchWorkerConnection = [[NSConnection alloc] init];
 		[m_searchWorkerConnection setRootObject:self];
@@ -69,11 +75,11 @@
 #pragma mark Public methods
 
 - (void)selectFirstLevelItem:(id)item{
-	[item retain];
-	[m_selectedItem release];
-	m_selectedItem = item;
+	m_detailSelectionIndex = -1;
 	
 	if (item == nil){
+		[m_selectedItem release];
+		m_selectedItem = nil;
 		[self willChangeValueForKey:@"selectionData"];
 		[m_selectionData release];
 		m_selectionData = nil;
@@ -87,10 +93,23 @@
 	
 	// @TODO handle the case where item could be a package, or where the parent of the item could 
 	// be a package
+	NSNumber *idToSelect = nil;
 	FHVDocSet *docSet = [self _docSetForItem:item];
 	if ([[item objectForKey:@"itemType"] intValue] == kItemTypeSignature){
+		idToSelect = [item objectForKey:@"dbId"];
 		item = [docSet classWithId:[item objectForKey:@"parentDbId"]];
 	}
+	
+	if (m_selectedItem != nil && [[item objectForKey:@"itemType"] 
+		isEqualToNumber:[m_selectedItem objectForKey:@"itemType"]] && 
+		[[item objectForKey:@"dbId"] isEqualToNumber:[m_selectedItem objectForKey:@"dbId"]]){
+		[self _updateDetailSelectionIndex:idToSelect];
+		return;
+	}
+	
+	[item retain];
+	[m_selectedItem release];
+	m_selectedItem = item;
 	
 	NSNumber *selectedId = [item objectForKey:@"dbId"];
 	NSArray *sigs = [docSet signaturesWithParentId:selectedId 
@@ -162,6 +181,7 @@
 	[self willChangeValueForKey:@"selectionData"];
 	[m_selectionData release];
 	m_selectionData = [mergedSigs copy];
+	if (idToSelect) [self _updateDetailSelectionIndex:idToSelect];
 	[self didChangeValueForKey:@"selectionData"];
 	
 	NSString *htmlBody = [self _classHTMLStringWithClassNode:[docSet classWithId:selectedId] 
@@ -194,11 +214,11 @@
 	[self selectFirstLevelItem:m_selectedItem];
 }
 
-- (void)setFilterString:(NSString *)filter{
+- (void)setSearchTerm:(NSString *)filter{
 	if (filter == m_lastSearchTerm || [m_lastSearchTerm isEqualToString:filter])
 		return;
 	
-	[NSObject cancelPreviousPerformRequestsWithTarget:m_searchWorker];
+	[NSObject cancelPreviousPerformRequestsWithTarget:self];
 	[m_searchWorker cancelSearch];
 	[m_lastSearchTerm release];
 	m_lastSearchTerm = [filter copy];
@@ -214,7 +234,16 @@
 	}
 	
 	m_inSearchMode = YES;
-	[m_searchWorker performSelector:@selector(performSearchWithTerm:) withObject:filter 
+	[self performSelector:@selector(_performSearchWithTerm:) withObject:filter 
+		afterDelay:0.2];
+}
+
+- (void)setSearchMode:(FHVDocSetSearchMode)mode{
+	if (m_searchMode == mode) return;
+	m_searchMode = mode;
+	if (!m_inSearchMode) return;
+	[NSObject cancelPreviousPerformRequestsWithTarget:self];
+	[self performSelector:@selector(_performSearchWithTerm:) withObject:m_lastSearchTerm 
 		afterDelay:0.2];
 }
 
@@ -359,6 +388,29 @@
 		}
 	}
 	return htmlString;
+}
+
+- (void)_updateDetailSelectionIndex:(NSNumber *)idToSelect{
+	NSInteger i = 0;
+	[m_detailSelectionAnchor release];
+	m_detailSelectionAnchor = nil;
+	for (NSDictionary *dict in m_selectionData){
+		i++;
+		NSArray *children = [dict objectForKey:@"children"];
+		for (NSDictionary *sig in children){
+			if ([[sig objectForKey:@"dbId"] isEqualToNumber:idToSelect]){
+				m_detailSelectionIndex = i;
+				m_detailSelectionAnchor = [[self anchorForItem:sig] retain];
+				return;
+			}
+			i++;
+		}
+	}
+	m_detailSelectionIndex = -1;
+}
+
+- (void)_performSearchWithTerm:(NSString *)term{
+	[m_searchWorker performSearchWithTerm:term mode:m_searchMode];
 }
 
 

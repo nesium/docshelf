@@ -20,6 +20,7 @@ NSString *sqlite3_column_nsstring(sqlite3_stmt *stmt, int col){
 	cancelCondition:(BOOL *)cancelCondition;
 - (NSArray *)_fetchSignatures:(NSString *)whereClause includeDetail:(BOOL)includeDetail 
 	limit:(NSInteger)limit cancelCondition:(BOOL *)cancelCondition;
+- (NSString *)_conditionForSearchTerm:(NSString *)term andMode:(FHVDocSetSearchMode)mode;
 @end
 
 
@@ -96,15 +97,18 @@ NSString *sqlite3_column_nsstring(sqlite3_stmt *stmt, int col){
 	return [classes objectAtIndex:0];
 }
 
-- (NSArray *)classesFilteredByExpression:(NSString *)filter cancelCondition:(BOOL *)cancelCondition{
-	return [self _fetchClasses:[NSString stringWithFormat:@"`name` LIKE '%@'", filter] 
+- (NSArray *)classesFilteredByExpression:(NSString *)filter searchMode:(FHVDocSetSearchMode)searchMode 
+	cancelCondition:(BOOL *)cancelCondition{
+	return [self _fetchClasses:[self _conditionForSearchTerm:filter andMode:searchMode] 
 		includeDetail:NO cancelCondition:cancelCondition];
 }
 
 - (NSArray *)signaturesFilteredByExpression:(NSString *)filter 
-	cancelCondition:(BOOL *)cancelCondition{
-	return [self _fetchSignatures:[NSString stringWithFormat:@"`name` LIKE '%@' AND `inherited` = 0", 
-		filter] includeDetail:NO limit:300 cancelCondition:cancelCondition];
+	searchMode:(FHVDocSetSearchMode)searchMode cancelCondition:(BOOL *)cancelCondition{
+	NSString *whereClause = [NSString stringWithFormat:@"%@  AND `inherited` = 0", 
+		[self _conditionForSearchTerm:filter andMode:searchMode]];
+	return [self _fetchSignatures:whereClause includeDetail:NO limit:300 
+		cancelCondition:cancelCondition];
 }
 
 
@@ -193,5 +197,17 @@ NSString *sqlite3_column_nsstring(sqlite3_stmt *stmt, int col){
 	}
 	m_db = 0x0;
 	return YES;
+}
+
+- (NSString *)_conditionForSearchTerm:(NSString *)term andMode:(FHVDocSetSearchMode)mode{
+	NSString *searchString = nil;
+	if (mode == kFHVDocSetSearchModeContains){
+		searchString = @"`name` LIKE '%%%@%%'";
+	}else if (mode == kFHVDocSetSearchModePrefix){
+		searchString = @"`name` LIKE '%@%%'";
+	}else{
+		searchString = @"`name` LIKE '%@'";
+	}
+	return [NSString stringWithFormat:searchString, term];
 }
 @end

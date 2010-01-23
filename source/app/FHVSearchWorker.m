@@ -34,12 +34,13 @@
 	[super dealloc];
 }
 
-- (void)performSearchWithTerm:(NSString *)term{
+- (void)performSearchWithTerm:(NSString *)term mode:(FHVDocSetSearchMode)mode{
 	m_interrupted = YES;
 	[m_lock lock];
 	[term retain];
 	[m_searchTerm release];
 	m_searchTerm = term;
+	m_searchMode = mode;
 	[m_lock unlockWithCondition:SEARCH_TERM_AVAILABLE];
 }
 
@@ -79,6 +80,7 @@
 		for (FHVDocSet *docSet in m_docSets){
 			if (m_interrupted) break;
 			NSArray *results = [docSet classesFilteredByExpression:searchTerm 
+				searchMode:m_searchMode 
 				cancelCondition:&m_interrupted];
 			if (m_interrupted) break;
 			[m_connectionProxy searchResultsAvailable:results];
@@ -86,6 +88,7 @@
 		for (FHVDocSet *docSet in m_docSets){
 			if (m_interrupted) break;
 			NSArray *results = [docSet signaturesFilteredByExpression:searchTerm 
+				searchMode:m_searchMode 
 				cancelCondition:&m_interrupted];
 			if (m_interrupted) break;
 			[m_connectionProxy searchResultsAvailable:results];

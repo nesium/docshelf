@@ -16,6 +16,12 @@ typedef enum _FHVItemType{
 	kItemTypeSignature = 3
 } FHVItemType;
 
+typedef enum _FHVDocSetSearchMode{
+	kFHVDocSetSearchModeContains = 0,
+	kFHVDocSetSearchModePrefix = 1, 
+	kFHVDocSetSearchModeExact = 2
+} FHVDocSetSearchMode;
+
 
 @interface FHVDocSet : NSObject{
 	NSString *m_path;
@@ -28,8 +34,10 @@ typedef enum _FHVItemType{
 - (NSArray *)allPackages;
 - (NSArray *)allClasses;
 - (NSArray *)allGlobalSignatures;
-- (NSArray *)classesFilteredByExpression:(NSString *)filter cancelCondition:(BOOL *)cancelCondition;
-- (NSArray *)signaturesFilteredByExpression:(NSString *)filter cancelCondition:(BOOL *)cancelCondition;
+- (NSArray *)classesFilteredByExpression:(NSString *)filter searchMode:(FHVDocSetSearchMode)searchMode 
+	cancelCondition:(BOOL *)cancelCondition;
+- (NSArray *)signaturesFilteredByExpression:(NSString *)filter 
+	searchMode:(FHVDocSetSearchMode)searchMode cancelCondition:(BOOL *)cancelCondition;
 - (NSArray *)signaturesWithParentId:(NSNumber *)parentId includeInherited:(BOOL)bFlag;
 - (NSDictionary *)classWithId:(NSNumber *)dbId;
 @end

@@ -13,15 +13,15 @@
 
 - (void)drawWithFrame:(NSRect)cellFrame inView:(NSView*)controlView{
 	NSRect frame = (NSRect){0, NSMinY(cellFrame) - 1, NSWidth([controlView bounds]), NSHeight(cellFrame) + 1};
-	[[NSColor colorWithCalibratedRed:0.725 green:0.725 blue:0.725 alpha:1.0] drawSwatchInRect:frame];
+	[[NSColor colorWithCalibratedRed:0.669 green:0.669 blue:0.669 alpha:1.0] drawSwatchInRect:frame];
 	frame = NSInsetRect(frame, 0, 1);
 	[[NSColor whiteColor] drawSwatchInRect:frame];
 	frame.origin.y += 1.0;
 	frame.size.height -= 1.0;
 	
 	NSGradient *gradient = [[NSGradient alloc] 
-		initWithStartingColor:[NSColor colorWithCalibratedRed:0.855 green:0.855 blue:0.855 alpha:1.0] 
-		endingColor:[NSColor colorWithCalibratedRed:0.929 green:0.929 blue:0.929 alpha:1.0]];
+		initWithStartingColor:[NSColor colorWithCalibratedRed:0.811 green:0.812 blue:0.811 alpha:1.0] 
+		endingColor:[NSColor colorWithCalibratedRed:0.912 green:0.912 blue:0.912 alpha:1.0]];
 	[gradient drawInRect:frame angle:-90.0];
 	[gradient release];
 	

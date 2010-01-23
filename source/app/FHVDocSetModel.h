@@ -12,7 +12,6 @@
 #import "SQLiteImporter.h"
 #import "FHVSearchWorker.h"
 
-
 @interface FHVDocSetModel : NSObject{
 	NSString *m_path;
 	NSArray *m_docSets;
@@ -27,16 +26,22 @@
 	BOOL m_inSearchMode;
 	FHVSearchWorker *m_searchWorker;
 	NSConnection *m_searchWorkerConnection;
+	NSInteger m_detailSelectionIndex;
+	NSString *m_detailSelectionAnchor;
+	FHVDocSetSearchMode m_searchMode;
 }
 @property (readonly) NSArray *currentData;
 @property (readonly) NSArray *selectionData;
 @property (readonly) NSString *detailData;
 @property (nonatomic, assign) BOOL showsInheritedSignatures;
 @property (readonly) BOOL inSearchMode;
+@property (readonly) NSInteger detailSelectionIndex;
+@property (readonly) NSString *detailSelectionAnchor;
+@property (nonatomic, assign) FHVDocSetSearchMode searchMode;
 - (id)initWithDocSetPath:(NSString *)path;
 - (void)selectFirstLevelItem:(id)item;
 - (NSURL *)URLForImageWithName:(NSString *)imageName;
 - (NSString *)anchorForItem:(id)item;
-- (void)setFilterString:(NSString *)filter;
+- (void)setSearchTerm:(NSString *)filter;
 - (NSImage *)imageForItem:(id)item;
 @end

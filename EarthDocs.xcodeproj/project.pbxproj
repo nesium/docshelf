@@ -36,6 +36,9 @@
 		2C9102D1110664F90031698D /* FHVDocSetModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C9102D0110664F90031698D /* FHVDocSetModel.m */; };
 		2CAE7DF6110A149700D5767F /* FHVNiceIndentationOutlineView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CAE7DF5110A149700D5767F /* FHVNiceIndentationOutlineView.m */; };
 		2CAE7E83110A2FFF00D5767F /* FHVSearchWorker.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CAE7E82110A2FFF00D5767F /* FHVSearchWorker.m */; };
+		2CB33D40110B3ADC00A7C238 /* Filterbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CB33D3A110B3ADC00A7C238 /* Filterbar.m */; };
+		2CB33D41110B3ADC00A7C238 /* FilterbarGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CB33D3D110B3ADC00A7C238 /* FilterbarGroup.m */; };
+		2CB33D42110B3ADC00A7C238 /* FilterbarGroupItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CB33D3F110B3ADC00A7C238 /* FilterbarGroupItem.m */; };
 		2CCFC17F110500590019F014 /* schema.sql in Resources */ = {isa = PBXBuildFile; fileRef = 2CCFC17E110500590019F014 /* schema.sql */; };
 		2CCFC1B2110512990019F014 /* SQLiteImporter.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CCFC1B1110512990019F014 /* SQLiteImporter.m */; };
 		2CE366111108B6FD00F582E9 /* ImageAndTextCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CE366101108B6FD00F582E9 /* ImageAndTextCell.m */; };
@@ -96,6 +99,13 @@
 		2CAE7DF5110A149700D5767F /* FHVNiceIndentationOutlineView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FHVNiceIndentationOutlineView.m; sourceTree = "<group>"; };
 		2CAE7E81110A2FFF00D5767F /* FHVSearchWorker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FHVSearchWorker.h; sourceTree = "<group>"; };
 		2CAE7E82110A2FFF00D5767F /* FHVSearchWorker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FHVSearchWorker.m; sourceTree = "<group>"; };
+		2CB33D39110B3ADC00A7C238 /* Filterbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Filterbar.h; sourceTree = "<group>"; };
+		2CB33D3A110B3ADC00A7C238 /* Filterbar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Filterbar.m; sourceTree = "<group>"; };
+		2CB33D3B110B3ADC00A7C238 /* FilterbarDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FilterbarDelegate.h; sourceTree = "<group>"; };
+		2CB33D3C110B3ADC00A7C238 /* FilterbarGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FilterbarGroup.h; sourceTree = "<group>"; };
+		2CB33D3D110B3ADC00A7C238 /* FilterbarGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FilterbarGroup.m; sourceTree = "<group>"; };
+		2CB33D3E110B3ADC00A7C238 /* FilterbarGroupItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FilterbarGroupItem.h; sourceTree = "<group>"; };
+		2CB33D3F110B3ADC00A7C238 /* FilterbarGroupItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FilterbarGroupItem.m; sourceTree = "<group>"; };
 		2CCFC17E110500590019F014 /* schema.sql */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = schema.sql; path = Resources/schema.sql; sourceTree = "<group>"; };
 		2CCFC1B0110512990019F014 /* SQLiteImporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SQLiteImporter.h; sourceTree = "<group>"; };
 		2CCFC1B1110512990019F014 /* SQLiteImporter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SQLiteImporter.m; sourceTree = "<group>"; };
@@ -182,6 +192,7 @@
 			isa = PBXGroup;
 			children = (
 				080E96DDFE201D6D7F000001 /* source */,
+				2CB33D37110B3ADC00A7C238 /* Libraries */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
@@ -219,6 +230,28 @@
 				1058C7A2FEA54F0111CA2CBB /* Other Frameworks */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		2CB33D37110B3ADC00A7C238 /* Libraries */ = {
+			isa = PBXGroup;
+			children = (
+				2CB33D38110B3ADC00A7C238 /* Filterbar */,
+			);
+			path = Libraries;
+			sourceTree = "<group>";
+		};
+		2CB33D38110B3ADC00A7C238 /* Filterbar */ = {
+			isa = PBXGroup;
+			children = (
+				2CB33D39110B3ADC00A7C238 /* Filterbar.h */,
+				2CB33D3A110B3ADC00A7C238 /* Filterbar.m */,
+				2CB33D3B110B3ADC00A7C238 /* FilterbarDelegate.h */,
+				2CB33D3C110B3ADC00A7C238 /* FilterbarGroup.h */,
+				2CB33D3D110B3ADC00A7C238 /* FilterbarGroup.m */,
+				2CB33D3E110B3ADC00A7C238 /* FilterbarGroupItem.h */,
+				2CB33D3F110B3ADC00A7C238 /* FilterbarGroupItem.m */,
+			);
+			path = Filterbar;
 			sourceTree = "<group>";
 		};
 		2CC3919110B7743E00C35BD8 /* categories */ = {
@@ -426,6 +459,9 @@
 				2CE366111108B6FD00F582E9 /* ImageAndTextCell.m in Sources */,
 				2CAE7DF6110A149700D5767F /* FHVNiceIndentationOutlineView.m in Sources */,
 				2CAE7E83110A2FFF00D5767F /* FHVSearchWorker.m in Sources */,
+				2CB33D40110B3ADC00A7C238 /* Filterbar.m in Sources */,
+				2CB33D41110B3ADC00A7C238 /* FilterbarGroup.m in Sources */,
+				2CB33D42110B3ADC00A7C238 /* FilterbarGroupItem.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

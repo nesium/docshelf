@@ -22,10 +22,11 @@ enum {SEARCH_TERM_AVAILABLE, NO_SEARCH_TERM};
 	BOOL m_interrupted;
 	NSConditionLock *m_lock;
 	NSString *m_searchTerm;
+	FHVDocSetSearchMode m_searchMode;
 	NSArray *m_docSets;
 }
 - (id)initWithDocSets:(NSArray *)docSets;
 - (void)start;
-- (void)performSearchWithTerm:(NSString *)term;
+- (void)performSearchWithTerm:(NSString *)term mode:(FHVDocSetSearchMode)mode;
 - (void)cancelSearch;
 @end

@@ -9,7 +9,9 @@
 #import <Cocoa/Cocoa.h>
 #import <WebKit/WebKit.h>
 #import "FHVDocSetModel.h"
+#import "FHVDocSet.h"
 #import "HeadlineCell.h"
+#import "Filterbar.h"
 
 
 @interface FHVMainWindowController : NSWindowController{
@@ -17,6 +19,8 @@
 	IBOutlet NSOutlineView *m_selectionOutlineView;
 	IBOutlet WebView *m_webView;
 	IBOutlet NSSearchField *m_searchField;
+	IBOutlet Filterbar *m_filterBar;
+	IBOutlet NSSplitView *m_outerSplitView;
 	NSTimeInterval m_lastOutlineViewUpdateTime;
 	BOOL m_outlineViewUpdateDelayed;
 	FHVDocSetModel *m_docSetModel;
