@@ -19,12 +19,15 @@ NSString *sqlite3_column_nsstring(sqlite3_stmt *stmt, int col){
 - (NSArray *)_fetchClasses:(NSString *)whereClause includeDetail:(BOOL)includeDetail 
 	cancelCondition:(BOOL *)cancelCondition;
 - (NSArray *)_fetchSignatures:(NSString *)whereClause includeDetail:(BOOL)includeDetail 
-	limit:(NSInteger)limit cancelCondition:(BOOL *)cancelCondition;
+	limit:(NSInteger)limit cancelCondition:(BOOL *)cancelCondition preventSorting:(BOOL)preventSorting;
 - (NSString *)_conditionForSearchTerm:(NSString *)term andMode:(FHVDocSetSearchMode)mode;
+- (void)_saveInfoPlist;
 @end
 
 
 @implementation FHVDocSet
+
+@synthesize name=m_name;
 
 #pragma mark -
 #pragma mark Initialization & Deallocation
@@ -34,6 +37,10 @@ NSString *sqlite3_column_nsstring(sqlite3_stmt *stmt, int col){
 		m_db = 0x0;
 		m_path = [path retain];
 		m_index = [[NSNumber numberWithInt:index] retain];
+		m_infoPlist = [[NSDictionary dictionaryWithContentsOfFile:
+			[m_path stringByAppendingPathComponent:@"Info.plist"]] retain];
+		m_name = [[m_infoPlist objectForKey:(NSString *)kCFBundleNameKey] retain];
+		m_inSearchIncluded = YES;
 		[self _open];
 	}
 	return self;
@@ -43,6 +50,8 @@ NSString *sqlite3_column_nsstring(sqlite3_stmt *stmt, int col){
 	[self _close];
 	[m_path release];
 	[m_index release];
+	[m_name release];
+	[m_infoPlist release];
 	[super dealloc];
 }
 
@@ -80,14 +89,15 @@ NSString *sqlite3_column_nsstring(sqlite3_stmt *stmt, int col){
 
 - (NSArray *)allGlobalSignatures{
 	return [self _fetchSignatures:[NSString stringWithFormat:@"`parent_type` = %d", 
-		kSigParentTypePackage] includeDetail:NO limit:-1 cancelCondition:NULL];
+		kSigParentTypePackage] includeDetail:NO limit:-1 cancelCondition:NULL preventSorting:YES];
 }
 
 - (NSArray *)signaturesWithParentId:(NSNumber *)parentId includeInherited:(BOOL)bFlag{
 	NSString *whereClause = [NSString stringWithFormat:@"`parent_id` = %qu AND `parent_type` = %d", 
 		[parentId longLongValue], kSigParentTypeClass];
 	if (!bFlag) whereClause = [whereClause stringByAppendingFormat:@" AND `inherited` = %d", bFlag];
-	return [self _fetchSignatures:whereClause includeDetail:YES limit:-1 cancelCondition:NULL];
+	return [self _fetchSignatures:whereClause includeDetail:YES limit:-1 cancelCondition:NULL 
+		preventSorting:NO];
 }
 
 - (NSDictionary *)classWithId:(NSNumber *)dbId{
@@ -108,7 +118,20 @@ NSString *sqlite3_column_nsstring(sqlite3_stmt *stmt, int col){
 	NSString *whereClause = [NSString stringWithFormat:@"%@  AND `inherited` = 0", 
 		[self _conditionForSearchTerm:filter andMode:searchMode]];
 	return [self _fetchSignatures:whereClause includeDetail:NO limit:300 
-		cancelCondition:cancelCondition];
+		cancelCondition:cancelCondition preventSorting:YES];
+}
+
+- (NSUInteger)index{
+	return [m_index intValue];
+}
+
+- (void)setInSearchIncluded:(BOOL)bFlag{
+	[m_infoPlist setObject:[NSNumber numberWithBool:bFlag] forKey:@"FHVInSearchIncluded"];
+	[self _saveInfoPlist];
+}
+
+- (BOOL)inSearchIncluded{
+	return [[m_infoPlist objectForKey:@"FHVInSearchIncluded"] boolValue];
 }
 
 
@@ -145,14 +168,14 @@ NSString *sqlite3_column_nsstring(sqlite3_stmt *stmt, int col){
 }
 
 - (NSArray *)_fetchSignatures:(NSString *)whereClause includeDetail:(BOOL)includeDetail 
-	limit:(NSInteger)limit cancelCondition:(BOOL *)cancelCondition{
+	limit:(NSInteger)limit cancelCondition:(BOOL *)cancelCondition preventSorting:(BOOL)preventSorting{
 	NSMutableArray *signatures = [NSMutableArray array];
 	NSString *sql = @"SELECT \
 `id`, `parent_id`, `parent_type`, `ident`, `name`, `signature`, `summary`, `inherited`, `type`, `parent_name`"; 
 	if (includeDetail) sql = [sql stringByAppendingString:@", `detail`"];
 	sql = [sql stringByAppendingString:@" FROM `fhv_signatures`"];
 	if (whereClause != nil) sql = [NSString stringWithFormat:@"%@ WHERE %@", sql, whereClause];
-	if (limit == -1) sql = [sql stringByAppendingString:@" ORDER BY `type`, `name`"];
+	if (preventSorting) sql = [sql stringByAppendingString:@" ORDER BY `type`, `name`"];
 	else sql = [sql stringByAppendingFormat:@" LIMIT %d", limit];
 	sqlite3_stmt *stmt;
 	sqlite3_prepare(m_db, [sql UTF8String], -1, &stmt, 0);
@@ -209,5 +232,9 @@ NSString *sqlite3_column_nsstring(sqlite3_stmt *stmt, int col){
 		searchString = @"`name` LIKE '%@'";
 	}
 	return [NSString stringWithFormat:searchString, term];
+}
+
+- (void)_saveInfoPlist{
+	[m_infoPlist writeToFile:[m_path stringByAppendingPathComponent:@"Info.plist"] atomically:YES];
 }
 @end

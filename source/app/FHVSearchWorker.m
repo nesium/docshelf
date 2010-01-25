@@ -79,6 +79,7 @@
 		[m_connectionProxy searchDidStart];
 		for (FHVDocSet *docSet in m_docSets){
 			if (m_interrupted) break;
+			if (!docSet.inSearchIncluded) continue;
 			NSArray *results = [docSet classesFilteredByExpression:searchTerm 
 				searchMode:m_searchMode 
 				cancelCondition:&m_interrupted];
@@ -87,6 +88,7 @@
 		}
 		for (FHVDocSet *docSet in m_docSets){
 			if (m_interrupted) break;
+			if (!docSet.inSearchIncluded) continue;
 			NSArray *results = [docSet signaturesFilteredByExpression:searchTerm 
 				searchMode:m_searchMode 
 				cancelCondition:&m_interrupted];

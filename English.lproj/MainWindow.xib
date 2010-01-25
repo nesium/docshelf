@@ -23,7 +23,7 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="7"/>
+			<integer value="16"/>
 			<integer value="64"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
@@ -417,12 +417,12 @@
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSSplitView" id="340859074">
 							<reference key="NSNextResponder" ref="424282548"/>
-							<int key="NSvFlags">274</int>
+							<int key="NSvFlags">4370</int>
 							<object class="NSMutableArray" key="NSSubviews">
 								<bool key="EncodedWithXMLCoder">YES</bool>
 								<object class="NSScrollView" id="1063405769">
 									<reference key="NSNextResponder" ref="340859074"/>
-									<int key="NSvFlags">268</int>
+									<int key="NSvFlags">4364</int>
 									<object class="NSMutableArray" key="NSSubviews">
 										<bool key="EncodedWithXMLCoder">YES</bool>
 										<object class="NSClipView" id="97599948">
@@ -432,7 +432,7 @@
 												<bool key="EncodedWithXMLCoder">YES</bool>
 												<object class="NSOutlineView" id="639423403">
 													<reference key="NSNextResponder" ref="97599948"/>
-													<int key="NSvFlags">256</int>
+													<int key="NSvFlags">4352</int>
 													<string key="NSFrameSize">{248, 733}</string>
 													<reference key="NSSuperview" ref="97599948"/>
 													<bool key="NSEnabled">YES</bool>
@@ -551,7 +551,7 @@
 								</object>
 								<object class="NSSplitView" id="283731284">
 									<reference key="NSNextResponder" ref="340859074"/>
-									<int key="NSvFlags">274</int>
+									<int key="NSvFlags">4370</int>
 									<object class="NSMutableArray" key="NSSubviews">
 										<bool key="EncodedWithXMLCoder">YES</bool>
 										<object class="NSScrollView" id="252511094">
@@ -566,7 +566,7 @@
 														<bool key="EncodedWithXMLCoder">YES</bool>
 														<object class="NSOutlineView" id="329342966">
 															<reference key="NSNextResponder" ref="733916314"/>
-															<int key="NSvFlags">256</int>
+															<int key="NSvFlags">4352</int>
 															<string key="NSFrameSize">{256, 733}</string>
 															<reference key="NSSuperview" ref="733916314"/>
 															<bool key="NSEnabled">YES</bool>
@@ -736,7 +736,7 @@
 				<string key="NSMaxSize">{3.40282e+38, 3.40282e+38}</string>
 				<string key="NSFrameAutosaveName">mainWindow</string>
 			</object>
-			<object class="NSCustomView" id="341777146">
+			<object class="NSCustomView" id="928246777">
 				<reference key="NSNextResponder"/>
 				<int key="NSvFlags">266</int>
 				<string key="NSFrameSize">{692, 25}</string>
@@ -847,7 +847,7 @@
 					<object class="IBOutletConnection" key="connection">
 						<string key="label">m_filterBar</string>
 						<reference key="source" ref="1001"/>
-						<reference key="destination" ref="341777146"/>
+						<reference key="destination" ref="928246777"/>
 					</object>
 					<int key="connectionID">65</int>
 				</object>
@@ -862,7 +862,7 @@
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
 						<string key="label">delegate</string>
-						<reference key="source" ref="341777146"/>
+						<reference key="source" ref="928246777"/>
 						<reference key="destination" ref="1001"/>
 					</object>
 					<int key="connectionID">67</int>
@@ -1144,7 +1144,7 @@
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">64</int>
-						<reference key="object" ref="341777146"/>
+						<reference key="object" ref="928246777"/>
 						<reference key="parent" ref="0"/>
 					</object>
 				</object>

@@ -22,6 +22,25 @@
 	[[NSUserDefaults standardUserDefaults] registerDefaults:dict];
 }
 
+- (id)init{
+	if (self = [super init]){
+		m_mainWindowController = nil;
+		m_initialLoadConnection = [[NSConnection alloc] init];
+		[m_initialLoadConnection registerName:@"com.nesium.FlexDocs.InitialLoadConnection"];
+		[m_initialLoadConnection setRootObject:self];
+		m_docSetModelReady = NO;
+		m_docSetModel = [[FHVDocSetModel alloc] initWithDocSetPath:[[self applicationSupportFolder] 
+			stringByAppendingPathComponent:@"DocSets"]];
+		[[NSNotificationCenter defaultCenter] 
+			addObserver:self 
+			selector:@selector(_docSetModel_initialLoadDone:) 
+			name:@"FHVDocSetModelInitialLoadDone" 
+			object:m_docSetModel];
+		[m_docSetModel loadDocSets];
+	}
+	return self;
+}
+
 - (NSString *)applicationSupportFolder{
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, 
 		NSUserDomainMask, YES);
@@ -46,10 +65,10 @@
 }
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification{
-	m_docSetModel = [[FHVDocSetModel alloc] initWithDocSetPath:[[self applicationSupportFolder] 
-		stringByAppendingPathComponent:@"DocSets"]];
-	m_mainWindowController = nil;
-	[self _showMainWindow];
+	if (!m_docSetModelReady){
+		[m_importWindow center];
+		[m_importWindow makeKeyAndOrderFront:self];
+	}
 }
 
 - (void)_showMainWindow{
@@ -80,6 +99,7 @@
 
 - (void)setProgressIsIndeterminate:(BOOL)bFlag{
 	[m_progressIndicator setIndeterminate:bFlag];
+	if (bFlag) [m_progressIndicator startAnimation:self];
 }
 
 - (void)setMaxProgressValue:(double)value{
@@ -92,5 +112,17 @@
 
 - (void)parsingComplete{
 	[m_importWindow orderOut:self];
+}
+
+
+
+#pragma mark -
+#pragma mark Notifications
+
+- (void)_docSetModel_initialLoadDone:(NSNotification *)notification{
+	m_docSetModelReady = YES;
+	[m_importWindow orderOut:self];
+	[m_initialLoadConnection release];
+	[self _showMainWindow];
 }
 @end

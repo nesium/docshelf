@@ -19,6 +19,8 @@
 	IBOutlet NSWindow *m_importWindow;
 	IBOutlet NSProgressIndicator *m_progressIndicator;
 	IBOutlet NSTextField *m_progressLabel;
+	NSConnection *m_initialLoadConnection;
+	BOOL m_docSetModelReady;
 }
 - (NSString *)applicationSupportFolder;
 @end

@@ -65,8 +65,15 @@
 	m_filterBar.borderColor = [NSColor colorWithCalibratedRed:0.665 green:0.665 blue:0.665 alpha:1.0];
 	[m_filterBar addGroup:@"matchingMode"];
 	[m_filterBar addSeparator];
+	[m_filterBar addGroup:@"docSetsList"];
 	[m_filterBar selectItem:[self _identifierForSearchMode:m_docSetModel.searchMode] 
 		inGroup:@"matchingMode" selected:YES];
+	NSMutableArray *docSetsListSelection = [NSMutableArray array];
+	for (FHVDocSet *docSet in m_docSetModel.docSets){
+		if (docSet.inSearchIncluded) 
+			[docSetsListSelection addObject:[[NSNumber numberWithInt:docSet.index] stringValue]];
+	}
+	[m_filterBar selectItems:docSetsListSelection inGroup:@"docSetsList" selected:YES];
 }
 
 
@@ -281,18 +288,40 @@ static HeadlineCell *g_headlineCell = nil;
 - (NSArray *)filterbar:(Filterbar *)filterBar itemIdentifiersForGroup:(NSString *)groupIdentifier{
 	if ([groupIdentifier isEqualToString:@"matchingMode"]){
 		return [NSArray arrayWithObjects:@"Contains", @"Prefix", @"Exact", nil];
+	}else if ([groupIdentifier isEqualToString:@"docSetsList"]){
+		NSMutableArray *indexes = [NSMutableArray array];
+		for (FHVDocSet *docSet in m_docSetModel.docSets)
+			[indexes addObject:[[NSNumber numberWithInt:docSet.index] stringValue]];
+		return indexes;
 	}
 	return nil;
 }
 
 - (NSString *)filterbar:(Filterbar *)filterBar labelForItemIdentifier:(NSString *)itemIdentifier 
 	groupIdentifier:(NSString *)groupIdentifier{
+	if ([groupIdentifier isEqualToString:@"docSetsList"]){
+		for (FHVDocSet *docSet in m_docSetModel.docSets)
+			if (docSet.index == [itemIdentifier intValue])
+				return docSet.name;
+		return @"ERROR";
+	}
 	return itemIdentifier;
 }
 
 - (void)filterbar:(Filterbar *)filterBar selectedStateChanged:(BOOL)selected 
 	fromItem:(NSString *)itemIdentifier groupIdentifier:(NSString *)groupIdentifier{
-	if (selected) m_docSetModel.searchMode = [self _searchModeForIdentifier:itemIdentifier];
+	if ([groupIdentifier isEqualToString:@"matchingMode"]){
+		if (selected) m_docSetModel.searchMode = [self _searchModeForIdentifier:itemIdentifier];
+	}else if ([groupIdentifier isEqualToString:@"docSetsList"]){
+		[m_docSetModel setDocSetWithIndex:[itemIdentifier intValue] inSearchIncluded:selected];
+	}
+}
+
+- (BOOL)filterbar:(Filterbar *)filterBar hasMultipleSelection:(NSString *)groupIdentifier{
+	if ([groupIdentifier isEqualToString:@"docSetsList"]){
+		return YES;
+	}
+	return NO;
 }
 
 
@@ -337,14 +366,12 @@ static HeadlineCell *g_headlineCell = nil;
 	NSRect contentViewBounds = [[self.window contentView] bounds];
 	NSRect filterBarBounds = [m_filterBar bounds];
 	if (bFlag){
-		NSLog(@"add filter bar");
 		[m_outerSplitView setFrame:(NSRect){-1, 0, NSWidth(contentViewBounds) + 1, 
 			NSHeight(contentViewBounds) - NSHeight(filterBarBounds) + 1}];
 		[m_filterBar setFrame:(NSRect){0, NSHeight(contentViewBounds) - NSHeight(filterBarBounds), 
 			NSWidth(contentViewBounds), NSHeight(filterBarBounds)}];
 		[[self.window contentView] addSubview:m_filterBar];
 	}else{
-		NSLog(@"remove filterbar");
 		[m_filterBar removeFromSuperview];
 		[m_outerSplitView setFrame:NSInsetRect(contentViewBounds, -1, -1)];
 	}

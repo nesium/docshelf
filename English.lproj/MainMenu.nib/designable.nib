@@ -12,8 +12,8 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
+			<integer value="462"/>
 			<integer value="220"/>
-			<integer value="461"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -787,7 +787,7 @@
 			<object class="NSWindowTemplate" id="234337737">
 				<int key="NSWindowStyleMask">7</int>
 				<int key="NSWindowBacking">2</int>
-				<string key="NSWindowRect">{{196, 413}, {480, 97}}</string>
+				<string key="NSWindowRect">{{196, 431}, {480, 79}}</string>
 				<int key="NSWTFlags">603979776</int>
 				<string key="NSWindowTitle">Importing data ...</string>
 				<string key="NSWindowClass">NSWindow</string>
@@ -802,15 +802,15 @@
 							<reference key="NSNextResponder" ref="781959054"/>
 							<int key="NSvFlags">1292</int>
 							<object class="NSPSMatrix" key="NSDrawMatrix"/>
-							<string key="NSFrame">{{18, 29}, {444, 20}}</string>
+							<string key="NSFrame">{{18, 24}, {444, 12}}</string>
 							<reference key="NSSuperview" ref="781959054"/>
-							<int key="NSpiFlags">16394</int>
+							<int key="NSpiFlags">16650</int>
 							<double key="NSMaxValue">100</double>
 						</object>
 						<object class="NSTextField" id="1006305907">
 							<reference key="NSNextResponder" ref="781959054"/>
 							<int key="NSvFlags">268</int>
-							<string key="NSFrame">{{17, 63}, {446, 14}}</string>
+							<string key="NSFrame">{{17, 51}, {446, 14}}</string>
 							<reference key="NSSuperview" ref="781959054"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSTextFieldCell" key="NSCell" id="817841073">
@@ -844,7 +844,7 @@
 							</object>
 						</object>
 					</object>
-					<string key="NSFrameSize">{480, 97}</string>
+					<string key="NSFrameSize">{480, 79}</string>
 					<reference key="NSSuperview"/>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1680, 1028}}</string>
@@ -2209,9 +2209,9 @@
 					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
-					<string>{{432, 433}, {480, 97}}</string>
+					<string>{{468, 338}, {480, 79}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{432, 433}, {480, 97}}</string>
+					<string>{{468, 338}, {480, 79}}</string>
 					<integer value="0"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -2383,13 +2383,6 @@
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">source/FlexHelpViewerApp.h</string>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
-					<string key="className">NSManagedObjectContext</string>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">source/NSManagedObjectContext+Extensions.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
@@ -3100,7 +3093,7 @@
 			<integer value="3000" key="NS.object.0"/>
 		</object>
 		<bool key="IBDocument.PluginDeclaredDependenciesTrackSystemTargetVersion">YES</bool>
-		<string key="IBDocument.LastKnownRelativeProjectPath">../FlexHelpViewer.xcodeproj</string>
+		<string key="IBDocument.LastKnownRelativeProjectPath">../EarthDocs.xcodeproj</string>
 		<int key="IBDocument.defaultPropertyAccessControl">3</int>
 	</data>
 </archive>

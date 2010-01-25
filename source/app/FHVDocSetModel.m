@@ -28,7 +28,8 @@
 			inSearchMode=m_inSearchMode, 
 			detailSelectionIndex=m_detailSelectionIndex, 
 			detailSelectionAnchor=m_detailSelectionAnchor, 
-			searchMode=m_searchMode;
+			searchMode=m_searchMode, 
+			docSets=m_docSets;
 
 #pragma mark -
 #pragma mark Initialization & Deallocation
@@ -55,8 +56,6 @@
 		[m_searchWorkerConnection setRootObject:self];
 		[m_searchWorkerConnection registerName:@"com.nesium.FlexHelpViewer.searchWorkerConnection"];
 		m_searchWorker = [[FHVSearchWorker alloc] initWithDocSets:m_docSets];
-		[m_searchWorker start];
-		[NSThread detachNewThreadSelector:@selector(_mergeDocSetsData) toTarget:self withObject:nil];
 	}
 	return self;
 }
@@ -75,6 +74,10 @@
 
 #pragma mark -
 #pragma mark Public methods
+
+- (void)loadDocSets{
+	[NSThread detachNewThreadSelector:@selector(_mergeDocSetsData) toTarget:self withObject:nil];
+}
 
 - (void)selectFirstLevelItem:(id)item{
 	m_detailSelectionIndex = -1;
@@ -254,6 +257,17 @@
 		afterDelay:0.2];
 }
 
+- (void)setDocSetWithIndex:(NSUInteger)index inSearchIncluded:(BOOL)bFlag{
+	FHVDocSet *docSet = [m_docSets objectAtIndex:index];
+	if (docSet.inSearchIncluded == bFlag)
+		return;
+	docSet.inSearchIncluded = bFlag;
+	if (!m_inSearchMode) return;
+	[NSObject cancelPreviousPerformRequestsWithTarget:self];
+	[self performSelector:@selector(_performSearchWithTerm:) withObject:m_lastSearchTerm 
+		afterDelay:0.2];
+}
+
 - (NSImage *)imageForItem:(id)item{
 	NSString *imageName = @"method";
 	FHVItemType itemType = [[item objectForKey:@"itemType"] intValue];
@@ -301,10 +315,18 @@
 - (void)_mergeDocSetsData{
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	
+	id *connectionProxy = [[NSConnection 
+		connectionWithRegisteredName:@"com.nesium.FlexDocs.InitialLoadConnection" 
+		host:nil] rootProxy];
+	
 	NSArray *docSets = m_docSets;
 	NSMutableArray *allPackages = [NSMutableArray array];
 	NSMutableDictionary *allClasses = [NSMutableDictionary dictionary];
+	[connectionProxy setProgressIsIndeterminate:YES];
+	int i = 1;
 	for (FHVDocSet *docSet in docSets){
+		[connectionProxy setStatusMessage:[NSString stringWithFormat:@"Loading %@ (%d/%d) ...", 
+			docSet.name, i++, [docSets count]]];
 		[allPackages addObjectsFromArray:[docSet allPackages]];
 		NSArray *classes = [docSet allClasses];
 		for (NSDictionary *clazz in classes){
@@ -329,6 +351,7 @@
 		}
 	}
 	
+	[connectionProxy setStatusMessage:@"Preparing data ..."];
 	[allPackages sortUsingComparator:^(id obj1, id obj2){
 		return [[obj1 objectForKey:@"ident"] compare:[obj2 objectForKey:@"ident"]];
 	}];
@@ -363,9 +386,15 @@
 }
 
 - (void)_docSetDataMerged{
+	BOOL isInitialLoad = m_currentData == nil;
 	[self willChangeValueForKey:@"currentData"];
 	m_currentData = m_mainData;
 	[self didChangeValueForKey:@"currentData"];
+	if (isInitialLoad){
+		[m_searchWorker start];
+		[[NSNotificationCenter defaultCenter] postNotificationName:@"FHVDocSetModelInitialLoadDone" 
+			object:self];
+	}
 }
 
 - (FHVDocSet *)_docSetForItem:(id)item{

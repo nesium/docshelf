@@ -38,10 +38,14 @@
 @property (readonly) NSInteger detailSelectionIndex;
 @property (readonly) NSString *detailSelectionAnchor;
 @property (nonatomic, assign) FHVDocSetSearchMode searchMode;
+@property (readonly) NSArray *docSets;
 - (id)initWithDocSetPath:(NSString *)path;
+- (void)loadDocSets;
 - (void)selectFirstLevelItem:(id)item;
 - (NSURL *)URLForImageWithName:(NSString *)imageName;
 - (NSString *)anchorForItem:(id)item;
 - (void)setSearchTerm:(NSString *)filter;
+- (void)setSearchMode:(FHVDocSetSearchMode)mode;
+- (void)setDocSetWithIndex:(NSUInteger)index inSearchIncluded:(BOOL)bFlag;
 - (NSImage *)imageForItem:(id)item;
 @end
