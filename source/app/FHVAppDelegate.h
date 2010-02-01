@@ -17,6 +17,7 @@
 	FHVDocSetModel *m_docSetModel;
 	FHVMainWindowController *m_mainWindowController;
 	IBOutlet NSWindow *m_importWindow;
+	IBOutlet NSWindow *m_newDocSetSheet;
 	IBOutlet NSProgressIndicator *m_progressIndicator;
 	IBOutlet NSTextField *m_progressLabel;
 	NSConnection *m_initialLoadConnection;

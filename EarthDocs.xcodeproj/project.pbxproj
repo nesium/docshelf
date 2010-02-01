@@ -17,6 +17,8 @@
 		2C53671810B9BD7600D9C0E4 /* class.html in Resources */ = {isa = PBXBuildFile; fileRef = 2C53671710B9BD7600D9C0E4 /* class.html */; };
 		2C53676510B9C38300D9C0E4 /* inherit-arrow.gif in Resources */ = {isa = PBXBuildFile; fileRef = 2C53676410B9C38300D9C0E4 /* inherit-arrow.gif */; };
 		2C53681210B9D14600D9C0E4 /* RSVerticallyCenteredTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C53681110B9D14600D9C0E4 /* RSVerticallyCenteredTextFieldCell.m */; };
+		2C5EB63C110E56E700BE8F30 /* BWToolkitFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C5EB63B110E56E700BE8F30 /* BWToolkitFramework.framework */; };
+		2C5EB641110E56FB00BE8F30 /* BWToolkitFramework.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2C5EB63B110E56E700BE8F30 /* BWToolkitFramework.framework */; };
 		2C64D50C11028577008D90E0 /* utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C64D50B11028577008D90E0 /* utils.m */; };
 		2C6D218D10BC97B3004A6A12 /* HeadlineCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C6D218C10BC97B3004A6A12 /* HeadlineCell.m */; };
 		2C6D222010BCA4F0004A6A12 /* MultiCellTableColumn.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C6D221F10BCA4F0004A6A12 /* MultiCellTableColumn.m */; };
@@ -53,6 +55,19 @@
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		2C5EB659110E571B00BE8F30 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				2C5EB641110E56FB00BE8F30 /* BWToolkitFramework.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
@@ -73,6 +88,7 @@
 		2C53676410B9C38300D9C0E4 /* inherit-arrow.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "inherit-arrow.gif"; sourceTree = "<group>"; };
 		2C53681010B9D14600D9C0E4 /* RSVerticallyCenteredTextFieldCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSVerticallyCenteredTextFieldCell.h; sourceTree = "<group>"; };
 		2C53681110B9D14600D9C0E4 /* RSVerticallyCenteredTextFieldCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSVerticallyCenteredTextFieldCell.m; sourceTree = "<group>"; };
+		2C5EB63B110E56E700BE8F30 /* BWToolkitFramework.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BWToolkitFramework.framework; path = /Users/mb/Library/Frameworks/BWToolkitFramework.framework; sourceTree = "<absolute>"; };
 		2C64D50A11028577008D90E0 /* utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = utils.h; sourceTree = "<group>"; };
 		2C64D50B11028577008D90E0 /* utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = utils.m; sourceTree = "<group>"; };
 		2C6D218B10BC97B3004A6A12 /* HeadlineCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HeadlineCell.h; sourceTree = "<group>"; };
@@ -142,6 +158,7 @@
 				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
 				2CEE304B0DD65FC700CC762E /* WebKit.framework in Frameworks */,
 				2C2E10A41103D4A00037769E /* libsqlite3.dylib in Frameworks */,
+				2C5EB63C110E56E700BE8F30 /* BWToolkitFramework.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -167,6 +184,7 @@
 				2C2E10A31103D4A00037769E /* libsqlite3.dylib */,
 				2CEE304A0DD65FC700CC762E /* WebKit.framework */,
 				1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */,
+				2C5EB63B110E56E700BE8F30 /* BWToolkitFramework.framework */,
 			);
 			name = "Linked Frameworks";
 			sourceTree = "<group>";
@@ -363,7 +381,7 @@
 				8D1107290486CEB800E47090 /* Resources */,
 				8D11072C0486CEB800E47090 /* Sources */,
 				8D11072E0486CEB800E47090 /* Frameworks */,
-				2C803FA00DE0D6C40081D5D5 /* ShellScript */,
+				2C5EB659110E571B00BE8F30 /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -417,22 +435,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		2C803FA00DE0D6C40081D5D5 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "#rm ~/Library/Application\\ Support/FlexHelpViewer/FlexHelpViewer.sql";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		8D11072C0486CEB800E47090 /* Sources */ = {
@@ -501,6 +503,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../../../Library/Frameworks\"",
+				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_MODEL_TUNING = G5;
@@ -518,6 +524,10 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../../../Library/Frameworks\"",
+				);
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = EarthDocs_Prefix.pch;

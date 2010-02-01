@@ -49,15 +49,18 @@
 }
 
 - (IBAction)addDocSet:(id)sender{
-	NSOpenPanel *op = [NSOpenPanel openPanel];
-	[op setAllowsMultipleSelection:NO];
-	[op setCanChooseFiles:NO];
-	[op setCanChooseDirectories:YES];
-	[op beginSheetModalForWindow:m_mainWindowController.window 
-		completionHandler:^(NSInteger result){
-			if (result == NSFileHandlingPanelCancelButton) return;
-			[self _parseDocsAtPath:[[[op URLs] objectAtIndex:0] path]];
-		}];
+	[m_newDocSetSheet center];
+	[m_newDocSetSheet makeKeyAndOrderFront:self];
+	
+//	NSOpenPanel *op = [NSOpenPanel openPanel];
+//	[op setAllowsMultipleSelection:NO];
+//	[op setCanChooseFiles:NO];
+//	[op setCanChooseDirectories:YES];
+//	[op beginSheetModalForWindow:m_mainWindowController.window 
+//		completionHandler:^(NSInteger result){
+//			if (result == NSFileHandlingPanelCancelButton) return;
+//			[self _parseDocsAtPath:[[[op URLs] objectAtIndex:0] path]];
+//		}];
 }
 
 - (IBAction)toggleInheritedSignaturesVisibility:(id)sender{
