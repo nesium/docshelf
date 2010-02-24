@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2C066F9E111752AC00AB755C /* DropView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C066F9D111752AC00AB755C /* DropView.m */; };
 		2C1987841101F1FC00C3A1BD /* FHVImportContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C1987831101F1FC00C3A1BD /* FHVImportContext.m */; };
 		2C1987AD1101F4E000C3A1BD /* NSString+FHVUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C1987AC1101F4E000C3A1BD /* NSString+FHVUtils.m */; };
 		2C2E10A41103D4A00037769E /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C2E10A31103D4A00037769E /* libsqlite3.dylib */; };
@@ -19,10 +20,16 @@
 		2C53681210B9D14600D9C0E4 /* RSVerticallyCenteredTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C53681110B9D14600D9C0E4 /* RSVerticallyCenteredTextFieldCell.m */; };
 		2C5EB63C110E56E700BE8F30 /* BWToolkitFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C5EB63B110E56E700BE8F30 /* BWToolkitFramework.framework */; };
 		2C5EB641110E56FB00BE8F30 /* BWToolkitFramework.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2C5EB63B110E56E700BE8F30 /* BWToolkitFramework.framework */; };
+		2C63E8D111184EC800B5E938 /* FHVImportWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C63E8D011184EC800B5E938 /* FHVImportWindowController.m */; };
+		2C63E8E01118829900B5E938 /* ImportWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2C63E8DE1118829900B5E938 /* ImportWindow.xib */; };
 		2C64D50C11028577008D90E0 /* utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C64D50B11028577008D90E0 /* utils.m */; };
 		2C6D218D10BC97B3004A6A12 /* HeadlineCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C6D218C10BC97B3004A6A12 /* HeadlineCell.m */; };
 		2C6D222010BCA4F0004A6A12 /* MultiCellTableColumn.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C6D221F10BCA4F0004A6A12 /* MultiCellTableColumn.m */; };
 		2C7E38A110BA1148005B403B /* h2_background.gif in Resources */ = {isa = PBXBuildFile; fileRef = 2C7E38A010BA1148005B403B /* h2_background.gif */; };
+		2C8583C91135A80E00D58B15 /* FHVConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C8583C81135A80E00D58B15 /* FHVConstants.m */; };
+		2C8584AD1135C36900D58B15 /* NSFileManager+NSMAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C8584A81135C36900D58B15 /* NSFileManager+NSMAdditions.m */; };
+		2C8584AE1135C36900D58B15 /* NSNumber+NSMAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C8584AA1135C36900D58B15 /* NSNumber+NSMAdditions.m */; };
+		2C8584AF1135C36900D58B15 /* NSString+NSMAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C8584AC1135C36900D58B15 /* NSString+NSMAdditions.m */; };
 		2C85E66C1107E19F001920A7 /* method.png in Resources */ = {isa = PBXBuildFile; fileRef = 2C85E66B1107E19F001920A7 /* method.png */; };
 		2C85E6AA1107E585001920A7 /* class.png in Resources */ = {isa = PBXBuildFile; fileRef = 2C85E6A31107E585001920A7 /* class.png */; };
 		2C85E6AB1107E585001920A7 /* constant.png in Resources */ = {isa = PBXBuildFile; fileRef = 2C85E6A41107E585001920A7 /* constant.png */; };
@@ -76,6 +83,8 @@
 		29B97319FDCFA39411CA2CEA /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/MainMenu.nib; sourceTree = "<group>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
+		2C066F9C111752AC00AB755C /* DropView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DropView.h; path = ../../4_AS3_Parser/project/DropView.h; sourceTree = SOURCE_ROOT; };
+		2C066F9D111752AC00AB755C /* DropView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DropView.m; path = ../../4_AS3_Parser/project/DropView.m; sourceTree = SOURCE_ROOT; };
 		2C1987821101F1FC00C3A1BD /* FHVImportContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FHVImportContext.h; sourceTree = "<group>"; };
 		2C1987831101F1FC00C3A1BD /* FHVImportContext.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FHVImportContext.m; sourceTree = "<group>"; };
 		2C1987AB1101F4E000C3A1BD /* NSString+FHVUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+FHVUtils.h"; path = "parser/NSString+FHVUtils.h"; sourceTree = "<group>"; };
@@ -89,6 +98,9 @@
 		2C53681010B9D14600D9C0E4 /* RSVerticallyCenteredTextFieldCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSVerticallyCenteredTextFieldCell.h; sourceTree = "<group>"; };
 		2C53681110B9D14600D9C0E4 /* RSVerticallyCenteredTextFieldCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSVerticallyCenteredTextFieldCell.m; sourceTree = "<group>"; };
 		2C5EB63B110E56E700BE8F30 /* BWToolkitFramework.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BWToolkitFramework.framework; path = /Users/mb/Library/Frameworks/BWToolkitFramework.framework; sourceTree = "<absolute>"; };
+		2C63E8CF11184EC800B5E938 /* FHVImportWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FHVImportWindowController.h; sourceTree = "<group>"; };
+		2C63E8D011184EC800B5E938 /* FHVImportWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FHVImportWindowController.m; sourceTree = "<group>"; };
+		2C63E8DF1118829900B5E938 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/ImportWindow.xib; sourceTree = "<group>"; };
 		2C64D50A11028577008D90E0 /* utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = utils.h; sourceTree = "<group>"; };
 		2C64D50B11028577008D90E0 /* utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = utils.m; sourceTree = "<group>"; };
 		2C6D218B10BC97B3004A6A12 /* HeadlineCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HeadlineCell.h; sourceTree = "<group>"; };
@@ -96,6 +108,14 @@
 		2C6D221E10BCA4F0004A6A12 /* MultiCellTableColumn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MultiCellTableColumn.h; sourceTree = "<group>"; };
 		2C6D221F10BCA4F0004A6A12 /* MultiCellTableColumn.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MultiCellTableColumn.m; sourceTree = "<group>"; };
 		2C7E38A010BA1148005B403B /* h2_background.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = h2_background.gif; sourceTree = "<group>"; };
+		2C8583B31135A58400D58B15 /* FHVConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FHVConstants.h; sourceTree = "<group>"; };
+		2C8583C81135A80E00D58B15 /* FHVConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FHVConstants.m; sourceTree = "<group>"; };
+		2C8584A71135C36900D58B15 /* NSFileManager+NSMAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSFileManager+NSMAdditions.h"; sourceTree = "<group>"; };
+		2C8584A81135C36900D58B15 /* NSFileManager+NSMAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSFileManager+NSMAdditions.m"; sourceTree = "<group>"; };
+		2C8584A91135C36900D58B15 /* NSNumber+NSMAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSNumber+NSMAdditions.h"; sourceTree = "<group>"; };
+		2C8584AA1135C36900D58B15 /* NSNumber+NSMAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSNumber+NSMAdditions.m"; sourceTree = "<group>"; };
+		2C8584AB1135C36900D58B15 /* NSString+NSMAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+NSMAdditions.h"; sourceTree = "<group>"; };
+		2C8584AC1135C36900D58B15 /* NSString+NSMAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+NSMAdditions.m"; sourceTree = "<group>"; };
 		2C85E66B1107E19F001920A7 /* method.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = method.png; sourceTree = "<group>"; };
 		2C85E6A31107E585001920A7 /* class.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = class.png; sourceTree = "<group>"; };
 		2C85E6A41107E585001920A7 /* constant.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = constant.png; sourceTree = "<group>"; };
@@ -174,6 +194,8 @@
 				2CC3919110B7743E00C35BD8 /* categories */,
 				2CFCB4530DD4F54C0090049E /* FlexHelpViewerApp.h */,
 				2CFCB4540DD4F54C0090049E /* FlexHelpViewerApp.m */,
+				2C8583B31135A58400D58B15 /* FHVConstants.h */,
+				2C8583C81135A80E00D58B15 /* FHVConstants.m */,
 			);
 			path = source;
 			sourceTree = "<group>";
@@ -232,6 +254,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				2C63E8DE1118829900B5E938 /* ImportWindow.xib */,
 				2CCFC17E110500590019F014 /* schema.sql */,
 				2CEE309F0DD668D300CC762E /* assets */,
 				8D1107310486CEB800E47090 /* Info.plist */,
@@ -251,10 +274,24 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		2C85836111359D6F00D58B15 /* NSMUtils */ = {
+			isa = PBXGroup;
+			children = (
+				2C8584A71135C36900D58B15 /* NSFileManager+NSMAdditions.h */,
+				2C8584A81135C36900D58B15 /* NSFileManager+NSMAdditions.m */,
+				2C8584A91135C36900D58B15 /* NSNumber+NSMAdditions.h */,
+				2C8584AA1135C36900D58B15 /* NSNumber+NSMAdditions.m */,
+				2C8584AB1135C36900D58B15 /* NSString+NSMAdditions.h */,
+				2C8584AC1135C36900D58B15 /* NSString+NSMAdditions.m */,
+			);
+			path = NSMUtils;
+			sourceTree = "<group>";
+		};
 		2CB33D37110B3ADC00A7C238 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
 				2CB33D38110B3ADC00A7C238 /* Filterbar */,
+				2C85836111359D6F00D58B15 /* NSMUtils */,
 			);
 			path = Libraries;
 			sourceTree = "<group>";
@@ -312,6 +349,8 @@
 		2CEE30B70DD6696E00CC762E /* util */ = {
 			isa = PBXGroup;
 			children = (
+				2C066F9C111752AC00AB755C /* DropView.h */,
+				2C066F9D111752AC00AB755C /* DropView.m */,
 				2CE3660F1108B6FD00F582E9 /* ImageAndTextCell.h */,
 				2CE366101108B6FD00F582E9 /* ImageAndTextCell.m */,
 				2C6D218B10BC97B3004A6A12 /* HeadlineCell.h */,
@@ -344,6 +383,8 @@
 				2CAE7E81110A2FFF00D5767F /* FHVSearchWorker.h */,
 				2CAE7E82110A2FFF00D5767F /* FHVSearchWorker.m */,
 				2CB33EC0110B5A0100A7C238 /* Constants.h */,
+				2C63E8CF11184EC800B5E938 /* FHVImportWindowController.h */,
+				2C63E8D011184EC800B5E938 /* FHVImportWindowController.m */,
 			);
 			path = app;
 			sourceTree = "<group>";
@@ -431,6 +472,7 @@
 				2C85E6AE1107E585001920A7 /* interface.png in Resources */,
 				2C85E6AF1107E585001920A7 /* package.png in Resources */,
 				2C85E6B01107E585001920A7 /* property.png in Resources */,
+				2C63E8E01118829900B5E938 /* ImportWindow.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -466,6 +508,12 @@
 				2CB33D40110B3ADC00A7C238 /* Filterbar.m in Sources */,
 				2CB33D41110B3ADC00A7C238 /* FilterbarGroup.m in Sources */,
 				2CB33D42110B3ADC00A7C238 /* FilterbarGroupItem.m in Sources */,
+				2C066F9E111752AC00AB755C /* DropView.m in Sources */,
+				2C63E8D111184EC800B5E938 /* FHVImportWindowController.m in Sources */,
+				2C8583C91135A80E00D58B15 /* FHVConstants.m in Sources */,
+				2C8584AD1135C36900D58B15 /* NSFileManager+NSMAdditions.m in Sources */,
+				2C8584AE1135C36900D58B15 /* NSNumber+NSMAdditions.m in Sources */,
+				2C8584AF1135C36900D58B15 /* NSString+NSMAdditions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -486,6 +534,14 @@
 				29B97319FDCFA39411CA2CEA /* English */,
 			);
 			name = MainMenu.nib;
+			sourceTree = "<group>";
+		};
+		2C63E8DE1118829900B5E938 /* ImportWindow.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				2C63E8DF1118829900B5E938 /* English */,
+			);
+			name = ImportWindow.xib;
 			sourceTree = "<group>";
 		};
 		2C91025C11065A100031698D /* MainWindow.xib */ = {

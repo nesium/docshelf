@@ -11,25 +11,14 @@
 
 @implementation FHVNiceIndentationOutlineView
 
-// Changing the indentation of NSOutlineView causes the 0-level items
-// to indent possibly large amounts as well, which looks bad.
-// Similarly, if the indent is set to small values, disclosure triangles of 
-// top level items draw to far to the side and appear in the neighboring column.
-#define kMaxFirstLevelIndentation 50
-#define kMinFirstLevelIndentation 25
-
 // corrects text and icons (if using ImageAndTextCell)
 - (NSRect)frameOfCellAtColumn:(NSInteger)column row:(NSInteger)row{
 	NSRect frame = [super frameOfCellAtColumn:column row:row];
-	if (column == -1){
-		CGFloat indent = [self indentationPerLevel];
-		if (indent > kMaxFirstLevelIndentation){
-			frame.origin.x -= (indent - kMaxFirstLevelIndentation);
-			frame.size.width += (indent - kMaxFirstLevelIndentation);
-		}else if (indent < kMinFirstLevelIndentation){
-			frame.origin.x += (kMinFirstLevelIndentation - indent);
-			frame.size.width -= (kMinFirstLevelIndentation - indent);
-		}
+	CGFloat indent = [self indentationPerLevel];
+	
+	if (column == -1 || (indent > 0 && column == 0 && [self levelForRow:row] == 1)){
+		frame.size.width += frame.origin.x - 21;
+		frame.origin.x = 21;
 	}
 	return frame;
 }
@@ -42,6 +31,11 @@
 }
 
 - (void)keyDown:(NSEvent *)theEvent{
+	if ([self isExpandable:[self itemAtRow:[self selectedRow]]]){
+		[super keyDown:theEvent];
+		return;
+	}
+
 	switch ([theEvent keyCode]){
 		case 123: // left
 			if ([[self delegate] respondsToSelector:@selector(outlineViewArrowLeftKeyWasPressed:)]){

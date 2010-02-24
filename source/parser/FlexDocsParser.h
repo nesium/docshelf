@@ -7,6 +7,7 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "FHVConstants.h"
 #import "AbstractXMLTreeParser.h"
 #import "PackageSummaryParser.h"
 #import "PackageDetailParser.h"
@@ -14,6 +15,16 @@
 #import "FHVImportContext.h"
 #import "utils.h"
 #import "SQLiteImporter.h"
+#import "NSFileManager+NSMAdditions.h"
+#import "NSString+NSMAdditions.h"
+
+@protocol FlexDocsParserConnectionDelegate
+- (void)setStatusMessage:(NSString *)message;
+- (void)setProgressIsIndeterminate:(BOOL)bFlag;
+- (void)setMaxProgressValue:(double)value;
+- (void)setProgress:(double)progress;
+- (void)parsingComplete:(NSError *)error;
+@end
 
 
 @interface FlexDocsParser : NSObject{
@@ -21,8 +32,9 @@
 	NSOperationQueue *m_classParsingQueue;
 	FHVImportContext *m_context;
 	SQLiteImporter *m_importer;
+	id <FlexDocsParserConnectionDelegate> m_connectionProxy;
 }
 @property (retain) NSString *path;
-- (id)initWithPath:(NSString *)path;
+- (id)initWithPath:(NSString *)path docSetName:(NSString *)docSetName;
 - (void)parse;
 @end

@@ -27,7 +27,7 @@
 			NSArray *parts = [classSignature componentsSeparatedByString:@" "];
 			m_name = [[parts objectAtIndex:[parts count] - 1] retain];
 		}
-		m_ident = [[file packageNameByResolvingAgainstBasePath:context.path] retain];
+		m_ident = [[file packageNameByResolvingAgainstBasePath:context.sourcePath] retain];
 	}
 	return self;
 }

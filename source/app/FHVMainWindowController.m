@@ -51,10 +51,14 @@
 #pragma mark Protected methods
 
 - (void)windowDidLoad{
+	NSLog(@"%@", NSStringFromSize([m_outlineView intercellSpacing]));
+	[m_outlineView setIntercellSpacing:(NSSize){3, 0}];
+	[m_selectionOutlineView setIntercellSpacing:(NSSize){3, 0}];
+
 	[m_docSetModel addObserver:self forKeyPath:@"currentData" options:0 context:(void *)1];
 	[m_docSetModel addObserver:self forKeyPath:@"selectionData" options:0 context:(void *)2];
 	[m_docSetModel addObserver:self forKeyPath:@"detailData" options:0 context:(void *)3];
-	[m_outlineView expandItem:nil expandChildren:YES];
+	//[m_outlineView expandItem:nil expandChildren:YES];
 	[m_webView setResourceLoadDelegate:self];
 	[m_webView setPolicyDelegate:self];
 	[m_webView setFrameLoadDelegate:self];
@@ -141,6 +145,7 @@
 }
 
 - (BOOL)outlineView:(NSOutlineView *)outlineView isItemExpandable:(id)item{
+	if ([[item objectForKey:@"itemType"] intValue] == kItemTypePackage) return YES;
 	return [self outlineView:outlineView numberOfChildrenOfItem:item] > 0;
 }
 
@@ -215,7 +220,7 @@ static HeadlineCell *g_headlineCell = nil;
 }
 
 - (CGFloat)outlineView:(NSOutlineView *)outlineView heightOfRowByItem:(id)item{
-	return [self _itemWantsHeaderCell:item] ? 20.0 : 17.0;
+	return [self _itemWantsHeaderCell:item] ? 20.0 : 19.0;
 }
 
 - (void)outlineViewArrowLeftKeyWasPressed:(NSOutlineView *)outlineView{
@@ -239,6 +244,11 @@ static HeadlineCell *g_headlineCell = nil;
 			return;
 		}
 	}
+}
+
+- (BOOL)outlineView:(NSOutlineView *)outlineView shouldExpandItem:(id)item{
+	[m_docSetModel loadChildrenOfPackage:item];
+	return YES;
 }
 
 
@@ -340,16 +350,18 @@ static HeadlineCell *g_headlineCell = nil;
 	else
 		m_outlineViewUpdateDelayed = NO;
 	[anOutlineView reloadData];
-	[anOutlineView expandItem:nil expandChildren:YES];
+	if ([m_docSetModel inSearchMode] || anOutlineView == m_selectionOutlineView)
+		[anOutlineView expandItem:nil expandChildren:YES];
 	if (anOutlineView == m_selectionOutlineView)
 		[self _updateSelectionOutlineViewSelectionIfNeeded];
-	else
+	else{
+		[m_outlineView setIndentationPerLevel:m_docSetModel.inSearchMode ? 0 : 10];
 		[self _setFilterBarVisible:m_docSetModel.inSearchMode];
+	}
 }
 
 - (BOOL)_itemWantsHeaderCell:(NSDictionary *)item{
-	return [item objectForKey:@"children"] != nil || 
-		[[item objectForKey:@"itemType"] intValue] == kItemTypePackage;
+	return [[item objectForKey:@"root"] boolValue];
 }
 
 - (void)_updateSelectionOutlineViewSelectionIfNeeded{

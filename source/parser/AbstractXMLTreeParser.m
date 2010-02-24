@@ -198,7 +198,7 @@
 }
 
 - (NSString *)_urlToIdent:(NSURL *)url{
-	NSString *ident = [[[url absoluteURL] path] packageNameByResolvingAgainstBasePath:m_context.path];
+	NSString *ident = [[[url absoluteURL] path] packageNameByResolvingAgainstBasePath:m_context.sourcePath];
 	if ([url fragment])
 		ident = [NSString stringWithFormat:@"%@#%@", ident, [url fragment]];
 	return ident;

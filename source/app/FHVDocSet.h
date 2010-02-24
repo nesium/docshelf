@@ -21,12 +21,15 @@
 }
 @property (readonly) NSString *name;
 @property (readonly) NSUInteger index;
+@property (readonly) NSString *path;
 @property (nonatomic, assign) BOOL inSearchIncluded;
 - (id)initWithPath:(NSString *)path index:(NSUInteger)index;
 - (NSString *)imagePath;
 - (NSArray *)allPackages;
 - (NSArray *)allClasses;
 - (NSArray *)allGlobalSignatures;
+- (NSArray *)classesWithParentId:(NSNumber *)parentId;
+- (NSArray *)signaturesWithPackageId:(NSNumber *)packageId;
 - (NSArray *)classesFilteredByExpression:(NSString *)filter searchMode:(FHVDocSetSearchMode)searchMode 
 	cancelCondition:(BOOL *)cancelCondition;
 - (NSArray *)signaturesFilteredByExpression:(NSString *)filter 

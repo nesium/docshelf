@@ -11,11 +11,11 @@
 
 @interface FHVDocSetModel (Private)
 - (void)_loadDocSets;
-- (void)_mergeDocSetsData;
 - (FHVDocSet *)_docSetForItem:(id)item;
 - (NSString *)_classHTMLStringWithClassNode:(NSDictionary *)classNode 
 	signatures:(NSArray *)signatures;
 - (void)_updateDetailSelectionIndex:(NSNumber *)idToLookFor;
+- (void)_docSetDataMerged;
 @end
 
 
@@ -76,13 +76,27 @@
 #pragma mark Public methods
 
 - (void)loadDocSets{
-	[NSThread detachNewThreadSelector:@selector(_mergeDocSetsData) toTarget:self withObject:nil];
+	NSArray *docSets = m_docSets;
+	NSMutableArray *allDocSets = [NSMutableArray array];
+	for (FHVDocSet *docSet in docSets){
+		NSMutableArray *docSetPackages = [[docSet allPackages] mutableCopy];
+		NSDictionary *docSetItem = [NSDictionary dictionaryWithObjectsAndKeys: 
+			docSet.name, @"name", 
+			docSetPackages, @"children", 
+			[NSNumber numberWithBool:YES], @"root", 
+			nil];
+		[allDocSets addObject:docSetItem];
+		[docSetPackages release];
+	}
+	[m_mainData release];
+	m_mainData = [allDocSets retain];
+	[self _docSetDataMerged];
 }
 
 - (void)selectFirstLevelItem:(id)item{
 	m_detailSelectionIndex = -1;
 	
-	if (item == nil){
+	if (item == nil || [[item objectForKey:@"itemType"] intValue] == kItemTypePackage){
 		[m_selectedItem release];
 		m_selectedItem = nil;
 		[self willChangeValueForKey:@"selectionData"];
@@ -155,30 +169,35 @@
 	if (constructor){
 		[mergedSigs addObject:[NSDictionary dictionaryWithObjectsAndKeys: 
 			@"Constructor", @"name", 
+			[NSNumber numberWithBool:YES], @"root", 
 			constructor, @"children", 
 			nil]];
 	}
 	if (constants){
 		[mergedSigs addObject:[NSDictionary dictionaryWithObjectsAndKeys: 
 			@"Constants", @"name", 
+			[NSNumber numberWithBool:YES], @"root", 
 			constants, @"children", 
 			nil]];
 	}
 	if (properties){
 		[mergedSigs addObject:[NSDictionary dictionaryWithObjectsAndKeys: 
 			@"Properties", @"name", 
+			[NSNumber numberWithBool:YES], @"root", 
 			properties, @"children", 
 			nil]];
 	}
 	if (methods){
 		[mergedSigs addObject:[NSDictionary dictionaryWithObjectsAndKeys: 
 			@"Methods", @"name", 
+			[NSNumber numberWithBool:YES], @"root", 
 			methods, @"children", 
 			nil]];
 	}
 	if (events){
 		[mergedSigs addObject:[NSDictionary dictionaryWithObjectsAndKeys: 
 			@"Events", @"name", 
+			[NSNumber numberWithBool:YES], @"root", 
 			events, @"children", 
 			nil]];
 	}
@@ -292,6 +311,18 @@
 	return [NSImage imageNamed:[NSString stringWithFormat:@"%@.png", imageName]];
 }
 
+- (void)loadChildrenOfPackage:(NSDictionary *)package{
+	if ([[package objectForKey:@"itemType"] intValue] != kItemTypePackage || 
+		[package objectForKey:@"children"] != nil)
+		return;
+	FHVDocSet *docSet = [m_docSets objectAtIndex:[[package objectForKey:@"docSetId"] intValue]];
+	NSMutableArray *children = [NSMutableArray array];
+	[children addObjectsFromArray:[docSet classesWithParentId:[package objectForKey:@"dbId"]]];
+	[children addObjectsFromArray:[docSet signaturesWithPackageId:[package objectForKey:@"dbId"]]];
+	
+	[(NSMutableDictionary *)package setObject:children forKey:@"children"];
+}
+
 
 
 #pragma mark -
@@ -309,80 +340,10 @@
 			[docSet release];
 		}
 	}
-	m_docSets = [docSets copy];
-}
-
-- (void)_mergeDocSetsData{
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	
-	id *connectionProxy = [[NSConnection 
-		connectionWithRegisteredName:@"com.nesium.FlexDocs.InitialLoadConnection" 
-		host:nil] rootProxy];
-	
-	NSArray *docSets = m_docSets;
-	NSMutableArray *allPackages = [NSMutableArray array];
-	NSMutableDictionary *allClasses = [NSMutableDictionary dictionary];
-	[connectionProxy setProgressIsIndeterminate:YES];
-	int i = 1;
-	for (FHVDocSet *docSet in docSets){
-		[connectionProxy setStatusMessage:[NSString stringWithFormat:@"Loading %@ (%d/%d) ...", 
-			docSet.name, i++, [docSets count]]];
-		[allPackages addObjectsFromArray:[docSet allPackages]];
-		NSArray *classes = [docSet allClasses];
-		for (NSDictionary *clazz in classes){
-			NSString *classPackageName = [[clazz objectForKey:@"ident"] 
-				stringByRemovingLastPackageComponent];
-			NSMutableArray *children = [allClasses objectForKey:classPackageName];
-			if (!children){
-				children = [NSMutableArray array];
-				[allClasses setObject:children forKey:classPackageName];
-			}
-			[children addObject:clazz];
-		}
-		NSArray *globalSignatures = [docSet allGlobalSignatures];
-		for (NSDictionary *sig in globalSignatures){
-			NSString *sigPackageName = [sig objectForKey:@"parentName"];
-			NSMutableArray *children = [allClasses objectForKey:sigPackageName];
-			if (!children){
-				children = [NSMutableArray array];
-				[allClasses setObject:children forKey:sigPackageName];
-			}
-			[children addObject:sig];
-		}
-	}
-	
-	[connectionProxy setStatusMessage:@"Preparing data ..."];
-	[allPackages sortUsingComparator:^(id obj1, id obj2){
-		return [[obj1 objectForKey:@"ident"] compare:[obj2 objectForKey:@"ident"]];
+	[docSets sortUsingComparator:^(id obj1, id obj2){
+		return [[obj1 valueForKey:@"name"] compare:[obj2 valueForKey:@"name"]];
 	}];
-	
-	NSMutableArray *mergedData = [NSMutableArray array];
-	NSMutableArray *mergedPackageNames = [NSMutableArray array];
-	for (NSDictionary *package in allPackages){
-		NSString *packageName = [package objectForKey:@"name"];
-		// prevent duplicates
-		if ([mergedPackageNames containsObject:packageName])
-			continue;
-		NSMutableArray *children = [allClasses objectForKey:packageName];
-		[mergedPackageNames addObject:packageName];
-		if (!children){
-			[mergedData addObject:package];
-			continue;
-		}
-		NSArray *immutableChildren = [children copy];
-		NSMutableDictionary *mutablePackage = [package mutableCopy];
-		[mutablePackage setObject:immutableChildren forKey:@"children"];
-		NSDictionary *immutablePackage = [mutablePackage copy];
-		[mutablePackage release];
-		[mergedData addObject:immutablePackage];
-		[immutablePackage release];
-		[immutableChildren release];
-	}
-	[m_mainData release];
-	m_mainData = [mergedData copy];
-	[self performSelectorOnMainThread:@selector(_docSetDataMerged) withObject:nil waitUntilDone:NO];
-	
-	[pool release];
+	m_docSets = [docSets copy];
 }
 
 - (void)_docSetDataMerged{
@@ -462,6 +423,7 @@
 	NSMutableDictionary *headerNode = [NSMutableDictionary dictionary];
 	[headerNode setObject:@"Searching ..." forKey:@"name"];
 	[headerNode setObject:children forKey:@"children"];
+	[headerNode setObject:[NSNumber numberWithBool:YES] forKey:@"root"];
 	m_searchResults = [[NSArray alloc] initWithObjects:headerNode, nil];
 	m_currentData = m_searchResults;
 	[self didChangeValueForKey:@"currentData"];

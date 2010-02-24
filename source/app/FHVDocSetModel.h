@@ -15,7 +15,7 @@
 @interface FHVDocSetModel : NSObject{
 	NSString *m_path;
 	NSArray *m_docSets;
-	NSArray *m_mainData;
+	NSMutableArray *m_mainData;
 	NSArray *m_currentData;
 	NSArray *m_selectionData;
 	NSString *m_detailData;
@@ -48,4 +48,5 @@
 - (void)setSearchMode:(FHVDocSetSearchMode)mode;
 - (void)setDocSetWithIndex:(NSUInteger)index inSearchIncluded:(BOOL)bFlag;
 - (NSImage *)imageForItem:(id)item;
+- (void)loadChildrenOfPackage:(NSDictionary *)package;
 @end

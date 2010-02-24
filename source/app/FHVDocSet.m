@@ -27,7 +27,8 @@ NSString *sqlite3_column_nsstring(sqlite3_stmt *stmt, int col){
 
 @implementation FHVDocSet
 
-@synthesize name=m_name;
+@synthesize name=m_name, 
+			path=m_path;
 
 #pragma mark -
 #pragma mark Initialization & Deallocation
@@ -69,7 +70,7 @@ NSString *sqlite3_column_nsstring(sqlite3_stmt *stmt, int col){
 	sqlite3_stmt *stmt;
 	sqlite3_prepare(m_db, "SELECT * FROM `fhv_packages`", -1, &stmt, 0);
 	while (sqlite3_step(stmt) == SQLITE_ROW){
-		NSDictionary *package = [NSDictionary dictionaryWithObjectsAndKeys: 
+		NSMutableDictionary *package = [NSMutableDictionary dictionaryWithObjectsAndKeys: 
 			m_index, @"docSetId", 
 			[NSNumber numberWithInt:kItemTypePackage], @"itemType", 
 			[NSNumber numberWithLongLong:sqlite3_column_int64(stmt, 0)], @"dbId", 
@@ -90,6 +91,19 @@ NSString *sqlite3_column_nsstring(sqlite3_stmt *stmt, int col){
 - (NSArray *)allGlobalSignatures{
 	return [self _fetchSignatures:[NSString stringWithFormat:@"`parent_type` = %d", 
 		kSigParentTypePackage] includeDetail:NO limit:-1 cancelCondition:NULL preventSorting:YES];
+}
+
+- (NSArray *)classesWithParentId:(NSNumber *)parentId{
+	NSString *whereClause = [NSString stringWithFormat:@"`package_id` = %qu", 
+		[parentId longLongValue]];
+	return [self _fetchClasses:whereClause includeDetail:YES cancelCondition:NULL];
+}
+
+- (NSArray *)signaturesWithPackageId:(NSNumber *)packageId{
+	NSString *whereClause = [NSString stringWithFormat:@"`parent_id` = %qu AND `parent_type` = %d", 
+		[packageId longLongValue], kSigParentTypePackage];
+	return [self _fetchSignatures:whereClause includeDetail:NO limit:-1 cancelCondition:NULL 
+		preventSorting:NO];
 }
 
 - (NSArray *)signaturesWithParentId:(NSNumber *)parentId includeInherited:(BOOL)bFlag{
