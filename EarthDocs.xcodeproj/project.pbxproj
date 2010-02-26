@@ -50,6 +50,7 @@
 		2CB33D42110B3ADC00A7C238 /* FilterbarGroupItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CB33D3F110B3ADC00A7C238 /* FilterbarGroupItem.m */; };
 		2CCFC17F110500590019F014 /* schema.sql in Resources */ = {isa = PBXBuildFile; fileRef = 2CCFC17E110500590019F014 /* schema.sql */; };
 		2CCFC1B2110512990019F014 /* SQLiteImporter.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CCFC1B1110512990019F014 /* SQLiteImporter.m */; };
+		2CE1FA31113732A600CB120C /* NSWindow+NSMAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CE1FA30113732A600CB120C /* NSWindow+NSMAdditions.m */; };
 		2CE366111108B6FD00F582E9 /* ImageAndTextCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CE366101108B6FD00F582E9 /* ImageAndTextCell.m */; };
 		2CEE304B0DD65FC700CC762E /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2CEE304A0DD65FC700CC762E /* WebKit.framework */; };
 		2CEE30BA0DD6698100CC762E /* NodeClassToIconTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CEE30B90DD6698100CC762E /* NodeClassToIconTransformer.m */; };
@@ -146,6 +147,9 @@
 		2CCFC17E110500590019F014 /* schema.sql */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = schema.sql; path = Resources/schema.sql; sourceTree = "<group>"; };
 		2CCFC1B0110512990019F014 /* SQLiteImporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SQLiteImporter.h; sourceTree = "<group>"; };
 		2CCFC1B1110512990019F014 /* SQLiteImporter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SQLiteImporter.m; sourceTree = "<group>"; };
+		2CE1F991113726EE00CB120C /* NSMMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSMMacros.h; sourceTree = "<group>"; };
+		2CE1FA2F113732A600CB120C /* NSWindow+NSMAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSWindow+NSMAdditions.h"; sourceTree = "<group>"; };
+		2CE1FA30113732A600CB120C /* NSWindow+NSMAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSWindow+NSMAdditions.m"; sourceTree = "<group>"; };
 		2CE3660F1108B6FD00F582E9 /* ImageAndTextCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageAndTextCell.h; sourceTree = "<group>"; };
 		2CE366101108B6FD00F582E9 /* ImageAndTextCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageAndTextCell.m; sourceTree = "<group>"; };
 		2CEE304A0DD65FC700CC762E /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = /System/Library/Frameworks/WebKit.framework; sourceTree = "<absolute>"; };
@@ -277,12 +281,15 @@
 		2C85836111359D6F00D58B15 /* NSMUtils */ = {
 			isa = PBXGroup;
 			children = (
+				2CE1F991113726EE00CB120C /* NSMMacros.h */,
 				2C8584A71135C36900D58B15 /* NSFileManager+NSMAdditions.h */,
 				2C8584A81135C36900D58B15 /* NSFileManager+NSMAdditions.m */,
 				2C8584A91135C36900D58B15 /* NSNumber+NSMAdditions.h */,
 				2C8584AA1135C36900D58B15 /* NSNumber+NSMAdditions.m */,
 				2C8584AB1135C36900D58B15 /* NSString+NSMAdditions.h */,
 				2C8584AC1135C36900D58B15 /* NSString+NSMAdditions.m */,
+				2CE1FA2F113732A600CB120C /* NSWindow+NSMAdditions.h */,
+				2CE1FA30113732A600CB120C /* NSWindow+NSMAdditions.m */,
 			);
 			path = NSMUtils;
 			sourceTree = "<group>";
@@ -514,6 +521,7 @@
 				2C8584AD1135C36900D58B15 /* NSFileManager+NSMAdditions.m in Sources */,
 				2C8584AE1135C36900D58B15 /* NSNumber+NSMAdditions.m in Sources */,
 				2C8584AF1135C36900D58B15 /* NSString+NSMAdditions.m in Sources */,
+				2CE1FA31113732A600CB120C /* NSWindow+NSMAdditions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -603,6 +611,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_CFLAGS = "-DDEBUG";
 				PREBINDING = NO;
 				SDKROOT = macosx10.6;
 			};

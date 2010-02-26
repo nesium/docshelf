@@ -15,16 +15,19 @@
 - (void)_attachPickerView;
 - (void)_attachProgressView;
 - (void)_parseDocsAtPath:(NSString *)aPath;
+- (void)_attachView:(NSView *)aView startButtonVisible:(BOOL)startButtonVisible 
+	animated:(BOOL)animated;
 @end
 
 #define kFHVImportWindowBottomBarHeight 40.0f
 
 @implementation FHVImportWindowController
 
-- (id)initWithWindowNibName:(NSString *)windowNibName{
+- (id)initWithWindowNibName:(NSString *)windowNibName model:(FHVDocSetModel *)model{
 	if (self = [super initWithWindowNibName:windowNibName]){
 		m_sourcePath = nil;
 		m_importConnection = nil;
+		m_model = model;
 	}
 	return self;
 }
@@ -59,6 +62,14 @@
 
 - (void)controlTextDidChange:(NSNotification *)aNotification{
 	[self _updateImportButton];
+}
+
+- (void)reset{
+	if (!self.isWindowLoaded)
+		return;
+	m_nameTextField.stringValue = @"";
+	[self _setSourcePath:nil];
+	[self _attachPickerView];
 }
 
 
@@ -98,36 +109,44 @@
 }
 
 - (void)_attachPickerView{
-	NSRect frame = m_pickerView.frame;
-	frame.origin.y = kFHVImportWindowBottomBarHeight;
-	m_pickerView.frame = frame;
-	[self.window.contentView addSubview:m_pickerView];
+	[self _attachView:m_pickerView startButtonVisible:YES animated:NO];
 }
 
 - (void)_attachProgressView{
-	[m_pickerView removeFromSuperview];
+	[self _attachView:m_progressView startButtonVisible:NO animated:YES];
+}
 
-	NSRect windowFrame = self.window.frame;
-	CGFloat chromeHeight = NSHeight(windowFrame) - NSHeight([[self.window contentView] frame]);
-	CGFloat newHeight = NSHeight(m_progressView.frame) + chromeHeight + 
-		kFHVImportWindowBottomBarHeight;
-	windowFrame.origin.y -= newHeight - NSHeight(windowFrame);
-	windowFrame.size.height = newHeight;
-	[[self.window animator] setFrame:windowFrame display:YES];
+- (void)_attachView:(NSView *)aView startButtonVisible:(BOOL)startButtonVisible 
+	animated:(BOOL)animated{
+	[m_progressView removeFromSuperview];
+	[m_pickerView removeFromSuperview];
 	
-	NSRect viewFrame = m_progressView.frame;
+	NSSize contentSize = [[self.window contentView] frame].size;
+	contentSize.height = NSHeight(aView.frame) + kFHVImportWindowBottomBarHeight;
+	[self.window nsm_resizeToFitContentSize:contentSize animated:animated];
+	
+	NSRect viewFrame = aView.frame;
 	viewFrame.origin.y = kFHVImportWindowBottomBarHeight;
-	viewFrame.size.width = NSWidth(windowFrame);
-	m_progressView.frame = viewFrame;
-	[m_progressView setAlphaValue:0.0f];
-	[self.window.contentView addSubview:m_progressView];
-	[m_progressView.animator setAlphaValue:1.0f];
+	viewFrame.size.width = NSWidth(self.window.frame);
+	aView.frame = viewFrame;
+	[self.window.contentView addSubview:aView];
+	if (animated){
+		[aView setAlphaValue:0.0f];
+		[aView.animator setAlphaValue:1.0f];
+	}
 	
 	NSRect cancelButtonFrame = m_cancelButton.frame;
 	NSRect startButtonFrame = m_startImportButton.frame;
-	cancelButtonFrame.origin.x = NSMaxX(startButtonFrame) - NSWidth(cancelButtonFrame);
-	[m_startImportButton setHidden:YES];
-	[[m_cancelButton animator] setFrame:cancelButtonFrame];
+	if (startButtonVisible){
+		cancelButtonFrame.origin.x = NSMinX(startButtonFrame) - NSWidth(cancelButtonFrame);
+	}else{
+		cancelButtonFrame.origin.x = NSMaxX(startButtonFrame) - NSWidth(cancelButtonFrame);
+	}
+	[m_startImportButton setHidden:!startButtonVisible];
+	if (animated)
+		[[m_cancelButton animator] setFrame:cancelButtonFrame];
+	else
+		m_cancelButton.frame = cancelButtonFrame;
 }
 
 
@@ -158,6 +177,8 @@
 	
 	if (error){
 		[NSApp presentError:error];
+	}else{
+		[m_model reloadDocSets];
 	}
 }
 @end

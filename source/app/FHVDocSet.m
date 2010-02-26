@@ -28,7 +28,8 @@ NSString *sqlite3_column_nsstring(sqlite3_stmt *stmt, int col){
 @implementation FHVDocSet
 
 @synthesize name=m_name, 
-			path=m_path;
+			path=m_path, 
+			docSetId=m_docSetId;
 
 #pragma mark -
 #pragma mark Initialization & Deallocation
@@ -41,6 +42,7 @@ NSString *sqlite3_column_nsstring(sqlite3_stmt *stmt, int col){
 		m_infoPlist = [[NSDictionary dictionaryWithContentsOfFile:
 			[m_path stringByAppendingPathComponent:@"Info.plist"]] retain];
 		m_name = [[m_infoPlist objectForKey:(NSString *)kCFBundleNameKey] retain];
+		m_docSetId = [[m_infoPlist objectForKey:@"FHVDocSetId"] retain];
 		m_inSearchIncluded = YES;
 		[self _open];
 	}
@@ -52,6 +54,7 @@ NSString *sqlite3_column_nsstring(sqlite3_stmt *stmt, int col){
 	[m_path release];
 	[m_index release];
 	[m_name release];
+	[m_docSetId release];
 	[m_infoPlist release];
 	[super dealloc];
 }

@@ -23,6 +23,9 @@
 - (void)_setFilterBarVisible:(BOOL)bFlag;
 - (NSString *)_identifierForSearchMode:(FHVDocSetSearchMode)mode;
 - (FHVDocSetSearchMode)_searchModeForIdentifier:(NSString *)identifier;
+- (void)_reloadOutlineView:(NSOutlineView *)anOutlineView;
+- (void)_serializeTreeState;
+- (void)_restoreTreeState;
 @end
 
 
@@ -34,14 +37,20 @@
 - (id)initWithWindowNibName:(NSString *)windowNibName docSetModel:(FHVDocSetModel *)docSetModel{
 	if (self = [super initWithWindowNibName:windowNibName]){
 		m_docSetModel = docSetModel;
-		m_outlineViewUpdateDelayed = NO;
+		[[NSNotificationCenter defaultCenter] 
+			addObserver:self 
+			selector:@selector(applicationWillTerminate:) 
+			name:NSApplicationWillTerminateNotification 
+			object:nil];
 	}
 	return self;
 }
 
 - (void)dealloc{
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	[m_docSetModel removeObserver:self forKeyPath:@"currentData"];
 	[m_docSetModel removeObserver:self forKeyPath:@"selectionData"];
+	[m_docSetModel removeObserver:self forKeyPath:@"detailData"];
 	[super dealloc];
 }
 
@@ -51,7 +60,6 @@
 #pragma mark Protected methods
 
 - (void)windowDidLoad{
-	NSLog(@"%@", NSStringFromSize([m_outlineView intercellSpacing]));
 	[m_outlineView setIntercellSpacing:(NSSize){3, 0}];
 	[m_selectionOutlineView setIntercellSpacing:(NSSize){3, 0}];
 
@@ -78,6 +86,7 @@
 			[docSetsListSelection addObject:[[NSNumber numberWithInt:docSet.index] stringValue]];
 	}
 	[m_filterBar selectItems:docSetsListSelection inGroup:@"docSetsList" selected:YES];
+	[self _restoreTreeState];
 }
 
 
@@ -114,13 +123,29 @@
 
 
 #pragma mark -
+#pragma mark Notifications
+
+- (void)applicationWillTerminate:(NSNotification *)notification{
+	[self _serializeTreeState];
+}
+
+
+
+#pragma mark -
 #pragma mark KVO Notifications
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object 
 	change:(NSDictionary *)change context:(void *)context{
+	NDCLog(@"change %@", keyPath);
 	if ((int)context == 1){
-		if (m_outlineViewUpdateDelayed) return;
-		[self performSelector:@selector(_reloadOutlineView:) withObject:m_outlineView afterDelay:1.0/20.0];
+		NDCLog(@"COUNT %d", [m_docSetModel.currentData count]);
+		if (m_docSetModel.currentData == nil){
+			NDCLog(@"reload immediately");
+			[self _reloadOutlineView:m_outlineView];
+		}else{
+			[self performSelector:@selector(_reloadOutlineView:) withObject:m_outlineView 
+				afterDelay:1.0/20.0];
+		}
 	}else if ((int)context == 2){
 		[self performSelector:@selector(_reloadOutlineView:) withObject:m_selectionOutlineView 
 			afterDelay:0.0];
@@ -278,13 +303,11 @@ static HeadlineCell *g_headlineCell = nil;
 - (void)webView:(WebView *)webView decidePolicyForNavigationAction:(NSDictionary *)actionInformation 
 	request:(NSURLRequest *)request frame:(WebFrame *)frame 
 	decisionListener:(id <WebPolicyDecisionListener>)listener{
-	NSLog(@"%@", [request URL]);
 	[listener use];
 }
 
 - (void)webView:(WebView *)sender didClearWindowObject:(WebScriptObject *)windowObject 
 	forFrame:(WebFrame *)frame{
-	NSLog(@"anchor: %@", m_docSetModel.detailSelectionAnchor);
 	if (m_docSetModel.detailSelectionAnchor){
 		[self _jumpToAnchor:m_docSetModel.detailSelectionAnchor];
 	}
@@ -347,8 +370,8 @@ static HeadlineCell *g_headlineCell = nil;
 - (void)_reloadOutlineView:(NSOutlineView *)anOutlineView{
 	if (anOutlineView == m_selectionOutlineView)
 		[anOutlineView deselectAll:nil];
-	else
-		m_outlineViewUpdateDelayed = NO;
+	NDCLog(@"reload %@ outlineview", 
+		anOutlineView == m_selectionOutlineView ? @"selection" : @"main");
 	[anOutlineView reloadData];
 	if ([m_docSetModel inSearchMode] || anOutlineView == m_selectionOutlineView)
 		[anOutlineView expandItem:nil expandChildren:YES];
@@ -405,5 +428,40 @@ static HeadlineCell *g_headlineCell = nil;
 		return kFHVDocSetSearchModePrefix;
 	else
 		return kFHVDocSetSearchModeExact;
+}
+
+- (void)_serializeTreeState{
+	NSInteger count = [m_outlineView numberOfRows];
+	NSMutableDictionary *tree = [NSMutableDictionary dictionary];
+	for (NSInteger i = 0; i < count; i++){
+		id item = [m_outlineView itemAtRow:i];
+		NSInteger level = [m_outlineView levelForRow:i];
+		if (![m_outlineView isItemExpanded:item] || level == -1 || level > 2)
+			continue;
+		if (level == 0){
+			NSString *docSetId = [m_docSetModel docSetForItem:item].docSetId;
+			[tree setObject:[NSMutableArray array] forKey:docSetId];
+		}else {
+			id parentItem = [m_docSetModel docSetItemForItem:item];
+			NSString *docSetId = [m_docSetModel docSetForItem:item].docSetId;
+			NSInteger index = [[parentItem objectForKey:@"children"] indexOfObject:item];
+			NSMutableArray *arr = [tree objectForKey:docSetId];
+			[arr addObject:[NSNumber numberWithInt:index]];
+		}
+	}
+	[[NSUserDefaults standardUserDefaults] setObject:tree forKey:@"FHVTreeState"];
+}
+
+- (void)_restoreTreeState{
+	NSDictionary *tree = [[NSUserDefaults standardUserDefaults] objectForKey:@"FHVTreeState"];
+	for (NSString *key in tree){
+		id item = [m_docSetModel docSetItemForDocSetId:key];
+		[m_outlineView expandItem:item];
+		NSArray *children = [item objectForKey:@"children"];
+		NSArray *arr = [tree objectForKey:key];
+		for (NSNumber *index in arr){
+			[m_outlineView expandItem:[children objectAtIndex:[index intValue]]];
+		}
+	}
 }
 @end

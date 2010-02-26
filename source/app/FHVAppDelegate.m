@@ -44,8 +44,9 @@
 - (IBAction)addDocSet:(id)sender{
 	if (!m_importWindowController){
 		m_importWindowController = [[FHVImportWindowController alloc] 
-			initWithWindowNibName:@"ImportWindow"];
+			initWithWindowNibName:@"ImportWindow" model:m_docSetModel];
 	}
+	[m_importWindowController reset];
 	[NSApp beginSheet:m_importWindowController.window 
 		modalForWindow:m_mainWindowController.window 
 		modalDelegate:self 
@@ -58,6 +59,9 @@
 }
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification{
+	if(getenv("NSZombieEnabled") || getenv("NSAutoreleaseFreedObjectCheckEnabled")){
+		NSLog(@"NSZombieEnabled/NSAutoreleaseFreedObjectCheckEnabled enabled!");
+	}
 }
 
 - (void)_showMainWindow{

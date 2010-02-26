@@ -22,7 +22,6 @@
 	IBOutlet Filterbar *m_filterBar;
 	IBOutlet NSSplitView *m_outerSplitView;
 	NSTimeInterval m_lastOutlineViewUpdateTime;
-	BOOL m_outlineViewUpdateDelayed;
 	FHVDocSetModel *m_docSetModel;
 }
 - (id)initWithWindowNibName:(NSString *)windowNibName docSetModel:(FHVDocSetModel *)docSetModel;

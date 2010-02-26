@@ -157,6 +157,7 @@ bailout:
 	NSDictionary *mainInfoPlist = [[NSBundle mainBundle] infoDictionary];
 	NSDictionary *bundleInfoPlist = [NSDictionary dictionaryWithObjectsAndKeys: 
 		name, (NSString *)kCFBundleNameKey, 
+		[NSString nsm_uuid], @"FHVDocSetId", 
 		[mainInfoPlist objectForKey:(NSString *)kCFBundleVersionKey], (NSString *)kCFBundleVersionKey, 
 		[mainInfoPlist objectForKey:@"CFBundleShortVersionString"], @"CFBundleShortVersionString", 
 		nil];

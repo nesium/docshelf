@@ -11,13 +11,14 @@
 
 @interface FHVDocSetModel (Private)
 - (void)_loadDocSets;
-- (FHVDocSet *)_docSetForItem:(id)item;
 - (NSString *)_classHTMLStringWithClassNode:(NSDictionary *)classNode 
 	signatures:(NSArray *)signatures;
 - (void)_updateDetailSelectionIndex:(NSNumber *)idToLookFor;
 - (void)_docSetDataMerged;
 @end
 
+
+static BOOL g_initialLoad = YES;
 
 @implementation FHVDocSetModel
 
@@ -83,6 +84,7 @@
 		NSDictionary *docSetItem = [NSDictionary dictionaryWithObjectsAndKeys: 
 			docSet.name, @"name", 
 			docSetPackages, @"children", 
+			[NSNumber numberWithInt:docSet.index], @"docSetId", 
 			[NSNumber numberWithBool:YES], @"root", 
 			nil];
 		[allDocSets addObject:docSetItem];
@@ -91,6 +93,21 @@
 	[m_mainData release];
 	m_mainData = [allDocSets retain];
 	[self _docSetDataMerged];
+}
+
+- (void)reloadDocSets{
+	[self willChangeValueForKey:@"currentData"];
+	[m_docSets release];
+	m_docSets = nil;
+	[m_mainData release];
+	m_mainData = nil;
+	m_currentData = nil;
+	[self didChangeValueForKey:@"currentData"];
+
+	[self selectFirstLevelItem:nil];
+
+	[self _loadDocSets];
+	[self loadDocSets];
 }
 
 - (void)selectFirstLevelItem:(id)item{
@@ -113,7 +130,7 @@
 	// @TODO handle the case where item could be a package, or where the parent of the item could 
 	// be a package
 	NSNumber *idToSelect = nil;
-	FHVDocSet *docSet = [self _docSetForItem:item];
+	FHVDocSet *docSet = [self docSetForItem:item];
 	if ([[item objectForKey:@"itemType"] intValue] == kItemTypeSignature){
 		idToSelect = [item objectForKey:@"dbId"];
 		item = [docSet classWithId:[item objectForKey:@"parentDbId"]];
@@ -221,7 +238,7 @@
 }
 
 - (NSURL *)URLForImageWithName:(NSString *)imageName{
-	FHVDocSet *docSet = [self _docSetForItem:m_selectedItem];
+	FHVDocSet *docSet = [self docSetForItem:m_selectedItem];
 	return [NSURL fileURLWithPath:[[docSet imagePath] stringByAppendingPathComponent:imageName]];
 }
 
@@ -315,12 +332,39 @@
 	if ([[package objectForKey:@"itemType"] intValue] != kItemTypePackage || 
 		[package objectForKey:@"children"] != nil)
 		return;
-	FHVDocSet *docSet = [m_docSets objectAtIndex:[[package objectForKey:@"docSetId"] intValue]];
+	FHVDocSet *docSet = [self docSetForItem:package];
 	NSMutableArray *children = [NSMutableArray array];
 	[children addObjectsFromArray:[docSet classesWithParentId:[package objectForKey:@"dbId"]]];
 	[children addObjectsFromArray:[docSet signaturesWithPackageId:[package objectForKey:@"dbId"]]];
-	
 	[(NSMutableDictionary *)package setObject:children forKey:@"children"];
+}
+
+- (NSDictionary *)docSetItemForItem:(id)item{
+	NSInteger docSetId = [[item objectForKey:@"docSetId"] intValue];
+	for (NSInteger i = 0; i < [m_docSets count]; i++){
+		FHVDocSet *docSet = [m_docSets objectAtIndex:i];
+		if (docSet.index == docSetId)
+			return [m_mainData objectAtIndex:i];
+	}
+	return nil;
+}
+
+- (FHVDocSet *)docSetForItem:(id)item{
+	NSInteger docSetId = [[item objectForKey:@"docSetId"] intValue];
+	for (FHVDocSet *docSet in m_docSets){
+		if (docSet.index == docSetId)
+			return docSet;
+	}
+	return nil;
+}
+
+- (NSDictionary *)docSetItemForDocSetId:(NSString *)docSetId{
+	for (NSInteger i = 0; i < [m_docSets count]; i++){
+		FHVDocSet *docSet = [m_docSets objectAtIndex:i];
+		if ([docSet.docSetId isEqualToString:docSetId])
+			return [m_mainData objectAtIndex:i];
+	}
+	return nil;
 }
 
 
@@ -343,23 +387,20 @@
 	[docSets sortUsingComparator:^(id obj1, id obj2){
 		return [[obj1 valueForKey:@"name"] compare:[obj2 valueForKey:@"name"]];
 	}];
+	[m_docSets release];
 	m_docSets = [docSets copy];
 }
 
 - (void)_docSetDataMerged{
-	BOOL isInitialLoad = m_currentData == nil;
 	[self willChangeValueForKey:@"currentData"];
 	m_currentData = m_mainData;
 	[self didChangeValueForKey:@"currentData"];
-	if (isInitialLoad){
+	if (g_initialLoad){
+		g_initialLoad = NO;
 		[m_searchWorker start];
 		[[NSNotificationCenter defaultCenter] postNotificationName:@"FHVDocSetModelInitialLoadDone" 
 			object:self];
 	}
-}
-
-- (FHVDocSet *)_docSetForItem:(id)item{
-	return [m_docSets objectAtIndex:[[item objectForKey:@"docSetId"] intValue]];
 }
 
 - (NSString *)_classHTMLStringWithClassNode:(NSDictionary *)classNode 

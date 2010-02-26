@@ -75,7 +75,7 @@
 		[m_searchTerm release];
 		m_searchTerm = nil;
 		[m_lock unlockWithCondition:NO_SEARCH_TERM];
-
+		
 		[m_connectionProxy searchDidStart];
 		for (FHVDocSet *docSet in m_docSets){
 			if (m_interrupted) break;

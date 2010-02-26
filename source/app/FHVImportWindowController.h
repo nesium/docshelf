@@ -9,6 +9,7 @@
 #import <Cocoa/Cocoa.h>
 #import "FHVDocSetModel.h"
 #import "FlexDocsParser.h"
+#import "NSWindow+NSMAdditions.h"
 
 
 @interface FHVImportWindowController : NSWindowController <FlexDocsParserConnectionDelegate>{
@@ -22,9 +23,11 @@
 	IBOutlet NSTextField *m_statusLabel;
 	NSString *m_sourcePath;
 	NSConnection *m_importConnection;
+	FHVDocSetModel *m_model;
 }
-- (id)initWithWindowNibName:(NSString *)windowNibName;
+- (id)initWithWindowNibName:(NSString *)windowNibName model:(FHVDocSetModel *)model;
 - (IBAction)chooseDirectory:(id)sender;
 - (IBAction)startImport:(id)sender;
 - (IBAction)cancel:(id)sender;
+- (void)reset;
 @end

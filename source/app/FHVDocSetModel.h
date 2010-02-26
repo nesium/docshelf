@@ -41,6 +41,7 @@
 @property (readonly) NSArray *docSets;
 - (id)initWithDocSetPath:(NSString *)path;
 - (void)loadDocSets;
+- (void)reloadDocSets;
 - (void)selectFirstLevelItem:(id)item;
 - (NSURL *)URLForImageWithName:(NSString *)imageName;
 - (NSString *)anchorForItem:(id)item;
@@ -49,4 +50,7 @@
 - (void)setDocSetWithIndex:(NSUInteger)index inSearchIncluded:(BOOL)bFlag;
 - (NSImage *)imageForItem:(id)item;
 - (void)loadChildrenOfPackage:(NSDictionary *)package;
+- (NSDictionary *)docSetItemForItem:(id)item;
+- (FHVDocSet *)docSetForItem:(id)item;
+- (NSDictionary *)docSetItemForDocSetId:(NSString *)docSetId;
 @end
