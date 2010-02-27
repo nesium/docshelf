@@ -113,6 +113,8 @@ static BOOL g_initialLoad = YES;
 - (void)selectFirstLevelItem:(id)item{
 	m_detailSelectionIndex = -1;
 	
+	NDCLog(@"%@", item);
+	
 	if (item == nil || [[item objectForKey:@"itemType"] intValue] == kItemTypePackage){
 		[m_selectedItem release];
 		m_selectedItem = nil;
@@ -136,8 +138,9 @@ static BOOL g_initialLoad = YES;
 		item = [docSet classWithId:[item objectForKey:@"parentDbId"]];
 	}
 	
-	if (m_selectedItem != nil && [[item objectForKey:@"itemType"] 
-		isEqualToNumber:[m_selectedItem objectForKey:@"itemType"]] && 
+	if (m_selectedItem != nil && 
+		m_selectedItem != item && // true when toggling inherited signatures
+		[[item objectForKey:@"itemType"] isEqualToNumber:[m_selectedItem objectForKey:@"itemType"]] && 
 		[[item objectForKey:@"dbId"] isEqualToNumber:[m_selectedItem objectForKey:@"dbId"]]){
 		[self _updateDetailSelectionIndex:idToSelect];
 		return;
@@ -222,6 +225,7 @@ static BOOL g_initialLoad = YES;
 	[self willChangeValueForKey:@"selectionData"];
 	[m_selectionData release];
 	m_selectionData = [mergedSigs copy];
+	NDCLog(@"ID TO SELECT %@", idToSelect);
 	if (idToSelect) [self _updateDetailSelectionIndex:idToSelect];
 	[self didChangeValueForKey:@"selectionData"];
 	
@@ -429,6 +433,7 @@ static BOOL g_initialLoad = YES;
 }
 
 - (void)_updateDetailSelectionIndex:(NSNumber *)idToSelect{
+	NDCLog(@"%@", idToSelect);
 	NSInteger i = 0;
 	[m_detailSelectionAnchor release];
 	m_detailSelectionAnchor = nil;

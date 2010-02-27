@@ -37,6 +37,7 @@
 - (id)initWithWindowNibName:(NSString *)windowNibName docSetModel:(FHVDocSetModel *)docSetModel{
 	if (self = [super initWithWindowNibName:windowNibName]){
 		m_docSetModel = docSetModel;
+		m_restoredAnchor = nil;
 		[[NSNotificationCenter defaultCenter] 
 			addObserver:self 
 			selector:@selector(applicationWillTerminate:) 
@@ -60,6 +61,7 @@
 #pragma mark Protected methods
 
 - (void)windowDidLoad{
+	NDCLog(@"WINDOW DID LOAD");
 	[m_outlineView setIntercellSpacing:(NSSize){3, 0}];
 	[m_selectionOutlineView setIntercellSpacing:(NSSize){3, 0}];
 
@@ -114,7 +116,7 @@
 
 
 #pragma mark -
-#pragma WindowDelegate methods
+#pragma mark WindowDelegate methods
 
 - (void)windowDidBecomeKey:(NSNotification *)notification{
 	[self focusGlobalSearchField:nil];
@@ -232,6 +234,7 @@ static HeadlineCell *g_headlineCell = nil;
 
 - (void)outlineViewSelectionDidChange:(NSNotification *)notification{
 	if ([notification object] == m_outlineView){
+		NDCLog(@"change %@", notification);
 		NSArray *oldSelectionData = [m_docSetModel.selectionData retain];
 		[m_docSetModel selectFirstLevelItem:[m_outlineView itemAtRow:[m_outlineView selectedRow]]];
 		if (m_docSetModel.selectionData == oldSelectionData){
@@ -279,7 +282,7 @@ static HeadlineCell *g_headlineCell = nil;
 
 
 #pragma mark -
-#pragma WebResourceLoadDelegate Prototcol
+#pragma mark WebResourceLoadDelegate Prototcol
 
 - (NSURLRequest *)webView:(WebView *)sender resource:(id)identifier 
 	willSendRequest:(NSURLRequest *)request redirectResponse:(NSURLResponse *)redirectResponse 
@@ -308,8 +311,17 @@ static HeadlineCell *g_headlineCell = nil;
 
 - (void)webView:(WebView *)sender didClearWindowObject:(WebScriptObject *)windowObject 
 	forFrame:(WebFrame *)frame{
-	if (m_docSetModel.detailSelectionAnchor){
-		[self _jumpToAnchor:m_docSetModel.detailSelectionAnchor];
+	NSString *anchor = nil;
+	if (m_restoredAnchor){
+		anchor = [[m_restoredAnchor copy] autorelease];
+		[m_restoredAnchor release];
+		m_restoredAnchor = nil;
+	}
+	if (!anchor){
+		anchor = m_docSetModel.detailSelectionAnchor;
+	}
+	if (anchor){
+		[self _jumpToAnchor:anchor];
 	}
 }
 
@@ -449,7 +461,14 @@ static HeadlineCell *g_headlineCell = nil;
 			[arr addObject:[NSNumber numberWithInt:index]];
 		}
 	}
+	
+	NSArray *selection = [NSArray arrayWithObjects:
+		[NSNumber numberWithInt:[m_outlineView selectedRow]], 
+		[NSNumber numberWithInt:[m_selectionOutlineView selectedRow]], 
+		nil];
+	
 	[[NSUserDefaults standardUserDefaults] setObject:tree forKey:@"FHVTreeState"];
+	[[NSUserDefaults standardUserDefaults] setObject:selection forKey:@"FHVSelection"];
 }
 
 - (void)_restoreTreeState{
@@ -463,5 +482,27 @@ static HeadlineCell *g_headlineCell = nil;
 			[m_outlineView expandItem:[children objectAtIndex:[index intValue]]];
 		}
 	}
+	NSArray *selection = [[NSUserDefaults standardUserDefaults] objectForKey:@"FHVSelection"];
+	NSInteger firstLevelSelection = [[selection objectAtIndex:0] intValue];
+	if (selection == nil || firstLevelSelection == -1) return;
+	[m_outlineView setDelegate:nil];
+	[m_outlineView selectRowIndexes:[NSIndexSet indexSetWithIndex:firstLevelSelection] 
+		byExtendingSelection:NO];
+	[m_outlineView scrollRowToVisible:firstLevelSelection];
+	[m_outlineView setDelegate:self];
+	[m_docSetModel selectFirstLevelItem:[m_outlineView itemAtRow:firstLevelSelection]];
+	
+	NSInteger secondLevelSelection = [[selection objectAtIndex:1] intValue];
+	if (secondLevelSelection == -1) return;
+	[m_selectionOutlineView reloadData];
+	[m_selectionOutlineView expandItem:nil expandChildren:YES];
+	[NSObject cancelPreviousPerformRequestsWithTarget:self];
+	[m_selectionOutlineView setDelegate:nil];
+	[m_selectionOutlineView selectRowIndexes:[NSIndexSet indexSetWithIndex:secondLevelSelection] 
+		byExtendingSelection:NO];
+	[m_selectionOutlineView scrollRowToVisible:secondLevelSelection];
+	[m_selectionOutlineView setDelegate:self];
+	m_restoredAnchor = [[m_docSetModel anchorForItem:[m_selectionOutlineView 
+		itemAtRow:secondLevelSelection]] retain];
 }
 @end

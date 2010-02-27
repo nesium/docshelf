@@ -14,7 +14,7 @@
 #import "Constants.h"
 
 
-@interface FHVMainWindowController : NSWindowController{
+@interface FHVMainWindowController : NSWindowController <NSOutlineViewDelegate>{
 	IBOutlet NSOutlineView *m_outlineView;
 	IBOutlet NSOutlineView *m_selectionOutlineView;
 	IBOutlet WebView *m_webView;
@@ -23,6 +23,7 @@
 	IBOutlet NSSplitView *m_outerSplitView;
 	NSTimeInterval m_lastOutlineViewUpdateTime;
 	FHVDocSetModel *m_docSetModel;
+	NSString *m_restoredAnchor;
 }
 - (id)initWithWindowNibName:(NSString *)windowNibName docSetModel:(FHVDocSetModel *)docSetModel;
 - (IBAction)updateFilter:(id)sender;
