@@ -14,6 +14,7 @@
 		2C38EEA71100A36E00B04E4E /* PackageDetailParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CF5FB8D0DD5C3780049C53D /* PackageDetailParser.m */; };
 		2C38EEE81100AC5700B04E4E /* ClassDetailParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CF55D490DD6FFAC00FB13C7 /* ClassDetailParser.m */; };
 		2C38EFB61100D73E00B04E4E /* FHVClassParserOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C38EFB51100D73E00B04E4E /* FHVClassParserOperation.m */; };
+		2C469B27113983EB0006E742 /* NSTreeController+NSMAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C469B26113983EB0006E742 /* NSTreeController+NSMAdditions.m */; };
 		2C53671310B9BC9500D9C0E4 /* styles.css in Resources */ = {isa = PBXBuildFile; fileRef = 2C53671210B9BC9500D9C0E4 /* styles.css */; };
 		2C53671810B9BD7600D9C0E4 /* class.html in Resources */ = {isa = PBXBuildFile; fileRef = 2C53671710B9BD7600D9C0E4 /* class.html */; };
 		2C53676510B9C38300D9C0E4 /* inherit-arrow.gif in Resources */ = {isa = PBXBuildFile; fileRef = 2C53676410B9C38300D9C0E4 /* inherit-arrow.gif */; };
@@ -93,6 +94,8 @@
 		2C2E10A31103D4A00037769E /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = /usr/lib/libsqlite3.dylib; sourceTree = "<absolute>"; };
 		2C38EFB41100D73E00B04E4E /* FHVClassParserOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FHVClassParserOperation.h; sourceTree = "<group>"; };
 		2C38EFB51100D73E00B04E4E /* FHVClassParserOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FHVClassParserOperation.m; sourceTree = "<group>"; };
+		2C469B25113983EA0006E742 /* NSTreeController+NSMAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSTreeController+NSMAdditions.h"; sourceTree = "<group>"; };
+		2C469B26113983EB0006E742 /* NSTreeController+NSMAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSTreeController+NSMAdditions.m"; sourceTree = "<group>"; };
 		2C53671210B9BC9500D9C0E4 /* styles.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = styles.css; sourceTree = "<group>"; };
 		2C53671710B9BD7600D9C0E4 /* class.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = class.html; sourceTree = "<group>"; };
 		2C53676410B9C38300D9C0E4 /* inherit-arrow.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "inherit-arrow.gif"; sourceTree = "<group>"; };
@@ -290,6 +293,8 @@
 				2C8584AC1135C36900D58B15 /* NSString+NSMAdditions.m */,
 				2CE1FA2F113732A600CB120C /* NSWindow+NSMAdditions.h */,
 				2CE1FA30113732A600CB120C /* NSWindow+NSMAdditions.m */,
+				2C469B25113983EA0006E742 /* NSTreeController+NSMAdditions.h */,
+				2C469B26113983EB0006E742 /* NSTreeController+NSMAdditions.m */,
 			);
 			path = NSMUtils;
 			sourceTree = "<group>";
@@ -522,6 +527,7 @@
 				2C8584AE1135C36900D58B15 /* NSNumber+NSMAdditions.m in Sources */,
 				2C8584AF1135C36900D58B15 /* NSString+NSMAdditions.m in Sources */,
 				2CE1FA31113732A600CB120C /* NSWindow+NSMAdditions.m in Sources */,
+				2C469B27113983EB0006E742 /* NSTreeController+NSMAdditions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

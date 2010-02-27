@@ -13,8 +13,6 @@
 - (void)_loadDocSets;
 - (NSString *)_classHTMLStringWithClassNode:(NSDictionary *)classNode 
 	signatures:(NSArray *)signatures;
-- (void)_updateDetailSelectionIndex:(NSNumber *)idToLookFor;
-- (void)_docSetDataMerged;
 @end
 
 
@@ -22,15 +20,15 @@ static BOOL g_initialLoad = YES;
 
 @implementation FHVDocSetModel
 
-@synthesize currentData=m_currentData, 
-			selectionData=m_selectionData, 
-			detailData=m_detailData, 
+@synthesize detailData=m_detailData, 
 			showsInheritedSignatures=m_showsInheritedSignatures, 
 			inSearchMode=m_inSearchMode, 
 			detailSelectionIndex=m_detailSelectionIndex, 
 			detailSelectionAnchor=m_detailSelectionAnchor, 
 			searchMode=m_searchMode, 
-			docSets=m_docSets;
+			docSets=m_docSets, 
+			firstLevelController=m_firstLevelController, 
+			secondLevelController=m_secondLevelController;
 
 #pragma mark -
 #pragma mark Initialization & Deallocation
@@ -40,8 +38,6 @@ static BOOL g_initialLoad = YES;
 		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 		m_path = [path copy];
 		m_docSets = nil;
-		m_currentData = nil;
-		m_selectionData = nil;
 		m_detailData = nil;
 		m_selectedItem = nil;
 		m_showsInheritedSignatures = [[defaults objectForKey:@"FHVDocSetShowsInheritedSignatures"] 
@@ -57,6 +53,16 @@ static BOOL g_initialLoad = YES;
 		[m_searchWorkerConnection setRootObject:self];
 		[m_searchWorkerConnection registerName:@"com.nesium.FlexHelpViewer.searchWorkerConnection"];
 		m_searchWorker = [[FHVSearchWorker alloc] initWithDocSets:m_docSets];
+		
+		m_firstLevelController = [[NSTreeController alloc] init];
+		[m_firstLevelController setChildrenKeyPath:@"children"];
+		[m_firstLevelController setLeafKeyPath:@"leaf"];
+		[m_firstLevelController addObserver:self forKeyPath:@"selectionIndexPaths" 
+			options:0 context:NULL];
+		m_secondLevelController = [[NSTreeController alloc] init];
+		[m_secondLevelController setChildrenKeyPath:@"children"];
+		[m_secondLevelController addObserver:self forKeyPath:@"selectionIndexPaths" 
+			options:0 context:NULL];
 	}
 	return self;
 }
@@ -84,6 +90,7 @@ static BOOL g_initialLoad = YES;
 		NSDictionary *docSetItem = [NSDictionary dictionaryWithObjectsAndKeys: 
 			docSet.name, @"name", 
 			docSetPackages, @"children", 
+			[NSNumber numberWithBool:NO], @"leaf", 
 			[NSNumber numberWithInt:docSet.index], @"docSetId", 
 			[NSNumber numberWithBool:YES], @"root", 
 			nil];
@@ -92,17 +99,21 @@ static BOOL g_initialLoad = YES;
 	}
 	[m_mainData release];
 	m_mainData = [allDocSets retain];
-	[self _docSetDataMerged];
+	[m_firstLevelController setContent:m_mainData];
+	if (g_initialLoad){
+		g_initialLoad = NO;
+		[m_searchWorker start];
+		[[NSNotificationCenter defaultCenter] postNotificationName:@"FHVDocSetModelInitialLoadDone" 
+			object:self];
+	}
 }
 
 - (void)reloadDocSets{
-	[self willChangeValueForKey:@"currentData"];
+	[m_firstLevelController setContent:nil];
 	[m_docSets release];
 	m_docSets = nil;
 	[m_mainData release];
 	m_mainData = nil;
-	m_currentData = nil;
-	[self didChangeValueForKey:@"currentData"];
 
 	[self selectFirstLevelItem:nil];
 
@@ -113,19 +124,8 @@ static BOOL g_initialLoad = YES;
 - (void)selectFirstLevelItem:(id)item{
 	m_detailSelectionIndex = -1;
 	
-	NDCLog(@"%@", item);
-	
-	if (item == nil || [[item objectForKey:@"itemType"] intValue] == kItemTypePackage){
-		[m_selectedItem release];
-		m_selectedItem = nil;
-		[self willChangeValueForKey:@"selectionData"];
-		[m_selectionData release];
-		m_selectionData = nil;
-		[self didChangeValueForKey:@"selectionData"];
-		[self willChangeValueForKey:@"detailData"];
-		[m_detailData release];
-		m_detailData = @"";
-		[self didChangeValueForKey:@"detailData"];
+	NSNumber *itemType = [item objectForKey:@"itemType"];
+	if (!itemType || [itemType intValue] == kItemTypePackage){
 		return;
 	}
 	
@@ -133,17 +133,16 @@ static BOOL g_initialLoad = YES;
 	// be a package
 	NSNumber *idToSelect = nil;
 	FHVDocSet *docSet = [self docSetForItem:item];
-	if ([[item objectForKey:@"itemType"] intValue] == kItemTypeSignature){
+	// a signature was selected from the search results
+	if ([itemType intValue] == kItemTypeSignature){
 		idToSelect = [item objectForKey:@"dbId"];
 		item = [docSet classWithId:[item objectForKey:@"parentDbId"]];
-	}
-	
-	if (m_selectedItem != nil && 
-		m_selectedItem != item && // true when toggling inherited signatures
-		[[item objectForKey:@"itemType"] isEqualToNumber:[m_selectedItem objectForKey:@"itemType"]] && 
-		[[item objectForKey:@"dbId"] isEqualToNumber:[m_selectedItem objectForKey:@"dbId"]]){
-		[self _updateDetailSelectionIndex:idToSelect];
-		return;
+	// the visibility of inherited signatures was toggled and we want to preserve the selection
+	}else if (item == m_selectedItem){
+		if ([m_secondLevelController selectedObjects]){
+			NSDictionary *selectedItem = [[m_secondLevelController selectedObjects] objectAtIndex:0];
+			idToSelect = [selectedItem objectForKey:@"dbId"];
+		}
 	}
 	
 	[item retain];
@@ -222,15 +221,10 @@ static BOOL g_initialLoad = YES;
 			nil]];
 	}
 	
-	[self willChangeValueForKey:@"selectionData"];
-	[m_selectionData release];
-	m_selectionData = [mergedSigs copy];
-	NDCLog(@"ID TO SELECT %@", idToSelect);
-	if (idToSelect) [self _updateDetailSelectionIndex:idToSelect];
-	[self didChangeValueForKey:@"selectionData"];
+	[m_secondLevelController setContent:mergedSigs];
 	
 	NSString *htmlBody = [self _classHTMLStringWithClassNode:[docSet classWithId:selectedId] 
-		signatures:m_selectionData];
+		signatures:mergedSigs];
 	NSMutableString *html = [NSMutableString stringWithContentsOfFile:[[NSBundle mainBundle] 
 		pathForResource:@"class" ofType:@"html"] encoding:NSUTF8StringEncoding error:nil];
 	[html replaceOccurrencesOfString:@"%BODY%" withString:htmlBody 
@@ -239,6 +233,17 @@ static BOOL g_initialLoad = YES;
 	[m_detailData release];
 	m_detailData = [html copy];
 	[self didChangeValueForKey:@"detailData"];
+	
+	if (idToSelect){
+		NSDictionary *itemToSelect = nil;
+		for (NSDictionary *sig in sigs){
+			if ([[sig objectForKey:@"dbId"] isEqualToNumber:idToSelect]){
+				itemToSelect = sig;
+				break;
+			}
+		}
+		[m_secondLevelController setSelectedObject:itemToSelect];
+	}
 }
 
 - (NSURL *)URLForImageWithName:(NSString *)imageName{
@@ -273,11 +278,9 @@ static BOOL g_initialLoad = YES;
 	
 	if (filter == nil){
 		m_inSearchMode = NO;
-		[self willChangeValueForKey:@"currentData"];
+		[m_firstLevelController setContent:m_mainData];
 		[m_searchResults release];
 		m_searchResults = nil;
-		m_currentData = m_mainData;
-		[self didChangeValueForKey:@"currentData"];
 		return;
 	}
 	
@@ -374,6 +377,25 @@ static BOOL g_initialLoad = YES;
 
 
 #pragma mark -
+#pragma mark KVO Notifications
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change 
+	context:(void *)context{
+	if (![[(NSTreeController *)object selectedObjects] count])
+		return;
+	if (object == m_firstLevelController){
+		[self selectFirstLevelItem:[[m_firstLevelController selectedObjects] objectAtIndex:0]];
+	}else if (object == m_secondLevelController){
+		NSDictionary *item = [[m_secondLevelController selectedObjects] objectAtIndex:0];
+		[self willChangeValueForKey:@"detailSelectionAnchor"];
+		m_detailSelectionAnchor = [[self anchorForItem:item] retain];
+		[self didChangeValueForKey:@"detailSelectionAnchor"];
+	}
+}
+
+
+
+#pragma mark -
 #pragma mark Private methods
 
 - (void)_loadDocSets{
@@ -393,18 +415,6 @@ static BOOL g_initialLoad = YES;
 	}];
 	[m_docSets release];
 	m_docSets = [docSets copy];
-}
-
-- (void)_docSetDataMerged{
-	[self willChangeValueForKey:@"currentData"];
-	m_currentData = m_mainData;
-	[self didChangeValueForKey:@"currentData"];
-	if (g_initialLoad){
-		g_initialLoad = NO;
-		[m_searchWorker start];
-		[[NSNotificationCenter defaultCenter] postNotificationName:@"FHVDocSetModelInitialLoadDone" 
-			object:self];
-	}
 }
 
 - (NSString *)_classHTMLStringWithClassNode:(NSDictionary *)classNode 
@@ -432,26 +442,6 @@ static BOOL g_initialLoad = YES;
 	return htmlString;
 }
 
-- (void)_updateDetailSelectionIndex:(NSNumber *)idToSelect{
-	NDCLog(@"%@", idToSelect);
-	NSInteger i = 0;
-	[m_detailSelectionAnchor release];
-	m_detailSelectionAnchor = nil;
-	for (NSDictionary *dict in m_selectionData){
-		i++;
-		NSArray *children = [dict objectForKey:@"children"];
-		for (NSDictionary *sig in children){
-			if ([[sig objectForKey:@"dbId"] isEqualToNumber:idToSelect]){
-				m_detailSelectionIndex = i;
-				m_detailSelectionAnchor = [[self anchorForItem:sig] retain];
-				return;
-			}
-			i++;
-		}
-	}
-	m_detailSelectionIndex = -1;
-}
-
 - (void)_performSearchWithTerm:(NSString *)term{
 	[m_searchWorker performSearchWithTerm:term mode:m_searchMode];
 }
@@ -462,25 +452,21 @@ static BOOL g_initialLoad = YES;
 #pragma mark FHVSearchWorkerProtocol methods
 
 - (void)searchDidStart{
-	NSLog(@"searchDidStart");
-	[self willChangeValueForKey:@"currentData"];
 	[m_searchResults release];
-	NSMutableArray *children = [NSMutableArray array];
 	NSMutableDictionary *headerNode = [NSMutableDictionary dictionary];
 	[headerNode setObject:@"Searching ..." forKey:@"name"];
-	[headerNode setObject:children forKey:@"children"];
+	[headerNode setObject:[NSMutableArray array] forKey:@"children"];
+	[headerNode setObject:[NSNumber numberWithBool:NO] forKey:@"leaf"];
 	[headerNode setObject:[NSNumber numberWithBool:YES] forKey:@"root"];
 	m_searchResults = [[NSArray alloc] initWithObjects:headerNode, nil];
-	m_currentData = m_searchResults;
-	[self didChangeValueForKey:@"currentData"];
+	[m_firstLevelController setContent:m_searchResults];
 }
 
 - (void)searchResultsAvailable:(NSArray *)results{
 	NSAssert([NSThread isMainThread], @"Not on main thread");
-	[self willChangeValueForKey:@"currentData"];
 	NSMutableArray *children = [[m_searchResults objectAtIndex:0] objectForKey:@"children"];
 	[children addObjectsFromArray:results];
-	[self didChangeValueForKey:@"currentData"];
+	[m_firstLevelController rearrangeObjects];
 }
 
 - (void)searchDidEnd{

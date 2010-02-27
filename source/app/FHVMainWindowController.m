@@ -64,11 +64,9 @@
 	NDCLog(@"WINDOW DID LOAD");
 	[m_outlineView setIntercellSpacing:(NSSize){3, 0}];
 	[m_selectionOutlineView setIntercellSpacing:(NSSize){3, 0}];
-
-	[m_docSetModel addObserver:self forKeyPath:@"currentData" options:0 context:(void *)1];
-	[m_docSetModel addObserver:self forKeyPath:@"selectionData" options:0 context:(void *)2];
+	
 	[m_docSetModel addObserver:self forKeyPath:@"detailData" options:0 context:(void *)3];
-	//[m_outlineView expandItem:nil expandChildren:YES];
+	[m_docSetModel addObserver:self forKeyPath:@"detailSelectionAnchor" options:0 context:(void *)4];
 	[m_webView setResourceLoadDelegate:self];
 	[m_webView setPolicyDelegate:self];
 	[m_webView setFrameLoadDelegate:self];
@@ -88,7 +86,28 @@
 			[docSetsListSelection addObject:[[NSNumber numberWithInt:docSet.index] stringValue]];
 	}
 	[m_filterBar selectItems:docSetsListSelection inGroup:@"docSetsList" selected:YES];
-	[self _restoreTreeState];
+//	[self _restoreTreeState];
+	
+	[m_outlineView bind:@"content" toObject:m_docSetModel.firstLevelController 
+		withKeyPath:@"arrangedObjects" options:nil];
+	[[m_outlineView outlineTableColumn] bind:@"value" toObject:m_docSetModel.firstLevelController 
+		withKeyPath:@"arrangedObjects.name" options:nil];
+	[m_outlineView bind:@"selectionIndexPaths" toObject:m_docSetModel.firstLevelController 
+		withKeyPath:@"selectionIndexPaths" options:nil];
+	[m_outlineView setDelegate:self];
+	[m_docSetModel.firstLevelController addObserver:self forKeyPath:@"content" options:0 
+		context:(void *)1];
+	
+	[m_selectionOutlineView bind:@"content" toObject:m_docSetModel.secondLevelController 
+		withKeyPath:@"arrangedObjects" options:nil];
+	[[m_selectionOutlineView outlineTableColumn] bind:@"value" 
+		toObject:m_docSetModel.secondLevelController withKeyPath:@"arrangedObjects.name" 
+		options:nil];
+	[m_selectionOutlineView bind:@"selectionIndexPaths" toObject:m_docSetModel.secondLevelController 
+		withKeyPath:@"selectionIndexPaths" options:nil];
+	[m_selectionOutlineView setDelegate:self];
+	[m_docSetModel.secondLevelController addObserver:self forKeyPath:@"content" options:0 
+		context:(void *)2];
 }
 
 
@@ -128,7 +147,7 @@
 #pragma mark Notifications
 
 - (void)applicationWillTerminate:(NSNotification *)notification{
-	[self _serializeTreeState];
+	//[self _serializeTreeState];
 }
 
 
@@ -138,62 +157,18 @@
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object 
 	change:(NSDictionary *)change context:(void *)context{
-	NDCLog(@"change %@", keyPath);
 	if ((int)context == 1){
-		NDCLog(@"COUNT %d", [m_docSetModel.currentData count]);
-		if (m_docSetModel.currentData == nil){
-			NDCLog(@"reload immediately");
-			[self _reloadOutlineView:m_outlineView];
-		}else{
-			[self performSelector:@selector(_reloadOutlineView:) withObject:m_outlineView 
-				afterDelay:1.0/20.0];
-		}
+		[m_outlineView setIndentationPerLevel:m_docSetModel.inSearchMode ? 0 : 10];
+		if (m_docSetModel.inSearchMode) [m_outlineView expandItem:nil expandChildren:YES];
 	}else if ((int)context == 2){
-		[self performSelector:@selector(_reloadOutlineView:) withObject:m_selectionOutlineView 
-			afterDelay:0.0];
+		[m_selectionOutlineView expandItem:nil expandChildren:YES];	
 	}else if ((int)context == 3){
+		[m_docSetModel removeObserver:self forKeyPath:@"detailSelectionAnchor"];
 		[[m_webView mainFrame] loadHTMLString:m_docSetModel.detailData  
 			baseURL:[NSURL fileURLWithPath:[[NSBundle mainBundle] resourcePath]]];
+	}else if ((int)context == 4){
+		[self _jumpToAnchor:m_docSetModel.detailSelectionAnchor];
 	}
-}
-
-
-
-#pragma mark -
-#pragma mark NSOutlineViewDataSource Protocol
-
-- (id)outlineView:(NSOutlineView *)outlineView child:(NSInteger)index ofItem:(id)item{
-	if (item == nil){
-		return outlineView == m_outlineView 
-			? [m_docSetModel.currentData objectAtIndex:index] 
-			: [m_docSetModel.selectionData objectAtIndex:index];
-	}
-	return [[item objectForKey:@"children"] objectAtIndex:index];
-}
-
-- (BOOL)outlineView:(NSOutlineView *)outlineView isItemExpandable:(id)item{
-	if ([[item objectForKey:@"itemType"] intValue] == kItemTypePackage) return YES;
-	return [self outlineView:outlineView numberOfChildrenOfItem:item] > 0;
-}
-
-- (NSInteger)outlineView:(NSOutlineView *)outlineView numberOfChildrenOfItem:(id)item{
-	if (item == nil){
-		return outlineView == m_outlineView 
-			? [m_docSetModel.currentData count] 
-			: [m_docSetModel.selectionData count];
-	}
-	return [[item objectForKey:@"children"] count];
-}
-
-- (id)outlineView:(NSOutlineView *)outlineView objectValueForTableColumn:(NSTableColumn *)tableColumn 
-	byItem:(id)item{
-	if (m_docSetModel.inSearchMode && outlineView == m_outlineView){
-		if ([[item objectForKey:@"itemType"] intValue] == kItemTypeSignature){
-			return [NSString stringWithFormat:@"%@ (%@)", [item objectForKey:@"name"], 
-				[item objectForKey:@"parentName"]];
-		}
-	}
-	return [item objectForKey:@"name"];
 }
 
 
@@ -205,20 +180,20 @@ static HeadlineCell *g_headlineCell = nil;
 
 - (void)outlineView:(NSOutlineView *)outlineView willDisplayCell:(id)cell 
 	forTableColumn:(NSTableColumn *)tableColumn item:(id)item{
-	BOOL itemWantsHeaderCell = [self _itemWantsHeaderCell:item];
-	if ([[item objectForKey:@"inherited"] boolValue] || itemWantsHeaderCell){
+	BOOL itemWantsHeaderCell = [self _itemWantsHeaderCell:[item representedObject]];
+	if ([[[item representedObject] objectForKey:@"inherited"] boolValue] || itemWantsHeaderCell){
 		[cell setTextColor:[NSColor colorWithCalibratedRed:0.459 green:0.459 blue:0.459 alpha:1.0]];
 	}else{
 		[cell setTextColor:[NSColor blackColor]];
 	}
 	if (!itemWantsHeaderCell){
-		[cell setImage:[m_docSetModel imageForItem:item]];
+		[cell setImage:[m_docSetModel imageForItem:[item representedObject]]];
 	}
 }
 
 - (NSCell *)outlineView:(NSOutlineView *)outlineView 
 	dataCellForTableColumn:(NSTableColumn *)tableColumn item:(id)item{
-	if (![self _itemWantsHeaderCell:item])
+	if (![self _itemWantsHeaderCell:[item representedObject]])
 		return [tableColumn dataCell];
 	if (g_headlineCell == nil){
 		g_headlineCell = [[HeadlineCell alloc] init];
@@ -229,26 +204,11 @@ static HeadlineCell *g_headlineCell = nil;
 }
 
 - (BOOL)outlineView:(NSOutlineView *)outlineView shouldSelectItem:(id)item{
-	return ![self _itemWantsHeaderCell:item];
-}
-
-- (void)outlineViewSelectionDidChange:(NSNotification *)notification{
-	if ([notification object] == m_outlineView){
-		NDCLog(@"change %@", notification);
-		NSArray *oldSelectionData = [m_docSetModel.selectionData retain];
-		[m_docSetModel selectFirstLevelItem:[m_outlineView itemAtRow:[m_outlineView selectedRow]]];
-		if (m_docSetModel.selectionData == oldSelectionData){
-			[self _updateSelectionOutlineViewSelectionIfNeeded];
-		}
-		[oldSelectionData release];
-	}else if ([notification object] == m_selectionOutlineView){
-		[self _jumpToAnchor:[m_docSetModel anchorForItem:[m_selectionOutlineView 
-			itemAtRow:[m_selectionOutlineView selectedRow]]]];
-	}
+	return ![self _itemWantsHeaderCell:[item representedObject]];
 }
 
 - (CGFloat)outlineView:(NSOutlineView *)outlineView heightOfRowByItem:(id)item{
-	return [self _itemWantsHeaderCell:item] ? 20.0 : 19.0;
+	return [self _itemWantsHeaderCell:[item representedObject]] ? 20.0 : 19.0;
 }
 
 - (void)outlineViewArrowLeftKeyWasPressed:(NSOutlineView *)outlineView{
@@ -275,7 +235,7 @@ static HeadlineCell *g_headlineCell = nil;
 }
 
 - (BOOL)outlineView:(NSOutlineView *)outlineView shouldExpandItem:(id)item{
-	[m_docSetModel loadChildrenOfPackage:item];
+	[m_docSetModel loadChildrenOfPackage:[item representedObject]];
 	return YES;
 }
 
@@ -323,6 +283,7 @@ static HeadlineCell *g_headlineCell = nil;
 	if (anchor){
 		[self _jumpToAnchor:anchor];
 	}
+	[m_docSetModel addObserver:self forKeyPath:@"detailSelectionAnchor" options:0 context:(void *)4];
 }
 
 
@@ -379,32 +340,8 @@ static HeadlineCell *g_headlineCell = nil;
 	[window evaluateWebScript:[NSString stringWithFormat:@"location.href='#%@';", anchor]];
 }
 
-- (void)_reloadOutlineView:(NSOutlineView *)anOutlineView{
-	if (anOutlineView == m_selectionOutlineView)
-		[anOutlineView deselectAll:nil];
-	NDCLog(@"reload %@ outlineview", 
-		anOutlineView == m_selectionOutlineView ? @"selection" : @"main");
-	[anOutlineView reloadData];
-	if ([m_docSetModel inSearchMode] || anOutlineView == m_selectionOutlineView)
-		[anOutlineView expandItem:nil expandChildren:YES];
-	if (anOutlineView == m_selectionOutlineView)
-		[self _updateSelectionOutlineViewSelectionIfNeeded];
-	else{
-		[m_outlineView setIndentationPerLevel:m_docSetModel.inSearchMode ? 0 : 10];
-		[self _setFilterBarVisible:m_docSetModel.inSearchMode];
-	}
-}
-
 - (BOOL)_itemWantsHeaderCell:(NSDictionary *)item{
 	return [[item objectForKey:@"root"] boolValue];
-}
-
-- (void)_updateSelectionOutlineViewSelectionIfNeeded{
-	if (m_docSetModel.detailSelectionIndex != -1){
-		[m_selectionOutlineView selectRowIndexes:[NSIndexSet indexSetWithIndex:
-			m_docSetModel.detailSelectionIndex] byExtendingSelection:NO];
-		[m_selectionOutlineView scrollRowToVisible:m_docSetModel.detailSelectionIndex];
-	}
 }
 
 - (void)_setFilterBarVisible:(BOOL)bFlag{

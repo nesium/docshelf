@@ -11,13 +11,12 @@
 #import "NSString+FHVUtils.h"
 #import "FHVSearchWorker.h"
 #import "Constants.h"
+#import "NSTreeController+NSMAdditions.h"
 
 @interface FHVDocSetModel : NSObject{
 	NSString *m_path;
 	NSArray *m_docSets;
 	NSMutableArray *m_mainData;
-	NSArray *m_currentData;
-	NSArray *m_selectionData;
 	NSString *m_detailData;
 	NSString *m_lastSearchTerm;
 	NSDictionary *m_selectedItem;
@@ -29,9 +28,13 @@
 	NSInteger m_detailSelectionIndex;
 	NSString *m_detailSelectionAnchor;
 	FHVDocSetSearchMode m_searchMode;
+	
+	NSTreeController *m_firstLevelController;
+	NSTreeController *m_secondLevelController;
 }
-@property (readonly) NSArray *currentData;
-@property (readonly) NSArray *selectionData;
+@property (readonly) NSTreeController *firstLevelController;
+@property (readonly) NSTreeController *secondLevelController;
+
 @property (readonly) NSString *detailData;
 @property (nonatomic, assign) BOOL showsInheritedSignatures;
 @property (readonly) BOOL inSearchMode;
