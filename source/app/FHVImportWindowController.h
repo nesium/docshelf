@@ -24,6 +24,7 @@
 	NSString *m_sourcePath;
 	NSConnection *m_importConnection;
 	FHVDocSetModel *m_model;
+	FlexDocsParser *m_parser;
 }
 - (id)initWithWindowNibName:(NSString *)windowNibName model:(FHVDocSetModel *)model;
 - (IBAction)chooseDirectory:(id)sender;

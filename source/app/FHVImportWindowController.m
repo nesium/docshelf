@@ -28,6 +28,7 @@
 		m_sourcePath = nil;
 		m_importConnection = nil;
 		m_model = model;
+		m_parser = nil;
 	}
 	return self;
 }
@@ -56,6 +57,13 @@
 }
 
 - (IBAction)cancel:(id)sender{
+	if (m_parser){
+		[self setStatusMessage:@"Cancelling ..."];
+		[self setProgressIsIndeterminate:YES];
+		[m_parser cancel];
+		return;
+	}
+
 	[NSApp endSheet:self.window];
 	[[self window] orderOut:self];
 }
@@ -70,6 +78,8 @@
 	m_nameTextField.stringValue = @"";
 	[self _setSourcePath:nil];
 	[self _attachPickerView];
+	[self setStatusMessage:@"Starting import ..."];
+	[self setProgress:0.0];
 }
 
 
@@ -98,9 +108,9 @@
 	m_importConnection = [[NSConnection alloc] init];
 	[m_importConnection setRootObject:self];
 	[m_importConnection registerName:@"com.nesium.FlexHelpViewer"];
-	FlexDocsParser *parser = [[FlexDocsParser alloc] initWithPath:aPath 
+	m_parser = [[FlexDocsParser alloc] initWithPath:aPath 
 		docSetName:m_nameTextField.stringValue];
-	[NSThread detachNewThreadSelector:@selector(parse) toTarget:parser withObject:nil];
+	[NSThread detachNewThreadSelector:@selector(parse) toTarget:m_parser withObject:nil];
 }
 
 - (void)_updateImportButton{
@@ -155,10 +165,12 @@
 #pragma mark NSConnection proxy methods called by FlexDocsParser
 
 - (void)setStatusMessage:(NSString *)message{
+	if (m_parser.isCancelled) return;
 	[m_statusLabel setStringValue:message];
 }
 
 - (void)setProgressIsIndeterminate:(BOOL)bFlag{
+	if (m_parser.isCancelled) return;
 	[m_progressIndicator setIndeterminate:bFlag];
 	if (bFlag) [m_progressIndicator startAnimation:self];
 }
@@ -174,11 +186,19 @@
 - (void)parsingComplete:(NSError *)error{
 	[NSApp endSheet:self.window];
 	[[self window] orderOut:self];
-	
+	[m_importConnection registerName:nil];
+	[m_importConnection setRootObject:nil];
+	[[m_importConnection receivePort] invalidate];
+	[m_importConnection invalidate];
+	[m_importConnection release];
+	m_importConnection = nil;
 	if (error){
 		[NSApp presentError:error];
 	}else{
-		[m_model reloadDocSets];
+		if (!m_parser.isCancelled)
+			[m_model reloadDocSets];
 	}
+	[m_parser release];
+	m_parser = nil;
 }
 @end

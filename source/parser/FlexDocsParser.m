@@ -17,13 +17,20 @@
 
 @implementation FlexDocsParser
 
-@synthesize path=m_path;
+@synthesize path=m_path, 
+			isCancelled=m_isCancelled;
+
+#pragma mark -
+#pragma mark Initialization & Deallocation
 
 - (id)initWithPath:(NSString *)path docSetName:(NSString *)docSetName{
 	if (self = [super init]){
 		self.path = path;
-		m_connectionProxy = (id <FlexDocsParserConnectionDelegate>)[[NSConnection 
+		m_isCancelled = NO;
+		m_classParsingQueue = nil;
+		m_connectionProxy = (NSDistantObject <FlexDocsParserConnectionDelegate> *)[[NSConnection 
 			connectionWithRegisteredName:@"com.nesium.FlexHelpViewer" host:nil] rootProxy];
+		[m_connectionProxy setProtocolForProxy:@protocol(FlexDocsParserConnectionDelegate)];
 		[self _createDocSetSkeleton:docSetName];
 	}
 	return self;
@@ -35,11 +42,19 @@
 	[super dealloc];
 }
 
+
+
+#pragma mark -
+#pragma mark Public methods
+
 - (void)parse{
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	NSError *error = nil;
 	[m_connectionProxy setProgressIsIndeterminate:YES];
 	[m_connectionProxy setStatusMessage:@"Parsing package infos ..."];
+	
+	if (m_isCancelled)
+		goto bailout;
 	
 	NSString *summaryPath = [m_path stringByAppendingPathComponent:@"package-summary.html"];
 	if (![[NSFileManager defaultManager] fileExistsAtPath:summaryPath]){
@@ -50,6 +65,9 @@
 	}
 	
 	{
+		if (m_isCancelled)
+			goto bailout;
+	
 		PackageSummaryParser *summaryParser = [[PackageSummaryParser alloc] 
 			initWithFile:summaryPath 
 			context:m_context];
@@ -62,6 +80,15 @@
 		NSUInteger i = 0;
 		NSAutoreleasePool *innerPool = [[NSAutoreleasePool alloc] init];
 		for (NSMutableDictionary *package in packages){
+			if (m_isCancelled){
+				[classes release];
+				classes = nil;
+				[innerPool release];
+				[packages release];
+				packages = nil;
+				goto bailout;
+			}
+		
 			NSString *packageName = [package objectForKey:@"name"];
 			NSNumber *dbId = [m_importer savePackageWithName:packageName 
 				summary:[package objectForKey:@"summary"]];
@@ -135,7 +162,7 @@
 	}
 	
 bailout:
-	if (error != nil){
+	if (error != nil || m_isCancelled){
 		[[NSFileManager defaultManager] removeItemAtPath:m_context.temporaryTargetPath error:nil];
 	}else{
 		[self _moveToFinalDestination];
@@ -145,10 +172,22 @@ bailout:
 	[pool release];
 }
 
+- (void)cancel{
+	if (m_isCancelled) return;
+	m_isCancelled = YES;
+	[m_classParsingQueue cancelAllOperations];
+}
+
+
+
+#pragma mark -
+#pragma mark Private methods
+
 - (void)_createDocSetSkeleton:(NSString *)name{
 	NSFileManager *fm = [NSFileManager defaultManager];
 	NSString *bundlePath = [[fm nsm_temporaryDirectory] 
 		stringByAppendingPathComponent:[NSString nsm_uuid]];
+	NDCLog(@"%@", bundlePath);
 	NSString *resourcesPath = [bundlePath stringByAppendingPathComponent:@"Resources"];
 	NSString *bundleInfoPlistPath = [bundlePath stringByAppendingPathComponent:@"Info.plist"];
 	NSString *bundleDataPath = [resourcesPath stringByAppendingPathComponent:@"Data.sql"];

@@ -19,11 +19,11 @@
 #import "NSString+NSMAdditions.h"
 
 @protocol FlexDocsParserConnectionDelegate
-- (void)setStatusMessage:(NSString *)message;
-- (void)setProgressIsIndeterminate:(BOOL)bFlag;
-- (void)setMaxProgressValue:(double)value;
-- (void)setProgress:(double)progress;
-- (void)parsingComplete:(NSError *)error;
+- (oneway void)setStatusMessage:(NSString *)message;
+- (oneway void)setProgressIsIndeterminate:(BOOL)bFlag;
+- (oneway void)setMaxProgressValue:(double)value;
+- (oneway void)setProgress:(double)progress;
+- (oneway void)parsingComplete:(NSError *)error;
 @end
 
 
@@ -32,9 +32,12 @@
 	NSOperationQueue *m_classParsingQueue;
 	FHVImportContext *m_context;
 	SQLiteImporter *m_importer;
-	id <FlexDocsParserConnectionDelegate> m_connectionProxy;
+	NSDistantObject <FlexDocsParserConnectionDelegate> *m_connectionProxy;
+	BOOL m_isCancelled;
 }
 @property (retain) NSString *path;
+@property (readonly) BOOL isCancelled;
 - (id)initWithPath:(NSString *)path docSetName:(NSString *)docSetName;
 - (void)parse;
+- (void)cancel;
 @end
