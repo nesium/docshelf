@@ -16,6 +16,7 @@
 		2C38EFB61100D73E00B04E4E /* FHVClassParserOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C38EFB51100D73E00B04E4E /* FHVClassParserOperation.m */; };
 		2C469B27113983EB0006E742 /* NSTreeController+NSMAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C469B26113983EB0006E742 /* NSTreeController+NSMAdditions.m */; };
 		2C494BB31139E0A3009DB736 /* index.sql in Resources */ = {isa = PBXBuildFile; fileRef = 2C494B9F1139DE6C009DB736 /* index.sql */; };
+		2C494CE7113A0192009DB736 /* NSIndexPath+NSMAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C494CE6113A0192009DB736 /* NSIndexPath+NSMAdditions.m */; };
 		2C53671310B9BC9500D9C0E4 /* styles.css in Resources */ = {isa = PBXBuildFile; fileRef = 2C53671210B9BC9500D9C0E4 /* styles.css */; };
 		2C53671810B9BD7600D9C0E4 /* class.html in Resources */ = {isa = PBXBuildFile; fileRef = 2C53671710B9BD7600D9C0E4 /* class.html */; };
 		2C53676510B9C38300D9C0E4 /* inherit-arrow.gif in Resources */ = {isa = PBXBuildFile; fileRef = 2C53676410B9C38300D9C0E4 /* inherit-arrow.gif */; };
@@ -98,6 +99,8 @@
 		2C469B25113983EA0006E742 /* NSTreeController+NSMAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSTreeController+NSMAdditions.h"; sourceTree = "<group>"; };
 		2C469B26113983EB0006E742 /* NSTreeController+NSMAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSTreeController+NSMAdditions.m"; sourceTree = "<group>"; };
 		2C494B9F1139DE6C009DB736 /* index.sql */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = index.sql; sourceTree = "<group>"; };
+		2C494CE5113A0192009DB736 /* NSIndexPath+NSMAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSIndexPath+NSMAdditions.h"; sourceTree = "<group>"; };
+		2C494CE6113A0192009DB736 /* NSIndexPath+NSMAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSIndexPath+NSMAdditions.m"; sourceTree = "<group>"; };
 		2C53671210B9BC9500D9C0E4 /* styles.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = styles.css; sourceTree = "<group>"; };
 		2C53671710B9BD7600D9C0E4 /* class.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = class.html; sourceTree = "<group>"; };
 		2C53676410B9C38300D9C0E4 /* inherit-arrow.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "inherit-arrow.gif"; sourceTree = "<group>"; };
@@ -298,6 +301,8 @@
 				2CE1FA30113732A600CB120C /* NSWindow+NSMAdditions.m */,
 				2C469B25113983EA0006E742 /* NSTreeController+NSMAdditions.h */,
 				2C469B26113983EB0006E742 /* NSTreeController+NSMAdditions.m */,
+				2C494CE5113A0192009DB736 /* NSIndexPath+NSMAdditions.h */,
+				2C494CE6113A0192009DB736 /* NSIndexPath+NSMAdditions.m */,
 			);
 			path = NSMUtils;
 			sourceTree = "<group>";
@@ -532,6 +537,7 @@
 				2C8584AF1135C36900D58B15 /* NSString+NSMAdditions.m in Sources */,
 				2CE1FA31113732A600CB120C /* NSWindow+NSMAdditions.m in Sources */,
 				2C469B27113983EB0006E742 /* NSTreeController+NSMAdditions.m in Sources */,
+				2C494CE7113A0192009DB736 /* NSIndexPath+NSMAdditions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -57,10 +57,12 @@ static BOOL g_initialLoad = YES;
 		m_firstLevelController = [[NSTreeController alloc] init];
 		[m_firstLevelController setChildrenKeyPath:@"children"];
 		[m_firstLevelController setLeafKeyPath:@"leaf"];
+		[m_firstLevelController setAvoidsEmptySelection:NO];
 		[m_firstLevelController addObserver:self forKeyPath:@"selectionIndexPaths" 
 			options:0 context:NULL];
 		m_secondLevelController = [[NSTreeController alloc] init];
 		[m_secondLevelController setChildrenKeyPath:@"children"];
+		[m_secondLevelController setAvoidsEmptySelection:NO];
 		[m_secondLevelController addObserver:self forKeyPath:@"selectionIndexPaths" 
 			options:0 context:NULL];
 	}
@@ -470,7 +472,6 @@ static BOOL g_initialLoad = YES;
 }
 
 - (void)searchDidEnd{
-	NSLog(@"searchDidEnd");
 	[[m_searchResults objectAtIndex:0] setObject:@"Search Results" forKey:@"name"];
 }
 @end

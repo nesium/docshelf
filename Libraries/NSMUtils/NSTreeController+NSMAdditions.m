@@ -9,7 +9,7 @@
 #import "NSTreeController+NSMAdditions.h"
 
 @interface NSTreeController (NSMPrivateAdditions)
-- (NSInteger)_indexOfObject:(id)anObject inArray:(NSArray *)anArray;
+- (NSTreeNode *)_nodeForObject:(id)anObject inArray:(NSArray *)anArray;
 @end
 
 
@@ -63,6 +63,21 @@
 		}
 	}
 	
+	return nil;
+}
+
+- (NSTreeNode *)nodeForObject:(id)anObject{
+	if (anObject == nil) return nil;
+	return [self _nodeForObject:anObject inArray:[[self arrangedObjects] childNodes]];
+}
+
+- (NSTreeNode *)_nodeForObject:(id)anObject inArray:(NSArray *)anArray{
+	for (id node in anArray){
+		if ([node representedObject] == anObject)
+			return node;
+		id subnode = [self _nodeForObject:anObject inArray:[node childNodes]];
+		if (subnode) return subnode;
+	}
 	return nil;
 }
 @end

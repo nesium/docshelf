@@ -61,7 +61,6 @@
 #pragma mark Protected methods
 
 - (void)windowDidLoad{
-	NDCLog(@"WINDOW DID LOAD");
 	[m_outlineView setIntercellSpacing:(NSSize){3, 0}];
 	[m_selectionOutlineView setIntercellSpacing:(NSSize){3, 0}];
 	
@@ -86,7 +85,6 @@
 			[docSetsListSelection addObject:[[NSNumber numberWithInt:docSet.index] stringValue]];
 	}
 	[m_filterBar selectItems:docSetsListSelection inGroup:@"docSetsList" selected:YES];
-//	[self _restoreTreeState];
 	
 	[m_outlineView bind:@"content" toObject:m_docSetModel.firstLevelController 
 		withKeyPath:@"arrangedObjects" options:nil];
@@ -108,6 +106,8 @@
 	[m_selectionOutlineView setDelegate:self];
 	[m_docSetModel.secondLevelController addObserver:self forKeyPath:@"content" options:0 
 		context:(void *)2];
+		
+	[self _restoreTreeState];
 }
 
 
@@ -129,6 +129,8 @@
 		[m_docSetModel setSearchTerm:nil];
 		return;
 	}
+	if (!m_docSetModel.inSearchMode)
+		[self _serializeTreeState];
 	[m_docSetModel setSearchTerm:[m_searchField stringValue]];
 }
 
@@ -147,7 +149,7 @@
 #pragma mark Notifications
 
 - (void)applicationWillTerminate:(NSNotification *)notification{
-	//[self _serializeTreeState];
+	[self _serializeTreeState];
 }
 
 
@@ -160,6 +162,7 @@
 	if ((int)context == 1){
 		[m_outlineView setIndentationPerLevel:m_docSetModel.inSearchMode ? 0 : 10];
 		if (m_docSetModel.inSearchMode) [m_outlineView expandItem:nil expandChildren:YES];
+		else [self _restoreTreeState];
 	}else if ((int)context == 2){
 		[m_selectionOutlineView expandItem:nil expandChildren:YES];	
 	}else if ((int)context == 3){
@@ -167,7 +170,8 @@
 		[[m_webView mainFrame] loadHTMLString:m_docSetModel.detailData  
 			baseURL:[NSURL fileURLWithPath:[[NSBundle mainBundle] resourcePath]]];
 	}else if ((int)context == 4){
-		[self _jumpToAnchor:m_docSetModel.detailSelectionAnchor];
+		if (m_docSetModel.detailSelectionAnchor)
+			[self _jumpToAnchor:m_docSetModel.detailSelectionAnchor];
 	}
 }
 
@@ -380,6 +384,9 @@ static HeadlineCell *g_headlineCell = nil;
 }
 
 - (void)_serializeTreeState{
+	if (m_docSetModel.inSearchMode)
+		return;
+
 	NSInteger count = [m_outlineView numberOfRows];
 	NSMutableDictionary *tree = [NSMutableDictionary dictionary];
 	for (NSInteger i = 0; i < count; i++){
@@ -387,10 +394,11 @@ static HeadlineCell *g_headlineCell = nil;
 		NSInteger level = [m_outlineView levelForRow:i];
 		if (![m_outlineView isItemExpanded:item] || level == -1 || level > 2)
 			continue;
+		item = [item representedObject];
 		if (level == 0){
 			NSString *docSetId = [m_docSetModel docSetForItem:item].docSetId;
 			[tree setObject:[NSMutableArray array] forKey:docSetId];
-		}else {
+		}else{
 			id parentItem = [m_docSetModel docSetItemForItem:item];
 			NSString *docSetId = [m_docSetModel docSetForItem:item].docSetId;
 			NSInteger index = [[parentItem objectForKey:@"children"] indexOfObject:item];
@@ -399,10 +407,19 @@ static HeadlineCell *g_headlineCell = nil;
 		}
 	}
 	
-	NSArray *selection = [NSArray arrayWithObjects:
-		[NSNumber numberWithInt:[m_outlineView selectedRow]], 
-		[NSNumber numberWithInt:[m_selectionOutlineView selectedRow]], 
-		nil];
+	NSMutableArray *selection = [NSMutableArray array];
+	if ([[m_docSetModel.firstLevelController selectedObjects] count]){
+		id selectedItem = [[m_docSetModel.firstLevelController selectedObjects] objectAtIndex:0];
+		NSString *docSetId = [m_docSetModel docSetForItem:selectedItem].docSetId;
+		[selection addObject:docSetId];
+		[selection addObject:[[m_docSetModel.firstLevelController selectionIndexPath] allIndexes]];
+		
+		if ([[m_docSetModel.secondLevelController selectedObjects] count]){
+			selectedItem = [[m_docSetModel.secondLevelController selectedObjects] objectAtIndex:0];
+			[selection addObject:[[m_docSetModel.secondLevelController selectionIndexPath] 
+				allIndexes]];
+		}
+	}
 	
 	[[NSUserDefaults standardUserDefaults] setObject:tree forKey:@"FHVTreeState"];
 	[[NSUserDefaults standardUserDefaults] setObject:selection forKey:@"FHVSelection"];
@@ -412,34 +429,27 @@ static HeadlineCell *g_headlineCell = nil;
 	NSDictionary *tree = [[NSUserDefaults standardUserDefaults] objectForKey:@"FHVTreeState"];
 	for (NSString *key in tree){
 		id item = [m_docSetModel docSetItemForDocSetId:key];
-		[m_outlineView expandItem:item];
+		[m_outlineView expandItem:[m_docSetModel.firstLevelController nodeForObject:item]];
 		NSArray *children = [item objectForKey:@"children"];
 		NSArray *arr = [tree objectForKey:key];
 		for (NSNumber *index in arr){
-			[m_outlineView expandItem:[children objectAtIndex:[index intValue]]];
+			[m_outlineView expandItem:[m_docSetModel.firstLevelController nodeForObject:
+				[children objectAtIndex:[index intValue]]]];
 		}
 	}
-	NSArray *selection = [[NSUserDefaults standardUserDefaults] objectForKey:@"FHVSelection"];
-	NSInteger firstLevelSelection = [[selection objectAtIndex:0] intValue];
-	if (selection == nil || firstLevelSelection == -1) return;
-	[m_outlineView setDelegate:nil];
-	[m_outlineView selectRowIndexes:[NSIndexSet indexSetWithIndex:firstLevelSelection] 
-		byExtendingSelection:NO];
-	[m_outlineView scrollRowToVisible:firstLevelSelection];
-	[m_outlineView setDelegate:self];
-	[m_docSetModel selectFirstLevelItem:[m_outlineView itemAtRow:firstLevelSelection]];
 	
-	NSInteger secondLevelSelection = [[selection objectAtIndex:1] intValue];
-	if (secondLevelSelection == -1) return;
-	[m_selectionOutlineView reloadData];
-	[m_selectionOutlineView expandItem:nil expandChildren:YES];
-	[NSObject cancelPreviousPerformRequestsWithTarget:self];
-	[m_selectionOutlineView setDelegate:nil];
-	[m_selectionOutlineView selectRowIndexes:[NSIndexSet indexSetWithIndex:secondLevelSelection] 
-		byExtendingSelection:NO];
-	[m_selectionOutlineView scrollRowToVisible:secondLevelSelection];
-	[m_selectionOutlineView setDelegate:self];
-	m_restoredAnchor = [[m_docSetModel anchorForItem:[m_selectionOutlineView 
-		itemAtRow:secondLevelSelection]] retain];
+	NSArray *selection = [[NSUserDefaults standardUserDefaults] objectForKey:@"FHVSelection"];
+	if (![selection count])
+		return;
+	
+	id item = [m_docSetModel docSetItemForDocSetId:[selection objectAtIndex:0]];
+	if (!item) return; // docset could be deleted
+	[m_docSetModel.firstLevelController setSelectionIndexPath:
+		[NSIndexPath indexPathWithIndexes:[selection objectAtIndex:1]]];
+	
+	if ([selection count] < 3)
+		return;
+	[m_docSetModel.secondLevelController setSelectionIndexPath:
+		[NSIndexPath indexPathWithIndexes:[selection objectAtIndex:2]]];
 }
 @end

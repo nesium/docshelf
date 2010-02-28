@@ -13,4 +13,5 @@
 - (void)setSelectedObject:(id)anObject;
 - (void)setSelectedObjects:(NSArray *)objects;
 - (NSIndexPath *)indexPathForObject:(id)anObject;
+- (NSTreeNode *)nodeForObject:(id)anObject;
 @end
