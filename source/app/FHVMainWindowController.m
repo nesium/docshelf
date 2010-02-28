@@ -126,11 +126,14 @@
 
 - (IBAction)updateFilter:(id)sender{
 	if (![[m_searchField stringValue] length]){
+		[self _setFilterBarVisible:NO];
 		[m_docSetModel setSearchTerm:nil];
 		return;
 	}
-	if (!m_docSetModel.inSearchMode)
+	if (!m_docSetModel.inSearchMode){
 		[self _serializeTreeState];
+		[self _setFilterBarVisible:YES];
+	}
 	[m_docSetModel setSearchTerm:[m_searchField stringValue]];
 }
 
