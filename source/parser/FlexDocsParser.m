@@ -163,8 +163,14 @@
 	
 bailout:
 	if (error != nil || m_isCancelled){
+		[m_importer close];
 		[[NSFileManager defaultManager] removeItemAtPath:m_context.temporaryTargetPath error:nil];
 	}else{
+		[m_connectionProxy setProgressIsIndeterminate:YES];
+		[m_connectionProxy setStatusMessage:@"Creating indexes ..."];
+		[m_importer createIndexes];
+		[m_importer commit];
+		[m_importer close];
 		[self _moveToFinalDestination];
 	}
 	[m_connectionProxy parsingComplete:error];
@@ -187,7 +193,6 @@ bailout:
 	NSFileManager *fm = [NSFileManager defaultManager];
 	NSString *bundlePath = [[fm nsm_temporaryDirectory] 
 		stringByAppendingPathComponent:[NSString nsm_uuid]];
-	NDCLog(@"%@", bundlePath);
 	NSString *resourcesPath = [bundlePath stringByAppendingPathComponent:@"Resources"];
 	NSString *bundleInfoPlistPath = [bundlePath stringByAppendingPathComponent:@"Info.plist"];
 	NSString *bundleDataPath = [resourcesPath stringByAppendingPathComponent:@"Data.sql"];

@@ -193,7 +193,8 @@
 	[m_importConnection release];
 	m_importConnection = nil;
 	if (error){
-		[NSApp presentError:error];
+		NSRunAlertPanel(@"Error creating DocSet", @"The selected folder does not contain ASDoc files.", 
+			@"OK", nil, nil);
 	}else{
 		if (!m_parser.isCancelled)
 			[m_model reloadDocSets];
