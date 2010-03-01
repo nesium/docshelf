@@ -70,7 +70,6 @@
 	[m_webView setPolicyDelegate:self];
 	[m_webView setFrameLoadDelegate:self];
 	[m_searchField setNextKeyView:m_outlineView];
-	
 	m_filterBar.startingColor = [NSColor colorWithCalibratedRed:0.816 green:0.816 blue:0.816 alpha:1.0];
 	m_filterBar.endingColor = [NSColor colorWithCalibratedRed:0.912 green:0.912 blue:0.912 alpha:1.0];
 	m_filterBar.borderColor = [NSColor colorWithCalibratedRed:0.665 green:0.665 blue:0.665 alpha:1.0];
@@ -276,8 +275,7 @@ static HeadlineCell *g_headlineCell = nil;
 	[listener use];
 }
 
-- (void)webView:(WebView *)sender didClearWindowObject:(WebScriptObject *)windowObject 
-	forFrame:(WebFrame *)frame{
+- (void)webView:(WebView *)sender didFinishLoadForFrame:(WebFrame *)frame{
 	NSString *anchor = nil;
 	if (m_restoredAnchor){
 		anchor = [[m_restoredAnchor copy] autorelease];

@@ -37,5 +37,6 @@
 - (NSArray *)signaturesFilteredByExpression:(NSString *)filter 
 	searchMode:(FHVDocSetSearchMode)searchMode cancelCondition:(BOOL *)cancelCondition;
 - (NSArray *)signaturesWithParentId:(NSNumber *)parentId includeInherited:(BOOL)bFlag;
+- (NSDictionary *)signatureWithId:(NSNumber *)dbId;
 - (NSDictionary *)classWithId:(NSNumber *)dbId;
 @end

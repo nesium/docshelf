@@ -118,6 +118,13 @@ NSString *sqlite3_column_nsstring(sqlite3_stmt *stmt, int col){
 		preventSorting:NO];
 }
 
+- (NSDictionary *)signatureWithId:(NSNumber *)dbId{
+	NSArray *signatures = [self _fetchSignatures:[NSString stringWithFormat:@"`id` = %qu", 
+		[dbId longLongValue]] includeDetail:YES limit:1 cancelCondition:NULL preventSorting:YES];
+	if ([signatures count] == 0) return nil;
+	return [signatures objectAtIndex:0];
+}
+
 - (NSDictionary *)classWithId:(NSNumber *)dbId{
 	NSArray *classes = [self _fetchClasses:[NSString stringWithFormat:@"`id` = %qu", 
 		[dbId longLongValue]] includeDetail:YES cancelCondition:NULL];

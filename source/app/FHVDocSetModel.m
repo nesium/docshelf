@@ -13,6 +13,9 @@
 - (void)_loadDocSets;
 - (NSString *)_classHTMLStringWithClassNode:(NSDictionary *)classNode 
 	signatures:(NSArray *)signatures;
+- (NSString *)_globalFunctionHTMLWithNode:(NSDictionary *)node;
+- (NSString *)_globalConstantHTMLWithNode:(NSDictionary *)node;
+- (void)_setHTMLBody:(NSString *)body usingTemplate:(NSString *)templateName;
 @end
 
 
@@ -137,11 +140,29 @@ static BOOL g_initialLoad = YES;
 	FHVDocSet *docSet = [self docSetForItem:item];
 	// a signature was selected from the search results
 	if ([itemType intValue] == kItemTypeSignature){
-		idToSelect = [item objectForKey:@"dbId"];
-		item = [docSet classWithId:[item objectForKey:@"parentDbId"]];
+		FHVSignatureParentType sigParentType = [[item objectForKey:@"parentType"] intValue];
+		FHVSignatureType sigType = [[item objectForKey:@"type"] intValue];
+		// global signatures
+		if (sigParentType == kSigParentTypePackage){
+			if (sigType == kSigTypeFunction){
+				[self _setHTMLBody:[self _globalFunctionHTMLWithNode:[docSet 
+					signatureWithId:[item objectForKey:@"dbId"]]] usingTemplate:@"class"];
+			}else if (sigType == kSigTypeConstant){
+				[self _setHTMLBody:[self _globalConstantHTMLWithNode:[docSet 
+					signatureWithId:[item objectForKey:@"dbId"]]] usingTemplate:@"class"];
+			}	
+			[item retain];
+			[m_selectedItem release];
+			m_selectedItem = item;
+			[m_secondLevelController setContent:nil];
+			return;
+		}else{
+			idToSelect = [item objectForKey:@"dbId"];
+			item = [docSet classWithId:[item objectForKey:@"parentDbId"]];
+		}	
 	// the visibility of inherited signatures was toggled and we want to preserve the selection
 	}else if (item == m_selectedItem){
-		if ([m_secondLevelController selectedObjects]){
+		if ([[m_secondLevelController selectedObjects] count] > 0){
 			NSDictionary *selectedItem = [[m_secondLevelController selectedObjects] objectAtIndex:0];
 			idToSelect = [selectedItem objectForKey:@"dbId"];
 		}
@@ -225,16 +246,8 @@ static BOOL g_initialLoad = YES;
 	
 	[m_secondLevelController setContent:mergedSigs];
 	
-	NSString *htmlBody = [self _classHTMLStringWithClassNode:[docSet classWithId:selectedId] 
-		signatures:mergedSigs];
-	NSMutableString *html = [NSMutableString stringWithContentsOfFile:[[NSBundle mainBundle] 
-		pathForResource:@"class" ofType:@"html"] encoding:NSUTF8StringEncoding error:nil];
-	[html replaceOccurrencesOfString:@"%BODY%" withString:htmlBody 
-		options:0 range:(NSRange){0, [html length]}];
-	[self willChangeValueForKey:@"detailData"];
-	[m_detailData release];
-	m_detailData = [html copy];
-	[self didChangeValueForKey:@"detailData"];
+	[self _setHTMLBody:[self _classHTMLStringWithClassNode:[docSet classWithId:selectedId] 
+		signatures:mergedSigs] usingTemplate:@"class"];
 	
 	if (idToSelect){
 		NSDictionary *itemToSelect = nil;
@@ -444,8 +457,33 @@ static BOOL g_initialLoad = YES;
 	return htmlString;
 }
 
+- (NSString *)_globalFunctionHTMLWithNode:(NSDictionary *)node{
+	NSMutableString *htmlString = [NSMutableString string];
+	[htmlString appendFormat:@"<h1>%@</h1>", [node objectForKey:@"name"]];
+	[htmlString appendString:[node objectForKey:@"detail"]];
+	return htmlString;
+}
+
+- (NSString *)_globalConstantHTMLWithNode:(NSDictionary *)node{
+	NSMutableString *htmlString = [NSMutableString string];
+	[htmlString appendFormat:@"<h1>%@</h1>", [node objectForKey:@"name"]];
+	[htmlString appendString:[node objectForKey:@"detail"]];
+	return htmlString;
+}
+
 - (void)_performSearchWithTerm:(NSString *)term{
 	[m_searchWorker performSearchWithTerm:term mode:m_searchMode];
+}
+
+- (void)_setHTMLBody:(NSString *)body usingTemplate:(NSString *)templateName{
+	NSMutableString *html = [NSMutableString stringWithContentsOfFile:[[NSBundle mainBundle] 
+		pathForResource:templateName ofType:@"html"] encoding:NSUTF8StringEncoding error:nil];
+	[html replaceOccurrencesOfString:@"%BODY%" withString:body 
+		options:0 range:(NSRange){0, [html length]}];
+	[self willChangeValueForKey:@"detailData"];
+	[m_detailData release];
+	m_detailData = [html copy];
+	[self didChangeValueForKey:@"detailData"];
 }
 
 
