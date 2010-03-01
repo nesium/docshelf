@@ -52,10 +52,15 @@ NSString *sqlite3_column_nsstring(sqlite3_stmt *stmt, int col){
 - (void)dealloc{
 	[self _close];
 	[m_path release];
+	m_path = nil;
 	[m_index release];
+	m_index = nil;
 	[m_name release];
+	m_name = nil;
 	[m_docSetId release];
+	m_docSetId = nil;
 	[m_infoPlist release];
+	m_infoPlist = nil;
 	[super dealloc];
 }
 

@@ -20,6 +20,7 @@
 			connectionWithRegisteredName:@"com.nesium.FlexHelpViewer.searchWorkerConnection" 
 			host:nil] rootProxy];
 		m_lock = [[NSConditionLock alloc] initWithCondition:NO_SEARCH_TERM];
+		m_docSetsLock = [[NSLock alloc] init];
 		m_interrupted = NO;
 		m_docSets = docSets;
 		m_searchTerm = nil;
@@ -29,6 +30,7 @@
 
 - (void)dealloc{
 	m_interrupted = YES;
+	[m_docSetsLock release];
 	[m_lock release];
 	[m_docSets release];
 	[super dealloc];
@@ -50,6 +52,12 @@
 	[m_searchTerm release];
 	m_searchTerm = nil;
 	[m_lock unlockWithCondition:NO_SEARCH_TERM];
+}
+
+- (void)setDocSets:(NSArray *)docSets{
+	[m_docSetsLock lock];
+	m_docSets = docSets;
+	[m_docSetsLock unlock];
 }
 
 
@@ -76,8 +84,12 @@
 		m_searchTerm = nil;
 		[m_lock unlockWithCondition:NO_SEARCH_TERM];
 		
+		[m_docSetsLock lock];
+		NSArray *docSets = [m_docSets copy];
+		[m_docSetsLock unlock];
+		
 		[m_connectionProxy searchDidStart];
-		for (FHVDocSet *docSet in m_docSets){
+		for (FHVDocSet *docSet in docSets){
 			if (m_interrupted) break;
 			if (!docSet.inSearchIncluded) continue;
 			NSArray *results = [docSet classesFilteredByExpression:searchTerm 
@@ -86,7 +98,7 @@
 			if (m_interrupted) break;
 			[m_connectionProxy searchResultsAvailable:results];
 		}
-		for (FHVDocSet *docSet in m_docSets){
+		for (FHVDocSet *docSet in docSets){
 			if (m_interrupted) break;
 			if (!docSet.inSearchIncluded) continue;
 			NSArray *results = [docSet signaturesFilteredByExpression:searchTerm 
@@ -95,6 +107,7 @@
 			if (m_interrupted) break;
 			[m_connectionProxy searchResultsAvailable:results];
 		}
+		[docSets release];
 		[searchTerm release];
 		[m_connectionProxy searchDidEnd];
 	}

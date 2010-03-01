@@ -115,8 +115,10 @@ static BOOL g_initialLoad = YES;
 
 - (void)reloadDocSets{
 	[m_firstLevelController setContent:nil];
+	[self willChangeValueForKey:@"docSets"];
 	[m_docSets release];
 	m_docSets = nil;
+	[self didChangeValueForKey:@"docSets"];
 	[m_mainData release];
 	m_mainData = nil;
 
@@ -124,6 +126,7 @@ static BOOL g_initialLoad = YES;
 
 	[self _loadDocSets];
 	[self loadDocSets];
+	[m_searchWorker setDocSets:m_docSets];
 }
 
 - (void)selectFirstLevelItem:(id)item{
@@ -429,7 +432,9 @@ static BOOL g_initialLoad = YES;
 		return [[obj1 valueForKey:@"name"] compare:[obj2 valueForKey:@"name"]];
 	}];
 	[m_docSets release];
+	[self willChangeValueForKey:@"docSets"];
 	m_docSets = [docSets copy];
+	[self didChangeValueForKey:@"docSets"];
 }
 
 - (NSString *)_classHTMLStringWithClassNode:(NSDictionary *)classNode 

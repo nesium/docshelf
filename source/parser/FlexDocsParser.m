@@ -202,6 +202,7 @@ bailout:
 	NSDictionary *bundleInfoPlist = [NSDictionary dictionaryWithObjectsAndKeys: 
 		name, (NSString *)kCFBundleNameKey, 
 		[NSString nsm_uuid], @"FHVDocSetId", 
+		[NSNumber numberWithBool:YES], @"FHVInSearchIncluded", 
 		[mainInfoPlist objectForKey:(NSString *)kCFBundleVersionKey], (NSString *)kCFBundleVersionKey, 
 		[mainInfoPlist objectForKey:@"CFBundleShortVersionString"], @"CFBundleShortVersionString", 
 		nil];

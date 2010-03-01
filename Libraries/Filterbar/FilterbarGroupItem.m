@@ -14,10 +14,10 @@
             icon:(NSImage *)icon
 {
 	if ((self = [super init])) {
-		_caption = caption;
+		_caption = [caption retain];
 		_itemWidth = 0.0;
-		_itemId = itemId;
-		_icon = icon;
+		_itemId = [itemId retain];
+		_icon = [icon retain];
 
 		/* Setup Default Icon Size */
 		if (_icon != nil) 

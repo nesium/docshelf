@@ -1,6 +1,7 @@
 #include <Cocoa/Cocoa.h>
 
 #import "FilterbarDelegate.h"
+#import "FilterbarGroup.h"
 
 @interface Filterbar : NSView {
 	@private
@@ -46,6 +47,6 @@
 - (void)selectItems:(NSArray *)itemsId inGroup:(NSString *)groupId selected:(BOOL)selected;
 
 - (CGFloat) availableWidth;
-
+- (FilterbarGroup *)findGroup:(NSString *)groupId;
 @end
 

@@ -29,6 +29,7 @@
 - (void)_restoreTreeState;
 - (void)_serializeSplitViewPositions;
 - (void)_restoreSplitViewPositions;
+- (void)_updateFilterBar;
 @end
 
 
@@ -55,6 +56,7 @@
 	[m_docSetModel removeObserver:self forKeyPath:@"currentData"];
 	[m_docSetModel removeObserver:self forKeyPath:@"selectionData"];
 	[m_docSetModel removeObserver:self forKeyPath:@"detailData"];
+	[m_docSetModel removeObserver:self forKeyPath:@"docSets"];
 	[m_innerSplitView release];
 	[super dealloc];
 }
@@ -72,6 +74,7 @@
 	
 	[m_docSetModel addObserver:self forKeyPath:@"detailData" options:0 context:(void *)3];
 	[m_docSetModel addObserver:self forKeyPath:@"detailSelectionAnchor" options:0 context:(void *)4];
+	[m_docSetModel addObserver:self forKeyPath:@"docSets" options:0 context:(void *)5];
 	[m_webView setResourceLoadDelegate:self];
 	[m_webView setPolicyDelegate:self];
 	[m_webView setFrameLoadDelegate:self];
@@ -79,17 +82,7 @@
 	m_filterBar.startingColor = [NSColor colorWithCalibratedRed:0.816 green:0.816 blue:0.816 alpha:1.0];
 	m_filterBar.endingColor = [NSColor colorWithCalibratedRed:0.912 green:0.912 blue:0.912 alpha:1.0];
 	m_filterBar.borderColor = [NSColor colorWithCalibratedRed:0.665 green:0.665 blue:0.665 alpha:1.0];
-	[m_filterBar addGroup:@"matchingMode"];
-	[m_filterBar addSeparator];
-	[m_filterBar addGroup:@"docSetsList"];
-	[m_filterBar selectItem:[self _identifierForSearchMode:m_docSetModel.searchMode] 
-		inGroup:@"matchingMode" selected:YES];
-	NSMutableArray *docSetsListSelection = [NSMutableArray array];
-	for (FHVDocSet *docSet in m_docSetModel.docSets){
-		if (docSet.inSearchIncluded) 
-			[docSetsListSelection addObject:[[NSNumber numberWithInt:docSet.index] stringValue]];
-	}
-	[m_filterBar selectItems:docSetsListSelection inGroup:@"docSetsList" selected:YES];
+	[self _updateFilterBar];
 	
 	[m_outlineView bind:@"content" toObject:m_docSetModel.firstLevelController 
 		withKeyPath:@"arrangedObjects" options:nil];
@@ -185,6 +178,10 @@
 	}else if ((int)context == 4){
 		if (m_docSetModel.detailSelectionAnchor)
 			[self _jumpToAnchor:m_docSetModel.detailSelectionAnchor];
+	}else if ((int)context == 5){
+		NSAssert([[NSThread currentThread] isMainThread], @"Not on main thread");
+		NDCLog(@"HELLO! %@", m_docSetModel.docSets);
+		[self _updateFilterBar];
 	}
 }
 
@@ -312,8 +309,9 @@ static HeadlineCell *g_headlineCell = nil;
 		return [NSArray arrayWithObjects:@"Contains", @"Prefix", @"Exact", nil];
 	}else if ([groupIdentifier isEqualToString:@"docSetsList"]){
 		NSMutableArray *indexes = [NSMutableArray array];
-		for (FHVDocSet *docSet in m_docSetModel.docSets)
+		for (FHVDocSet *docSet in m_docSetModel.docSets){
 			[indexes addObject:[[NSNumber numberWithInt:docSet.index] stringValue]];
+		}
 		return indexes;
 	}
 	return nil;
@@ -323,8 +321,9 @@ static HeadlineCell *g_headlineCell = nil;
 	groupIdentifier:(NSString *)groupIdentifier{
 	if ([groupIdentifier isEqualToString:@"docSetsList"]){
 		for (FHVDocSet *docSet in m_docSetModel.docSets)
-			if (docSet.index == [itemIdentifier intValue])
+			if (docSet.index == [itemIdentifier intValue]){
 				return docSet.name;
+			}
 		return @"ERROR";
 	}
 	return itemIdentifier;
@@ -414,6 +413,21 @@ static HeadlineCell *g_headlineCell = nil;
 		[m_innerSplitView addSubview:m_webView];
 		[self _restoreSplitViewPositions];
 	}
+}
+
+- (void)_updateFilterBar{
+	[m_filterBar clearItems];
+	[m_filterBar addGroup:@"matchingMode"];
+	[m_filterBar addSeparator];
+	[m_filterBar addGroup:@"docSetsList"];
+	[m_filterBar selectItem:[self _identifierForSearchMode:m_docSetModel.searchMode] 
+		inGroup:@"matchingMode" selected:YES];
+	NSMutableArray *docSetsListSelection = [NSMutableArray array];
+	for (FHVDocSet *docSet in m_docSetModel.docSets){
+		if (docSet.inSearchIncluded) 
+			[docSetsListSelection addObject:[[NSNumber numberWithInt:docSet.index] stringValue]];
+	}
+	[m_filterBar selectItems:docSetsListSelection inGroup:@"docSetsList" selected:YES];
 }
 
 - (void)_serializeSplitViewPositions{
