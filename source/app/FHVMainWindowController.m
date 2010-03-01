@@ -105,8 +105,8 @@
 	[m_docSetModel.secondLevelController addObserver:self forKeyPath:@"content" options:0 
 		context:(void *)2];
 		
-	[self _restoreTreeState];
 	[self _restoreSplitViewPositions];
+	[self _restoreTreeState];
 	if ([[m_docSetModel.secondLevelController content] count] == 0)
 		[self _setDetailOutlineViewVisible:NO];
 }
@@ -180,7 +180,6 @@
 			[self _jumpToAnchor:m_docSetModel.detailSelectionAnchor];
 	}else if ((int)context == 5){
 		NSAssert([[NSThread currentThread] isMainThread], @"Not on main thread");
-		NDCLog(@"HELLO! %@", m_docSetModel.docSets);
 		[self _updateFilterBar];
 	}
 }
@@ -232,7 +231,8 @@ static HeadlineCell *g_headlineCell = nil;
 }
 
 - (void)outlineViewArrowRightKeyWasPressed:(NSOutlineView *)outlineView{
-	if (outlineView == m_outlineView){
+	// make sure that the detailoutlineview is visible
+	if (outlineView == m_outlineView && [m_innerSplitView superview] != nil){
 		[[self window] makeFirstResponder:m_selectionOutlineView];
 	}
 }
@@ -435,6 +435,7 @@ static HeadlineCell *g_headlineCell = nil;
 	if ([m_innerSplitView superview]){
 		[[NSUserDefaults standardUserDefaults] setObject:NSStringFromRect(m_webView.frame) 
 			forKey:@"FHVWebViewFrame"];
+		NDCLog(@"save %@", NSStringFromRect(m_webView.frame));
 		[[NSUserDefaults standardUserDefaults] setObject:NSStringFromRect(m_innerSplitView.frame) 
 			forKey:@"FHVInnerSplitViewFrame"];
 	}else{
@@ -448,6 +449,7 @@ static HeadlineCell *g_headlineCell = nil;
 		objectForKey:@"FHVInnerSplitViewFrame"];
 	NSString *webViewFrame = [[NSUserDefaults standardUserDefaults] 
 		objectForKey:@"FHVWebViewFrame"];
+	NDCLog(@"%@", webViewFrame);
 	// first launch
 	if (!innerSplitViewFrame)
 		return;

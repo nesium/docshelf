@@ -222,13 +222,21 @@ bailout:
 - (void)_moveToFinalDestination{
 	NSString *bundleFolder = [[[NSApp delegate] applicationSupportFolder] 
 		stringByAppendingPathComponent:@"DocSets"];
+	NSError *error = nil;
+	BOOL success;
 	NSFileManager *fm = [NSFileManager defaultManager];
+	if (![fm fileExistsAtPath:bundleFolder]){
+		success = [fm createDirectoryAtPath:bundleFolder withIntermediateDirectories:YES 
+			attributes:nil error:&error];
+		if (!success){
+			NSLog(@"%@", error);
+		}
+	}
 	NSString *filename = [fm nsm_nextAvailableFileNameAtPath:bundleFolder 
 		proposedFileName:[[m_context.name nsm_normalizedFilename] 
 			stringByAppendingPathExtension:@"fhvdocset"] scheme:nil];
 	NSString *targetPath = [bundleFolder stringByAppendingPathComponent:filename];
-	NSError *error = nil;
-	BOOL success = [fm moveItemAtPath:m_context.temporaryTargetPath toPath:targetPath error:&error];
+	success = [fm moveItemAtPath:m_context.temporaryTargetPath toPath:targetPath error:&error];
 	if (!success){
 		NSLog(@"%@", error);
 	}
