@@ -23,6 +23,7 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
+			<integer value="6"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -409,7 +410,7 @@
 				</object>
 				<string key="NSWindowContentMaxSize">{3.40282e+38, 3.40282e+38}</string>
 				<object class="NSView" key="NSWindowView" id="424282548">
-					<nil key="NSNextResponder"/>
+					<reference key="NSNextResponder"/>
 					<int key="NSvFlags">256</int>
 					<object class="NSMutableArray" key="NSSubviews">
 						<bool key="EncodedWithXMLCoder">YES</bool>
@@ -719,17 +720,16 @@
 									<reference key="NSSuperview" ref="340859074"/>
 									<bool key="NSIsVertical">YES</bool>
 									<int key="NSDividerStyle">2</int>
-									<string key="NSAutosaveName">innerSplitView</string>
 								</object>
 							</object>
 							<string key="NSFrame">{{-1, 0}, {1138, 733}}</string>
 							<reference key="NSSuperview" ref="424282548"/>
 							<bool key="NSIsVertical">YES</bool>
 							<int key="NSDividerStyle">2</int>
-							<string key="NSAutosaveName">outerSplitView</string>
 						</object>
 					</object>
 					<string key="NSFrameSize">{1137, 732}</string>
+					<reference key="NSSuperview"/>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1680, 1028}}</string>
 				<string key="NSMaxSize">{3.40282e+38, 3.40282e+38}</string>
@@ -832,6 +832,14 @@
 						<reference key="destination" ref="1001"/>
 					</object>
 					<int key="connectionID">67</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">m_innerSplitView</string>
+						<reference key="source" ref="1001"/>
+						<reference key="destination" ref="283731284"/>
+					</object>
+					<int key="connectionID">68</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -1180,9 +1188,9 @@
 					<boolean value="NO"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{303, 84}, {1137, 732}}</string>
+					<string>{{413, 134}, {1137, 732}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{303, 84}, {1137, 732}}</string>
+					<string>{{413, 134}, {1137, 732}}</string>
 					<integer value="0"/>
 					<string>{{33, 99}, {480, 360}}</string>
 					<string>{3.40282e+38, 3.40282e+38}</string>
@@ -1228,7 +1236,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">67</int>
+			<int key="maxID">68</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -1245,6 +1253,7 @@
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>m_filterBar</string>
+							<string>m_innerSplitView</string>
 							<string>m_outerSplitView</string>
 							<string>m_outlineView</string>
 							<string>m_searchField</string>
@@ -1254,6 +1263,7 @@
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>Filterbar</string>
+							<string>NSSplitView</string>
 							<string>NSSplitView</string>
 							<string>NSOutlineView</string>
 							<string>NSSearchField</string>
@@ -1367,6 +1377,13 @@
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">source/util/MultiCellTableColumn.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">NSTreeController</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">Libraries/NSMUtils/NSTreeController+NSMAdditions.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
@@ -2090,7 +2107,7 @@
 			<integer value="3000" key="NS.object.0"/>
 		</object>
 		<bool key="IBDocument.PluginDeclaredDependenciesTrackSystemTargetVersion">YES</bool>
-		<string key="IBDocument.LastKnownRelativeProjectPath">../EarthDocs.xcodeproj</string>
+		<string key="IBDocument.LastKnownRelativeProjectPath">../EarthDoc.xcodeproj</string>
 		<int key="IBDocument.defaultPropertyAccessControl">3</int>
 	</data>
 </archive>

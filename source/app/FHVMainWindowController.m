@@ -24,8 +24,11 @@
 - (NSString *)_identifierForSearchMode:(FHVDocSetSearchMode)mode;
 - (FHVDocSetSearchMode)_searchModeForIdentifier:(NSString *)identifier;
 - (void)_reloadOutlineView:(NSOutlineView *)anOutlineView;
+- (void)_setDetailOutlineViewVisible:(BOOL)bFlag;
 - (void)_serializeTreeState;
 - (void)_restoreTreeState;
+- (void)_serializeSplitViewPositions;
+- (void)_restoreSplitViewPositions;
 @end
 
 
@@ -52,6 +55,7 @@
 	[m_docSetModel removeObserver:self forKeyPath:@"currentData"];
 	[m_docSetModel removeObserver:self forKeyPath:@"selectionData"];
 	[m_docSetModel removeObserver:self forKeyPath:@"detailData"];
+	[m_innerSplitView release];
 	[super dealloc];
 }
 
@@ -61,6 +65,8 @@
 #pragma mark Protected methods
 
 - (void)windowDidLoad{
+	// we remove the inner splitview from its parent eventually, so retain it for safety reasons
+	[m_innerSplitView retain];
 	[m_outlineView setIntercellSpacing:(NSSize){3, 0}];
 	[m_selectionOutlineView setIntercellSpacing:(NSSize){3, 0}];
 	
@@ -107,6 +113,9 @@
 		context:(void *)2];
 		
 	[self _restoreTreeState];
+	[self _restoreSplitViewPositions];
+	if ([[m_docSetModel.secondLevelController content] count] == 0)
+		[self _setDetailOutlineViewVisible:NO];
 }
 
 
@@ -152,6 +161,7 @@
 
 - (void)applicationWillTerminate:(NSNotification *)notification{
 	[self _serializeTreeState];
+	[self _serializeSplitViewPositions];
 }
 
 
@@ -166,7 +176,8 @@
 		if (m_docSetModel.inSearchMode) [m_outlineView expandItem:nil expandChildren:YES];
 		else [self _restoreTreeState];
 	}else if ((int)context == 2){
-		[m_selectionOutlineView expandItem:nil expandChildren:YES];	
+		[self _setDetailOutlineViewVisible:[[m_docSetModel.secondLevelController content] count] > 0];
+		[m_selectionOutlineView expandItem:nil expandChildren:YES];
 	}else if ((int)context == 3){
 		[m_docSetModel removeObserver:self forKeyPath:@"detailSelectionAnchor"];
 		[[m_webView mainFrame] loadHTMLString:m_docSetModel.detailData  
@@ -382,6 +393,58 @@ static HeadlineCell *g_headlineCell = nil;
 		return kFHVDocSetSearchModePrefix;
 	else
 		return kFHVDocSetSearchModeExact;
+}
+
+- (void)_setDetailOutlineViewVisible:(BOOL)bFlag{
+	if ((bFlag && [m_webView superview] != m_outerSplitView) || 
+		(!bFlag && ![m_innerSplitView superview])){
+		return;
+	}
+	if (!bFlag){
+		[self _serializeSplitViewPositions];
+		m_webView.frame = m_innerSplitView.frame;
+		[m_innerSplitView removeFromSuperview];
+		[m_outerSplitView addSubview:m_webView];
+		[self _restoreSplitViewPositions];
+	}else{
+		[self _serializeSplitViewPositions];
+		m_innerSplitView.frame = m_webView.frame;
+		[m_webView removeFromSuperview];
+		[m_outerSplitView addSubview:m_innerSplitView];
+		[m_innerSplitView addSubview:m_webView];
+		[self _restoreSplitViewPositions];
+	}
+}
+
+- (void)_serializeSplitViewPositions{
+	// detailoutlineview is visible
+	if ([m_innerSplitView superview]){
+		[[NSUserDefaults standardUserDefaults] setObject:NSStringFromRect(m_webView.frame) 
+			forKey:@"FHVWebViewFrame"];
+		[[NSUserDefaults standardUserDefaults] setObject:NSStringFromRect(m_innerSplitView.frame) 
+			forKey:@"FHVInnerSplitViewFrame"];
+	}else{
+		[[NSUserDefaults standardUserDefaults] setObject:NSStringFromRect(m_webView.frame) 
+			forKey:@"FHVInnerSplitViewFrame"];
+	}
+}
+
+- (void)_restoreSplitViewPositions{
+	NSString *innerSplitViewFrame = [[NSUserDefaults standardUserDefaults] 
+		objectForKey:@"FHVInnerSplitViewFrame"];
+	NSString *webViewFrame = [[NSUserDefaults standardUserDefaults] 
+		objectForKey:@"FHVWebViewFrame"];
+	// first launch
+	if (!innerSplitViewFrame)
+		return;
+	[m_outerSplitView setPosition:(NSWidth(m_outerSplitView.frame) - 
+		NSWidth(NSRectFromString(innerSplitViewFrame)) - [m_outerSplitView dividerThickness]) 
+		ofDividerAtIndex:0];
+	if ([m_webView superview] == m_innerSplitView){
+		[m_innerSplitView setPosition:(NSWidth(m_innerSplitView.frame) - 
+		 	NSWidth(NSRectFromString(webViewFrame)) - [m_innerSplitView dividerThickness]) 
+			ofDividerAtIndex:0];
+	}
 }
 
 - (void)_serializeTreeState{

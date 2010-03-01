@@ -22,6 +22,7 @@
 	IBOutlet NSSearchField *m_searchField;
 	IBOutlet Filterbar *m_filterBar;
 	IBOutlet NSSplitView *m_outerSplitView;
+	IBOutlet NSSplitView *m_innerSplitView;
 	NSTimeInterval m_lastOutlineViewUpdateTime;
 	FHVDocSetModel *m_docSetModel;
 	NSString *m_restoredAnchor;
