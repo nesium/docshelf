@@ -54,6 +54,11 @@
 		2CB33D40110B3ADC00A7C238 /* Filterbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CB33D3A110B3ADC00A7C238 /* Filterbar.m */; };
 		2CB33D41110B3ADC00A7C238 /* FilterbarGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CB33D3D110B3ADC00A7C238 /* FilterbarGroup.m */; };
 		2CB33D42110B3ADC00A7C238 /* FilterbarGroupItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CB33D3F110B3ADC00A7C238 /* FilterbarGroupItem.m */; };
+		2CBDCDB1113EE5C800FB4C23 /* FHVUpdatePreferencesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CBDCDB0113EE5C800FB4C23 /* FHVUpdatePreferencesViewController.m */; };
+		2CBDCDC1113EE63700FB4C23 /* NSDate+NSMAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CBDCDC0113EE63700FB4C23 /* NSDate+NSMAdditions.m */; };
+		2CBDCDCE113EE6B700FB4C23 /* UpdatePreferences.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2CBDCDCC113EE6B700FB4C23 /* UpdatePreferences.xib */; };
+		2CBDCDD2113EE71300FB4C23 /* NSMPreferencesWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CBDCDD1113EE71300FB4C23 /* NSMPreferencesWindowController.m */; };
+		2CBDCDE4113EE7C100FB4C23 /* reload.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 2CBDCDE3113EE7C100FB4C23 /* reload.tiff */; };
 		2CCFC17F110500590019F014 /* schema.sql in Resources */ = {isa = PBXBuildFile; fileRef = 2CCFC17E110500590019F014 /* schema.sql */; };
 		2CCFC1B2110512990019F014 /* SQLiteImporter.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CCFC1B1110512990019F014 /* SQLiteImporter.m */; };
 		2CE1FA31113732A600CB120C /* NSWindow+NSMAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CE1FA30113732A600CB120C /* NSWindow+NSMAdditions.m */; };
@@ -158,6 +163,14 @@
 		2CB33D3E110B3ADC00A7C238 /* FilterbarGroupItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FilterbarGroupItem.h; sourceTree = "<group>"; };
 		2CB33D3F110B3ADC00A7C238 /* FilterbarGroupItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FilterbarGroupItem.m; sourceTree = "<group>"; };
 		2CB33EC0110B5A0100A7C238 /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
+		2CBDCDAF113EE5C800FB4C23 /* FHVUpdatePreferencesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FHVUpdatePreferencesViewController.h; sourceTree = "<group>"; };
+		2CBDCDB0113EE5C800FB4C23 /* FHVUpdatePreferencesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FHVUpdatePreferencesViewController.m; sourceTree = "<group>"; };
+		2CBDCDBF113EE63700FB4C23 /* NSDate+NSMAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+NSMAdditions.h"; sourceTree = "<group>"; };
+		2CBDCDC0113EE63700FB4C23 /* NSDate+NSMAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+NSMAdditions.m"; sourceTree = "<group>"; };
+		2CBDCDCD113EE6B700FB4C23 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/UpdatePreferences.xib; sourceTree = "<group>"; };
+		2CBDCDD0113EE71300FB4C23 /* NSMPreferencesWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSMPreferencesWindowController.h; sourceTree = "<group>"; };
+		2CBDCDD1113EE71300FB4C23 /* NSMPreferencesWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSMPreferencesWindowController.m; sourceTree = "<group>"; };
+		2CBDCDE3113EE7C100FB4C23 /* reload.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = reload.tiff; sourceTree = "<group>"; };
 		2CCFC17E110500590019F014 /* schema.sql */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = schema.sql; path = Resources/schema.sql; sourceTree = "<group>"; };
 		2CCFC1B0110512990019F014 /* SQLiteImporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SQLiteImporter.h; sourceTree = "<group>"; };
 		2CCFC1B1110512990019F014 /* SQLiteImporter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SQLiteImporter.m; sourceTree = "<group>"; };
@@ -275,6 +288,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				2CBDCDCC113EE6B700FB4C23 /* UpdatePreferences.xib */,
 				2C9828B0113D8BE900D97695 /* dsa_pub.pem */,
 				2C63E8DE1118829900B5E938 /* ImportWindow.xib */,
 				2CCFC17E110500590019F014 /* schema.sql */,
@@ -301,6 +315,8 @@
 			isa = PBXGroup;
 			children = (
 				2CE1F991113726EE00CB120C /* NSMMacros.h */,
+				2CBDCDD0113EE71300FB4C23 /* NSMPreferencesWindowController.h */,
+				2CBDCDD1113EE71300FB4C23 /* NSMPreferencesWindowController.m */,
 				2C8584A71135C36900D58B15 /* NSFileManager+NSMAdditions.h */,
 				2C8584A81135C36900D58B15 /* NSFileManager+NSMAdditions.m */,
 				2C8584A91135C36900D58B15 /* NSNumber+NSMAdditions.h */,
@@ -313,6 +329,8 @@
 				2C469B26113983EB0006E742 /* NSTreeController+NSMAdditions.m */,
 				2C494CE5113A0192009DB736 /* NSIndexPath+NSMAdditions.h */,
 				2C494CE6113A0192009DB736 /* NSIndexPath+NSMAdditions.m */,
+				2CBDCDBF113EE63700FB4C23 /* NSDate+NSMAdditions.h */,
+				2CBDCDC0113EE63700FB4C23 /* NSDate+NSMAdditions.m */,
 			);
 			path = NSMUtils;
 			sourceTree = "<group>";
@@ -352,6 +370,7 @@
 		2CEE309F0DD668D300CC762E /* assets */ = {
 			isa = PBXGroup;
 			children = (
+				2CBDCDE3113EE7C100FB4C23 /* reload.tiff */,
 				2CEE30A00DD668D300CC762E /* icons */,
 				2C53671210B9BC9500D9C0E4 /* styles.css */,
 				2C53671710B9BD7600D9C0E4 /* class.html */,
@@ -415,6 +434,8 @@
 				2CB33EC0110B5A0100A7C238 /* Constants.h */,
 				2C63E8CF11184EC800B5E938 /* FHVImportWindowController.h */,
 				2C63E8D011184EC800B5E938 /* FHVImportWindowController.m */,
+				2CBDCDAF113EE5C800FB4C23 /* FHVUpdatePreferencesViewController.h */,
+				2CBDCDB0113EE5C800FB4C23 /* FHVUpdatePreferencesViewController.m */,
 			);
 			path = app;
 			sourceTree = "<group>";
@@ -505,6 +526,8 @@
 				2C85E6B01107E585001920A7 /* property.png in Resources */,
 				2C63E8E01118829900B5E938 /* ImportWindow.xib in Resources */,
 				2C9828B1113D8BE900D97695 /* dsa_pub.pem in Resources */,
+				2CBDCDCE113EE6B700FB4C23 /* UpdatePreferences.xib in Resources */,
+				2CBDCDE4113EE7C100FB4C23 /* reload.tiff in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -549,6 +572,9 @@
 				2CE1FA31113732A600CB120C /* NSWindow+NSMAdditions.m in Sources */,
 				2C469B27113983EB0006E742 /* NSTreeController+NSMAdditions.m in Sources */,
 				2C494CE7113A0192009DB736 /* NSIndexPath+NSMAdditions.m in Sources */,
+				2CBDCDB1113EE5C800FB4C23 /* FHVUpdatePreferencesViewController.m in Sources */,
+				2CBDCDC1113EE63700FB4C23 /* NSDate+NSMAdditions.m in Sources */,
+				2CBDCDD2113EE71300FB4C23 /* NSMPreferencesWindowController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -585,6 +611,14 @@
 				2C91025D11065A100031698D /* English */,
 			);
 			name = MainWindow.xib;
+			sourceTree = "<group>";
+		};
+		2CBDCDCC113EE6B700FB4C23 /* UpdatePreferences.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				2CBDCDCD113EE6B700FB4C23 /* English */,
+			);
+			name = UpdatePreferences.xib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

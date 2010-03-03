@@ -53,6 +53,7 @@
 - (void)setDocSetWithIndex:(NSUInteger)index inSearchIncluded:(BOOL)bFlag;
 - (NSImage *)imageForItem:(id)item;
 - (void)loadChildrenOfPackage:(NSDictionary *)package;
+- (void)selectItemWithURLInCurrentDocSet:(NSURL *)anURL;
 - (NSDictionary *)docSetItemForItem:(id)item;
 - (FHVDocSet *)docSetForItem:(id)item;
 - (NSDictionary *)docSetItemForDocSetId:(NSString *)docSetId;

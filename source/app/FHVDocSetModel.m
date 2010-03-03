@@ -364,6 +364,57 @@ static BOOL g_initialLoad = YES;
 	[(NSMutableDictionary *)package setObject:children forKey:@"children"];
 }
 
+- (void)selectItemWithURLInCurrentDocSet:(NSURL *)anURL{
+	NSString *searchedIdent = [anURL host];
+	NSDictionary *searchedPackage = nil;
+	NSDictionary *topLevelPackage = nil;
+	NSArray *packages = [[self docSetItemForItem:m_selectedItem] objectForKey:@"children"];
+	for (NSDictionary *package in packages){
+		NSString *packageIdent = [package objectForKey:@"ident"];
+		if ([searchedIdent hasPrefix:packageIdent]){
+			searchedPackage = package;
+			break;
+		}else if ([packageIdent isEqualToString:@"Top Level"]){
+			topLevelPackage = package;
+		}
+	}
+	if (searchedPackage == nil)
+		searchedPackage = topLevelPackage;
+	
+	if ([[searchedPackage objectForKey:@"ident"] isEqualToString:searchedIdent]){
+		[m_firstLevelController setSelectedObject:searchedPackage];
+		return;
+	}
+	
+	[self loadChildrenOfPackage:searchedPackage];
+	NSArray *contents = [searchedPackage objectForKey:@"children"];
+	NSDictionary *searchedItem = nil;
+	for (NSDictionary *item in contents){
+		NSString *itemIdent = [item objectForKey:@"ident"];
+		if ([itemIdent isEqualToString:searchedIdent]){
+			searchedItem = item;
+			break;
+		}
+	}
+	
+	if (!searchedItem){
+		return;
+	}
+	
+	[m_firstLevelController setSelectedObject:searchedItem];
+	if ([anURL fragment]){
+		for (NSDictionary *section in [m_secondLevelController content]){
+			NSArray *children = [section objectForKey:@"children"];
+			for (NSDictionary *item in children){
+				if ([[self anchorForItem:item] isEqualToString:[anURL fragment]]){
+					[m_secondLevelController setSelectedObject:item];
+					return;
+				}
+			}
+		}
+	}
+}
+
 - (NSDictionary *)docSetItemForItem:(id)item{
 	NSInteger docSetId = [[item objectForKey:@"docSetId"] intValue];
 	for (NSInteger i = 0; i < [m_docSets count]; i++){
@@ -406,6 +457,7 @@ static BOOL g_initialLoad = YES;
 	}else if (object == m_secondLevelController){
 		NSDictionary *item = [[m_secondLevelController selectedObjects] objectAtIndex:0];
 		[self willChangeValueForKey:@"detailSelectionAnchor"];
+		[m_detailSelectionAnchor release];
 		m_detailSelectionAnchor = [[self anchorForItem:item] retain];
 		[self didChangeValueForKey:@"detailSelectionAnchor"];
 	}

@@ -58,6 +58,24 @@
 	m_docSetModel.showsInheritedSignatures = !m_docSetModel.showsInheritedSignatures;
 }
 
+- (IBAction)showPreferences:(id)sender{
+	if (!m_prefsWindowController){
+		NSWindow *window = [[NSWindow alloc] initWithContentRect:(NSRect){0, 0, 100, 100} 
+			styleMask:(NSTitledWindowMask | NSClosableWindowMask) 
+			backing:NSBackingStoreBuffered defer:YES];
+		m_prefsWindowController = [[NSMPreferencesWindowController alloc] initWithWindow:window];
+		m_prefsWindowController.toolbarIdentifier = @"FHVPreferencesToolbar";
+		m_prefsWindowController.windowAutosaveName = @"FHVPreferencesWindowOrigin";
+		FHVUpdatePreferencesViewController *updatePrefsController = 
+			[[FHVUpdatePreferencesViewController alloc] initWithNibName:@"UpdatePreferences" 
+				bundle:nil];
+		[m_prefsWindowController addPrefPaneWithController:updatePrefsController 
+			icon:[NSImage imageNamed:@"reload.tiff"]];
+		[window release];
+	}
+	[m_prefsWindowController showWindow:self];
+}
+
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification{
 	if(getenv("NSZombieEnabled") || getenv("NSAutoreleaseFreedObjectCheckEnabled")){
 		NDCLog(@"NSZombieEnabled/NSAutoreleaseFreedObjectCheckEnabled enabled!");

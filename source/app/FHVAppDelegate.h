@@ -10,6 +10,8 @@
 #import "FHVDocSetModel.h"
 #import "FHVMainWindowController.h"
 #import "FHVImportWindowController.h"
+#import "FHVUpdatePreferencesViewController.h"
+#import "NSMPreferencesWindowController.h"
 #import "Constants.h"
 
 
@@ -21,6 +23,8 @@
 	IBOutlet NSWindow *m_newDocSetSheet;
 	IBOutlet NSProgressIndicator *m_progressIndicator;
 	IBOutlet NSTextField *m_progressLabel;
+	NSMPreferencesWindowController *m_prefsWindowController;
 }
 - (NSString *)applicationSupportFolder;
+- (IBAction)showPreferences:(id)sender;
 @end

@@ -280,6 +280,11 @@ static HeadlineCell *g_headlineCell = nil;
 - (void)webView:(WebView *)webView decidePolicyForNavigationAction:(NSDictionary *)actionInformation 
 	request:(NSURLRequest *)request frame:(WebFrame *)frame 
 	decisionListener:(id <WebPolicyDecisionListener>)listener{
+	if ([[[request URL] scheme] isEqualToString:@"fhelpv"]){
+		[m_docSetModel selectItemWithURLInCurrentDocSet:[request URL]];
+		[listener ignore];
+		return;
+	}
 	[listener use];
 }
 
