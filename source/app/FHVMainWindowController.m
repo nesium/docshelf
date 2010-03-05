@@ -30,6 +30,8 @@
 - (void)_serializeSplitViewPositions;
 - (void)_restoreSplitViewPositions;
 - (void)_updateFilterBar;
+- (void)_recordHistoryItem:(NSURL *)anURL;
+- (void)_updateBackForwardControl;
 @end
 
 
@@ -42,6 +44,8 @@
 	if (self = [super initWithWindowNibName:windowNibName]){
 		m_docSetModel = docSetModel;
 		m_restoredAnchor = nil;
+		m_history = [[NSMutableArray alloc] init];
+		m_historyIndex = 0;
 		[[NSNotificationCenter defaultCenter] 
 			addObserver:self 
 			selector:@selector(applicationWillTerminate:) 
@@ -57,7 +61,9 @@
 	[m_docSetModel removeObserver:self forKeyPath:@"selectionData"];
 	[m_docSetModel removeObserver:self forKeyPath:@"detailData"];
 	[m_docSetModel removeObserver:self forKeyPath:@"docSets"];
+	[m_docSetModel removeObserver:self forKeyPath:@"selectionURL"];
 	[m_innerSplitView release];
+	[m_history release];
 	[super dealloc];
 }
 
@@ -75,6 +81,7 @@
 	[m_docSetModel addObserver:self forKeyPath:@"detailData" options:0 context:(void *)3];
 	[m_docSetModel addObserver:self forKeyPath:@"detailSelectionAnchor" options:0 context:(void *)4];
 	[m_docSetModel addObserver:self forKeyPath:@"docSets" options:0 context:(void *)5];
+	m_detailSelectionAnchorBound = YES;
 	[m_webView setResourceLoadDelegate:self];
 	[m_webView setPolicyDelegate:self];
 	[m_webView setFrameLoadDelegate:self];
@@ -109,6 +116,13 @@
 	[self _restoreTreeState];
 	if ([[m_docSetModel.secondLevelController content] count] == 0)
 		[self _setDetailOutlineViewVisible:NO];
+	[m_docSetModel addObserver:self forKeyPath:@"selectionURL" options:0 context:(void *)6];
+	if (m_docSetModel.selectionURL)
+		[self _recordHistoryItem:m_docSetModel.selectionURL];
+	else{
+		[m_backForwardSegmentedCell setEnabled:NO forSegment:0];
+		[m_backForwardSegmentedCell setEnabled:NO forSegment:1];
+	}
 }
 
 
@@ -136,6 +150,18 @@
 		[self _setFilterBarVisible:YES];
 	}
 	[m_docSetModel setSearchTerm:[m_searchField stringValue]];
+}
+
+- (IBAction)navigateInHistory:(id)sender{
+	if ([(NSSegmentedControl *)sender selectedSegment] == 0){
+		m_historyIndex--;
+	}else{
+		m_historyIndex++;
+	}
+	[m_docSetModel removeObserver:self forKeyPath:@"selectionURL"];
+	[m_docSetModel selectItemWithURLInAnyDocSet:[m_history objectAtIndex:m_historyIndex]];
+	[m_docSetModel addObserver:self forKeyPath:@"selectionURL" options:0 context:(void *)6];
+	[self _updateBackForwardControl];
 }
 
 
@@ -172,7 +198,10 @@
 		[self _setDetailOutlineViewVisible:[[m_docSetModel.secondLevelController content] count] > 0];
 		[m_selectionOutlineView expandItem:nil expandChildren:YES];
 	}else if ((int)context == 3){
-		[m_docSetModel removeObserver:self forKeyPath:@"detailSelectionAnchor"];
+		if (m_detailSelectionAnchorBound){
+			[m_docSetModel removeObserver:self forKeyPath:@"detailSelectionAnchor"];
+			m_detailSelectionAnchorBound = NO;
+		}
 		[[m_webView mainFrame] loadHTMLString:m_docSetModel.detailData  
 			baseURL:[NSURL fileURLWithPath:[[NSBundle mainBundle] resourcePath]]];
 	}else if ((int)context == 4){
@@ -181,6 +210,8 @@
 	}else if ((int)context == 5){
 		NSAssert([[NSThread currentThread] isMainThread], @"Not on main thread");
 		[self _updateFilterBar];
+	}else if ((int)context == 6){
+		[self _recordHistoryItem:m_docSetModel.selectionURL];
 	}
 }
 
@@ -302,6 +333,7 @@ static HeadlineCell *g_headlineCell = nil;
 		[self _jumpToAnchor:anchor];
 	}
 	[m_docSetModel addObserver:self forKeyPath:@"detailSelectionAnchor" options:0 context:(void *)4];
+	m_detailSelectionAnchorBound = YES;
 }
 
 
@@ -536,5 +568,24 @@ static HeadlineCell *g_headlineCell = nil;
 		return;
 	[m_docSetModel.secondLevelController setSelectionIndexPath:
 		[NSIndexPath indexPathWithIndexes:[selection objectAtIndex:2]]];
+}
+
+- (void)_recordHistoryItem:(NSURL *)anURL{
+	if ([m_history count] && m_historyIndex < [m_history count] - 1){
+		[m_history removeObjectsInRange:(NSRange){m_historyIndex + 1, 
+			[m_history count] - m_historyIndex - 1}];
+	}
+	if (![[m_history lastObject] isEqual:anURL]){
+		[m_history addObject:anURL];
+		m_historyIndex = [m_history count] - 1;
+	}
+	NDCLog(@"%@", m_history);
+	[self _updateBackForwardControl];
+}
+
+- (void)_updateBackForwardControl{
+	[m_backForwardSegmentedCell setEnabled:(m_historyIndex > 0) forSegment:0];
+	[m_backForwardSegmentedCell setEnabled:([m_history count] && m_historyIndex < [m_history count] - 1) 
+		forSegment:1];
 }
 @end

@@ -23,10 +23,16 @@
 	IBOutlet Filterbar *m_filterBar;
 	IBOutlet NSSplitView *m_outerSplitView;
 	IBOutlet NSSplitView *m_innerSplitView;
+	IBOutlet NSSegmentedCell *m_backForwardSegmentedCell;
+	
+	BOOL m_detailSelectionAnchorBound;
 	NSTimeInterval m_lastOutlineViewUpdateTime;
 	FHVDocSetModel *m_docSetModel;
 	NSString *m_restoredAnchor;
+	NSUInteger m_historyIndex;
+	NSMutableArray *m_history;
 }
 - (id)initWithWindowNibName:(NSString *)windowNibName docSetModel:(FHVDocSetModel *)docSetModel;
 - (IBAction)updateFilter:(id)sender;
+- (IBAction)navigateInHistory:(id)sender;
 @end

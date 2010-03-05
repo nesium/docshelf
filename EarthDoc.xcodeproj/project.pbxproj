@@ -192,8 +192,6 @@
 		2CF5FB8D0DD5C3780049C53D /* PackageDetailParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PackageDetailParser.m; sourceTree = "<group>"; };
 		2CFCB4500DD4F4FB0090049E /* PackageSummaryParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PackageSummaryParser.h; sourceTree = "<group>"; };
 		2CFCB4510DD4F4FB0090049E /* PackageSummaryParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PackageSummaryParser.m; sourceTree = "<group>"; };
-		2CFCB4530DD4F54C0090049E /* FlexHelpViewerApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlexHelpViewerApp.h; sourceTree = "<group>"; };
-		2CFCB4540DD4F54C0090049E /* FlexHelpViewerApp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FlexHelpViewerApp.m; sourceTree = "<group>"; };
 		2CFCB7BC0DD52CDA0090049E /* AbstractXMLTreeParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AbstractXMLTreeParser.h; sourceTree = "<group>"; };
 		2CFCB7BD0DD52CDA0090049E /* AbstractXMLTreeParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AbstractXMLTreeParser.m; sourceTree = "<group>"; };
 		32CA4F630368D1EE00C91783 /* EarthDoc_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EarthDoc_Prefix.pch; sourceTree = "<group>"; };
@@ -224,8 +222,6 @@
 				2CFCB44F0DD4F4FB0090049E /* parser */,
 				2CEE30B70DD6696E00CC762E /* util */,
 				2CC3919110B7743E00C35BD8 /* categories */,
-				2CFCB4530DD4F54C0090049E /* FlexHelpViewerApp.h */,
-				2CFCB4540DD4F54C0090049E /* FlexHelpViewerApp.m */,
 				2C8583B31135A58400D58B15 /* FHVConstants.h */,
 				2C8583C81135A80E00D58B15 /* FHVConstants.m */,
 			);

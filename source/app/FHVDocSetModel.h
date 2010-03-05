@@ -34,7 +34,6 @@
 }
 @property (readonly) NSTreeController *firstLevelController;
 @property (readonly) NSTreeController *secondLevelController;
-
 @property (readonly) NSString *detailData;
 @property (nonatomic, assign) BOOL showsInheritedSignatures;
 @property (readonly) BOOL inSearchMode;
@@ -42,6 +41,8 @@
 @property (readonly) NSString *detailSelectionAnchor;
 @property (nonatomic, assign) FHVDocSetSearchMode searchMode;
 @property (readonly) NSArray *docSets;
+@property (readonly) NSURL *selectionURL;
+
 - (id)initWithDocSetPath:(NSString *)path;
 - (void)loadDocSets;
 - (void)reloadDocSets;
@@ -54,7 +55,10 @@
 - (NSImage *)imageForItem:(id)item;
 - (void)loadChildrenOfPackage:(NSDictionary *)package;
 - (void)selectItemWithURLInCurrentDocSet:(NSURL *)anURL;
+- (void)selectItemWithURLInAnyDocSet:(NSURL *)anURL;
+- (BOOL)selectItemWithURL:(NSURL *)anURL inDocSet:(FHVDocSet *)aDocSet;
 - (NSDictionary *)docSetItemForItem:(id)item;
 - (FHVDocSet *)docSetForItem:(id)item;
+- (FHVDocSet *)docSetForDocSetId:(NSInteger)docSetId;
 - (NSDictionary *)docSetItemForDocSetId:(NSString *)docSetId;
 @end

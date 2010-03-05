@@ -55,7 +55,9 @@
 }
 
 - (BOOL)becomeFirstResponder{
-	if ([[self delegate] respondsToSelector:@selector(outlineViewDidBecomeFirstResponder:)]){
+	NSEvent *currentEvent = [[self window] currentEvent];
+	if ((currentEvent.type == NSKeyDown || currentEvent.type == NSKeyUp) && 
+		[[self delegate] respondsToSelector:@selector(outlineViewDidBecomeFirstResponder:)]){
 		[(FHVNiceIndentationOutlineViewDelegate *)[self delegate] 
 			outlineViewDidBecomeFirstResponder:self];
 	}
