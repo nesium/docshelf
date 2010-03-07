@@ -19,6 +19,7 @@
 	FHVImportContext *m_context;
 }
 - (id)initWithFile:(NSString *)file context:(FHVImportContext *)context;
+- (id)initWithData:(NSData *)data fromURL:(NSURL *)anURL context:(FHVImportContext *)context;
 @end
 
 @interface AbstractXMLTreeParser (Protected)

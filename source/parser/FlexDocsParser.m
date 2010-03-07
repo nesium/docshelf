@@ -7,7 +7,6 @@
 //
 
 #import "FlexDocsParser.h"
-#import "FlexHelpViewerApp.h"
 
 @interface FlexDocsParser (Private)
 - (void)_createDocSetSkeleton:(NSString *)name;

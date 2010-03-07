@@ -11,8 +11,7 @@
 // Manages a preferences window, handling the toolbar and shows and hides the according views.
 // The toolbar is created upon the first showWindow: message, thus there is enough time to 
 // set it up via the addPrefPane ... methods
-@interface NSMPreferencesWindowController : NSWindowController 
-{
+@interface NSMPreferencesWindowController : NSWindowController <NSWindowDelegate, NSToolbarDelegate>{
 	NSMutableArray *m_toolbarItems;
 	NSViewController *m_activeController;
 	NSString *m_toolbarIdentifier;
@@ -43,7 +42,7 @@
 @end
 
 
-@interface NSObject (AAPreferencesViewController)
+@interface NSObject (NSMPreferencesViewController)
 - (void)prefPaneWillMoveToWindow;
 - (void)prefPaneDidMoveToWindow;
 @end

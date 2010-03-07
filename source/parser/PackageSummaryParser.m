@@ -11,6 +11,17 @@
 
 @implementation PackageSummaryParser
 
+- (NSString *)title{
+	NSError *error = nil;
+	NSArray *matchingNodes = [m_xmlTree nodesForXPath:@"/html/body//table[@id='titleTable'][1]/tr[1]/td[@class='titleTableTitle'][1]" 
+		error:&error];
+	if (![matchingNodes count])
+		return nil;
+	NSXMLElement *elem = [matchingNodes objectAtIndex:0];
+	return [[elem stringValue] 
+		stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+}
+
 - (NSArray *)packages{
 	NSError *error = nil;
 	NSArray *rows = [self rowsForSummaryTable:[self summaryTable]];

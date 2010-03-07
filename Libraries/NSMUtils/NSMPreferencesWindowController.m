@@ -35,39 +35,33 @@
 #pragma mark -
 #pragma mark Initialization & Deallocation
 
-- (id)initWithWindow:(NSWindow *)window
-{
-	if (self = [super initWithWindow:window])
-	{
+- (id)initWithWindow:(NSWindow *)window{
+	if (self = [super initWithWindow:window]){
 		[window setDelegate:self];
 		[self _initDefaults];
 	}
 	return self;
 }
 
-- (id)initWithWindowNibName:(NSString *)windowNibName
-{
+- (id)initWithWindowNibName:(NSString *)windowNibName{
 	if (self = [super initWithWindowNibName:windowNibName])
 		[self _initDefaults];
 	return self;
 }
 
-- (id)initWithWindowNibName:(NSString *)windowNibName owner:(id)owner
-{
+- (id)initWithWindowNibName:(NSString *)windowNibName owner:(id)owner{
 	if (self = [super initWithWindowNibName:windowNibName owner:owner])
 		[self _initDefaults];
 	return self;
 }
 
-- (id)initWithWindowNibPath:(NSString *)windowNibPath owner:(id)owner
-{
+- (id)initWithWindowNibPath:(NSString *)windowNibPath owner:(id)owner{
 	if (self = [super initWithWindowNibPath:windowNibPath owner:owner])
 		[self _initDefaults];
 	return self;
 }
 
-- (void)dealloc
-{
+- (void)dealloc{
 	[m_toolbarItems release];
 	[m_toolbarIdentifier release];
 	[m_windowAutosaveName release];
@@ -79,8 +73,7 @@
 #pragma mark -
 #pragma mark Public methods
 
-- (void)addPrefPaneWithController:(NSViewController *)controller icon:(NSImage *)icon
-{
+- (void)addPrefPaneWithController:(NSViewController *)controller icon:(NSImage *)icon{
 	NSToolbarItem *toolbarItem = [[NSToolbarItem alloc] initWithItemIdentifier:[controller title]];
 	[toolbarItem setLabel:[controller title]];
 	[toolbarItem setPaletteLabel:[controller title]];
@@ -97,26 +90,22 @@
 	[toolbarItem release];
 }
 
-- (void)setToolbarAllowsUserCustomization:(BOOL)bFlag
-{
+- (void)setToolbarAllowsUserCustomization:(BOOL)bFlag{
 	m_toolbarAllowsUserCustomization = bFlag;
 	[self _applySettings];
 }
 
-- (void)setToolbarAutosavesConfiguration:(BOOL)bFlag
-{
+- (void)setToolbarAutosavesConfiguration:(BOOL)bFlag{
 	m_toolbarAutosavesConfiguration = bFlag;
 	[self _applySettings];
 }
 
-- (void)setToolbarSizeMode:(NSToolbarSizeMode)mode
-{
+- (void)setToolbarSizeMode:(NSToolbarSizeMode)mode{
 	m_toolbarSizeMode = mode;
 	[self _applySettings];
 }
 
-- (void)setToolbarDisplayMode:(NSToolbarDisplayMode)mode
-{
+- (void)setToolbarDisplayMode:(NSToolbarDisplayMode)mode{
 	m_toolbarDisplayMode = mode;
 	[self _applySettings];
 }
@@ -126,10 +115,8 @@
 #pragma mark -
 #pragma mark Overridden NSWindowController methods
 
-- (IBAction)showWindow:(id)sender
-{
-	if ([[self window] toolbar] == nil && [m_toolbarItems count] > 0)
-	{
+- (IBAction)showWindow:(id)sender{
+	if ([[self window] toolbar] == nil && [m_toolbarItems count] > 0){
 		[self _setupToolbar];
 		[self _setViewControllerVisible:[[m_toolbarItems objectAtIndex:0] 
 			objectForKey:@"Controller"]];
@@ -137,8 +124,7 @@
 	[super showWindow:sender];
 }
 
-- (BOOL)windowShouldClose:(id)window
-{
+- (BOOL)windowShouldClose:(id)window{
 	[self _saveWindowOrigin];
 	return YES;
 }
@@ -149,11 +135,9 @@
 #pragma mark -
 #pragma mark Private methods
 
-- (void)_initDefaults
-{
+- (void)_initDefaults{
 	m_toolbarItems = [[NSMutableArray alloc] init];
 	m_activeController = nil;
-	
 	m_toolbarIdentifier = [@"MainToolbar" retain];
 	m_toolbarAllowsUserCustomization = NO;
 	m_toolbarAutosavesConfiguration = YES;
@@ -162,11 +146,9 @@
 	m_windowAutosaveName = [@"PreferencesWindowOrigin" retain];
 }
 
-- (void)_applySettings
-{
+- (void)_applySettings{
 	NSToolbar *toolbar;
-	if (toolbar = [[self window] toolbar])
-	{
+	if (toolbar = [[self window] toolbar]){
 		 [toolbar setAllowsUserCustomization:m_toolbarAllowsUserCustomization];
 		 [toolbar setAutosavesConfiguration:m_toolbarAutosavesConfiguration];
 		 [toolbar setSizeMode:m_toolbarSizeMode];
@@ -174,8 +156,7 @@
 	}
 }
 
-- (void)_resizeWindowToSize:(NSSize)size animate:(BOOL)bFlag
-{
+- (void)_resizeWindowToSize:(NSSize)size animate:(BOOL)bFlag{
 	NSRect windowFrame = [[self window] frame];
 	int toolbarHeight = NSHeight(windowFrame) - NSHeight([[[self window] contentView] frame]);
 	int neededWindowSize = size.height + toolbarHeight;
@@ -186,8 +167,7 @@
 	[[self window] setFrame:windowFrame display:YES animate:bFlag];
 }
 
-- (void)_saveWindowOrigin
-{
+- (void)_saveWindowOrigin{
 	NSPoint windowOrigin = [[self window] frame].origin;
 	NSSize windowSize = [[self window] frame].size;
 	windowOrigin.y += windowSize.height;
@@ -196,12 +176,10 @@
 		forKey:m_windowAutosaveName];
 }
 
-- (void)_restoreWindowOrigin
-{
+- (void)_restoreWindowOrigin{
 	NSString *originString = [[[NSUserDefaultsController sharedUserDefaultsController] values] 
 		valueForKey:m_windowAutosaveName];
-	if (originString == nil)
-	{
+	if (originString == nil){
 		[[self window] center];
 		return;
 	}
@@ -211,26 +189,22 @@
 	[[self window] setFrameOrigin:origin];
 }
 
-- (NSArray *)_toolbarIdentifiers
-{
+- (NSArray *)_toolbarIdentifiers{
 	NSMutableArray *identifiers = [NSMutableArray array];
 	for (NSDictionary *dict in m_toolbarItems)
 		[identifiers addObject:[(NSViewController *)[dict objectForKey:@"Controller"] title]];
 	return identifiers;
 }
 
-- (NSToolbarItem *)_toolbarItemForIdentifier:(NSString *)ident
-{
+- (NSToolbarItem *)_toolbarItemForIdentifier:(NSString *)ident{
 	for (NSDictionary *dict in m_toolbarItems)
 		if ([[(NSViewController *)[dict objectForKey:@"Controller"] title] isEqualToString:ident])
 			return [dict objectForKey:@"ToolbarItem"];
 	return nil;
 }
 
-- (NSViewController *)_viewControllerForIdentifier:(NSString *)ident
-{
-	for (NSDictionary *dict in m_toolbarItems)
-	{
+- (NSViewController *)_viewControllerForIdentifier:(NSString *)ident{
+	for (NSDictionary *dict in m_toolbarItems){
 		NSViewController *controller = [dict objectForKey:@"Controller"];
 		if ([[controller title] isEqualToString:ident])
 			return controller;
@@ -238,12 +212,9 @@
 	return nil;
 }
 
-- (void)_setViewControllerVisible:(NSViewController *)controller
-{
+- (void)_setViewControllerVisible:(NSViewController *)controller{
 	BOOL animate = NO;
-	if (m_activeController != nil)
-	{
-
+	if (m_activeController != nil){
 		[[m_activeController view] removeFromSuperview];
 		if ([m_activeController respondsToSelector:@selector(prefPaneDidMoveToWindow)])
 			[m_activeController prefPaneDidMoveToWindow];
@@ -261,8 +232,7 @@
 	[[[self window] toolbar] setSelectedItemIdentifier:[controller title]];
 }
 
-- (void)_setupToolbar
-{
+- (void)_setupToolbar{
 	NSToolbar *toolbar = [[NSToolbar alloc] initWithIdentifier:m_toolbarIdentifier];
 	[toolbar setDelegate:self];
 	[[self window] setToolbar:toolbar];
@@ -275,8 +245,7 @@
 #pragma mark -
 #pragma mark NSToolbarItem action method
 
-- (void)toolbarItem_clicked:(NSToolbarItem *)sender
-{
+- (void)toolbarItem_clicked:(NSToolbarItem *)sender{
 	[self _setViewControllerVisible:[self _viewControllerForIdentifier:[[[self window] toolbar] 
 		selectedItemIdentifier]]];
 }
@@ -288,24 +257,19 @@
 
 - (NSToolbarItem *)toolbar:(NSToolbar *)toolbar 
     itemForItemIdentifier:(NSString *)itemIdentifier
-    willBeInsertedIntoToolbar:(BOOL)flag 
-{
+    willBeInsertedIntoToolbar:(BOOL)flag{
 	return [self _toolbarItemForIdentifier:itemIdentifier];
 }
 
-- (NSArray *)toolbarAllowedItemIdentifiers:(NSToolbar*)toolbar
-{
+- (NSArray *)toolbarAllowedItemIdentifiers:(NSToolbar*)toolbar{
     return [self _toolbarIdentifiers];
 }
 
-- (NSArray *)toolbarDefaultItemIdentifiers:(NSToolbar*)toolbar
-{
+- (NSArray *)toolbarDefaultItemIdentifiers:(NSToolbar*)toolbar{
     return [self _toolbarIdentifiers];
 }
 
-- (NSArray *)toolbarSelectableItemIdentifiers:(NSToolbar *)toolbar
-{
+- (NSArray *)toolbarSelectableItemIdentifiers:(NSToolbar *)toolbar{
     return [self _toolbarIdentifiers];
 }
-
 @end

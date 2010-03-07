@@ -11,25 +11,25 @@
 @implementation AbstractXMLTreeParser
 
 - (id)initWithFile:(NSString *)file context:(FHVImportContext *)context{
+	NSData *data = [NSData dataWithContentsOfFile:file];
+	if (self = [self initWithData:data fromURL:[NSURL URLWithString:file] context:context]){
+	}
+	return self;
+}
+
+- (id)initWithData:(NSData *)data fromURL:(NSURL *)anURL context:(FHVImportContext *)context{
 	if (self = [super init]){
-		m_filePath = [file retain];
-		m_fileURL = [[NSURL alloc] initWithString:file];
+		m_filePath = [[anURL absoluteString] retain];
+		m_fileURL = [anURL retain];
 		m_context = [context retain];
 		NSError *error = nil;
-		m_xmlTree = [[NSXMLDocument alloc] initWithContentsOfURL:[NSURL fileURLWithPath:m_filePath]
-			options:NSXMLDocumentTidyHTML error:&error];
+		m_xmlTree = [[NSXMLDocument alloc] initWithData:data options:NSXMLDocumentTidyHTML 
+			error:&error];
 		if (!m_xmlTree){
 			NSLog(@"error while parsing file %@: %@", m_filePath, error);
 			[self release];
 			return nil;
 		}
-//		if (error){
-//			NSLog(@"error not nil: %@", error);
-//			[m_xmlTree release];
-//			m_xmlTree = nil;
-//			[self release];
-//			return nil;
-//		}
 	}
 	return self;
 }

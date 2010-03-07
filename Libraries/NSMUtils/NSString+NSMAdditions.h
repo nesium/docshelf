@@ -7,10 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "RegexKitLite.h"
 
 
 @interface NSString (NSMAdditions)
 + (NSString *)nsm_uuid;
 - (NSString *)nsm_stringByEscapingHTMLEntities;
 - (NSString *)nsm_normalizedFilename;
+- (BOOL)nsm_isURL;
 @end

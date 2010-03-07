@@ -13,5 +13,6 @@
 
 @interface PackageSummaryParser : AbstractXMLTreeParser{
 }
+- (NSString *)title;
 - (NSArray *)packages;
 @end

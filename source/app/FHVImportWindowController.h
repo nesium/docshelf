@@ -10,25 +10,32 @@
 #import "FHVDocSetModel.h"
 #import "FlexDocsParser.h"
 #import "NSWindow+NSMAdditions.h"
+#import "PackageSummaryParser.h"
+#import "NSString+NSMAdditions.h"
+#import "FHVLocalImportPickerViewController.h"
+#import "FHVRemoteImportPickerViewController.h"
+#import "FHVPresetsImportPickerViewController.h"
 
 
 @interface FHVImportWindowController : NSWindowController <FlexDocsParserConnectionDelegate>{
-	IBOutlet NSView *m_pickerView;
-	IBOutlet NSTextField *m_nameTextField;
-	IBOutlet NSTextField *m_selectedFolderTextField;
+	IBOutlet FHVLocalImportPickerViewController *m_localPickerController;
+	IBOutlet FHVRemoteImportPickerViewController *m_remotePickerController;
+	IBOutlet FHVPresetsImportPickerViewController *m_presetsPickerController;
+	IBOutlet NSView *m_titleView;
 	IBOutlet NSButton *m_cancelButton;
 	IBOutlet NSButton *m_startImportButton;
 	IBOutlet NSView *m_progressView;
-	IBOutlet NSProgressIndicator *m_progressIndicator;
 	IBOutlet NSTextField *m_statusLabel;
-	NSString *m_sourcePath;
+	IBOutlet NSProgressIndicator *m_progressIndicator;
 	NSConnection *m_importConnection;
 	FHVDocSetModel *m_model;
 	FlexDocsParser *m_parser;
+	NSArray *m_pickerControllers;
+	FHVAbstractImportPickerViewController *m_selectedController;
 }
 - (id)initWithWindowNibName:(NSString *)windowNibName model:(FHVDocSetModel *)model;
-- (IBAction)chooseDirectory:(id)sender;
 - (IBAction)startImport:(id)sender;
 - (IBAction)cancel:(id)sender;
+- (IBAction)toolbarItem_clicked:(NSToolbarItem *)sender;
 - (void)reset;
 @end

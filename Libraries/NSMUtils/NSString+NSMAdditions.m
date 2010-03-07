@@ -41,4 +41,8 @@
 		options:0 range:(NSRange){0, [result length]}];
 	return [result precomposedStringWithCanonicalMapping];
 }
+
+- (BOOL)nsm_isURL{
+	return [self isMatchedByRegex:@"([hH][tT][tT][pP][sS]?:\\/\\/[^ ,'\">\\]\\)]*[^\\. ,'\">\\]\\)])"];
+}
 @end

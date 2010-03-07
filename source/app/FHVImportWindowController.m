@@ -10,50 +10,63 @@
 #import "FlexDocsParser.h"
 
 @interface FHVImportWindowController (Private)
-- (void)_setSourcePath:(NSString *)aPath;
-- (void)_updateImportButton;
-- (void)_attachPickerView;
-- (void)_attachProgressView;
+- (void)_updateToolbarSelection:(BOOL)animated;
+- (void)_updateVisibleView:(BOOL)animated;
 - (void)_parseDocsAtPath:(NSString *)aPath;
-- (void)_attachView:(NSView *)aView startButtonVisible:(BOOL)startButtonVisible 
+- (void)_selectController:(FHVAbstractImportPickerViewController *)aController 
 	animated:(BOOL)animated;
+- (void)_applySelectedViewControllerAttributes;
 @end
 
 #define kFHVImportWindowBottomBarHeight 40.0f
 
 @implementation FHVImportWindowController
 
+#pragma mark -
+#pragma mark Initialization & Deallocation
+
 - (id)initWithWindowNibName:(NSString *)windowNibName model:(FHVDocSetModel *)model{
 	if (self = [super initWithWindowNibName:windowNibName]){
-		m_sourcePath = nil;
 		m_importConnection = nil;
 		m_model = model;
 		m_parser = nil;
+		m_pickerControllers = nil;
+		m_selectedController = nil;
 	}
 	return self;
 }
 
-- (void)windowDidLoad{
-	[self _setSourcePath:nil];
-	[m_nameTextField sendActionOn:NSAnyEventMask];
-	[self _attachPickerView];
+- (void)dealloc{
+	[m_pickerControllers release];
+	m_selectedController = nil;
+	[super dealloc];
 }
 
-- (IBAction)chooseDirectory:(id)sender{
-	NSOpenPanel *op = [NSOpenPanel openPanel];
-	[op setAllowsMultipleSelection:NO];
-	[op setCanChooseFiles:NO];
-	[op setCanChooseDirectories:YES];
-	[op beginSheetModalForWindow:self.window 
-		completionHandler:^(NSInteger result){
-			if (result == NSFileHandlingPanelCancelButton) return;
-			[self _setSourcePath:[[[op URLs] objectAtIndex:0] path]];
-		}];
+
+
+#pragma mark -
+#pragma mark NSWindowController methods
+
+- (void)windowDidLoad{
+	m_pickerControllers = [[NSArray alloc] initWithObjects: 
+		m_localPickerController, 
+		m_remotePickerController, 
+		m_presetsPickerController, 
+		nil];
+	for (FHVAbstractImportPickerViewController *controller in m_pickerControllers){
+		[controller addObserver:self forKeyPath:@"valid" options:0 context:NULL];
+		[controller addObserver:self forKeyPath:@"busy" options:0 context:NULL];
+	}
+	[self _updateToolbarSelection:NO];
 }
+
+
+
+#pragma mark -
+#pragma mark IB Actions
 
 - (IBAction)startImport:(id)sender{
-	[self _parseDocsAtPath:m_sourcePath];
-	[self _attachProgressView];
+//	[self _parseDocsAtPath:m_sourcePath];
 }
 
 - (IBAction)cancel:(id)sender{
@@ -63,23 +76,41 @@
 		[m_parser cancel];
 		return;
 	}
-
 	[NSApp endSheet:self.window];
 	[[self window] orderOut:self];
 }
 
-- (void)controlTextDidChange:(NSNotification *)aNotification{
-	[self _updateImportButton];
+- (IBAction)toolbarItem_clicked:(NSToolbarItem *)sender{
+	[self _updateVisibleView:YES];
 }
+
+
+
+#pragma mark -
+#pragma mark Public methods
 
 - (void)reset{
 	if (!self.isWindowLoaded)
 		return;
-	m_nameTextField.stringValue = @"";
-	[self _setSourcePath:nil];
-	[self _attachPickerView];
+		
+	for (FHVAbstractImportPickerViewController *controller in m_pickerControllers){
+		[controller reset];
+	}
 	[self setStatusMessage:@"Starting import ..."];
 	[self setProgress:0.0];
+	[self _updateToolbarSelection:NO];
+}
+
+
+
+#pragma mark -
+#pragma mark KVO Notifications
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change 
+	context:(void *)context{
+	if (object != m_selectedController)
+		return;
+	[self _applySelectedViewControllerAttributes];
 }
 
 
@@ -87,76 +118,84 @@
 #pragma mark -
 #pragma mark Private methods
 
-- (void)_setSourcePath:(NSString *)aPath{
-	[aPath retain];
-	[m_sourcePath release];
-	m_sourcePath = aPath;
-	if (!aPath){
-		[m_selectedFolderTextField setStringValue:@"No selection"];
-		[m_selectedFolderTextField setTextColor:[NSColor lightGrayColor]];
-		[m_selectedFolderTextField setToolTip:nil];
+- (void)_updateToolbarSelection:(BOOL)animated{
+	NSString *clipboardContents = [[NSPasteboard generalPasteboard] 
+		stringForType:NSStringPboardType];
+	if ([clipboardContents nsm_isURL]){
+		[m_remotePickerController setURLString:clipboardContents];
+		[[self.window toolbar] setSelectedItemIdentifier:@"remote"];
 	}else{
-		[m_selectedFolderTextField setStringValue:[NSString stringWithFormat:@"%@ - %@", 
-			[m_sourcePath lastPathComponent], [m_sourcePath stringByDeletingLastPathComponent]]];
-		[m_selectedFolderTextField setToolTip:m_sourcePath];
-		[m_selectedFolderTextField setTextColor:[NSColor blackColor]];
+		if (![[self.window toolbar] selectedItemIdentifier])
+			[[self.window toolbar] setSelectedItemIdentifier:@"local"];
 	}
-	[self _updateImportButton];
+	[self _updateVisibleView:animated];
+}
+
+- (void)_updateVisibleView:(BOOL)animated{
+	FHVAbstractImportPickerViewController *controller = nil;
+	NSString *identifier = [[self.window toolbar] selectedItemIdentifier];
+	if ([identifier isEqualToString:@"local"]){
+		controller = m_localPickerController;
+	}else if ([identifier isEqualToString:@"remote"]){
+		controller = m_remotePickerController;
+	}else if ([identifier isEqualToString:@"presets"]){
+		controller = m_presetsPickerController;
+	}
+	[self _selectController:controller animated:animated];
+}
+
+- (void)_applySelectedViewControllerAttributes{
+	if (m_selectedController.busy)
+		[m_progressIndicator startAnimation:self];
+	else
+		[m_progressIndicator stopAnimation:self];
+	[m_startImportButton setEnabled:m_selectedController.valid];
 }
 
 - (void)_parseDocsAtPath:(NSString *)aPath{
 	m_importConnection = [[NSConnection alloc] init];
 	[m_importConnection setRootObject:self];
 	[m_importConnection registerName:@"com.nesium.FlexHelpViewer"];
-	m_parser = [[FlexDocsParser alloc] initWithPath:aPath 
-		docSetName:m_nameTextField.stringValue];
-	[NSThread detachNewThreadSelector:@selector(parse) toTarget:m_parser withObject:nil];
+//	m_parser = [[FlexDocsParser alloc] initWithPath:aPath 
+//		docSetName:m_nameTextField.stringValue];
+//	[NSThread detachNewThreadSelector:@selector(parse) toTarget:m_parser withObject:nil];
 }
 
-- (void)_updateImportButton{
-	BOOL bFlag = m_sourcePath != nil && [[m_nameTextField stringValue] length] > 0;
-	[m_startImportButton setEnabled:bFlag];
-}
-
-- (void)_attachPickerView{
-	[self _attachView:m_pickerView startButtonVisible:YES animated:NO];
-}
-
-- (void)_attachProgressView{
-	[self _attachView:m_progressView startButtonVisible:NO animated:YES];
-}
-
-- (void)_attachView:(NSView *)aView startButtonVisible:(BOOL)startButtonVisible 
+- (void)_selectController:(FHVAbstractImportPickerViewController *)aController 
 	animated:(BOOL)animated{
-	[m_progressView removeFromSuperview];
-	[m_pickerView removeFromSuperview];
+	if (m_selectedController == aController)
+		return;
+	
+	[m_selectedController.view removeFromSuperview];
+	m_selectedController = aController;
+	[self _applySelectedViewControllerAttributes];
 	
 	NSSize contentSize = [[self.window contentView] frame].size;
-	contentSize.height = NSHeight(aView.frame) + kFHVImportWindowBottomBarHeight;
+	contentSize.height = NSHeight(aController.view.frame) + kFHVImportWindowBottomBarHeight + 54.0f;
 	[self.window nsm_resizeToFitContentSize:contentSize animated:animated];
 	
-	NSRect viewFrame = aView.frame;
+	NSRect viewFrame = aController.view.frame;
 	viewFrame.origin.y = kFHVImportWindowBottomBarHeight;
 	viewFrame.size.width = NSWidth(self.window.frame);
-	aView.frame = viewFrame;
-	[self.window.contentView addSubview:aView];
+	aController.view.frame = viewFrame;
+	[self.window.contentView addSubview:aController.view positioned:NSWindowBelow 
+		relativeTo:m_titleView];
 	if (animated){
-		[aView setAlphaValue:0.0f];
-		[aView.animator setAlphaValue:1.0f];
+		[aController.view setAlphaValue:0.0f];
+		[aController.view.animator setAlphaValue:1.0f];
 	}
-	
-	NSRect cancelButtonFrame = m_cancelButton.frame;
-	NSRect startButtonFrame = m_startImportButton.frame;
-	if (startButtonVisible){
-		cancelButtonFrame.origin.x = NSMinX(startButtonFrame) - NSWidth(cancelButtonFrame);
-	}else{
-		cancelButtonFrame.origin.x = NSMaxX(startButtonFrame) - NSWidth(cancelButtonFrame);
-	}
-	[m_startImportButton setHidden:!startButtonVisible];
-	if (animated)
-		[[m_cancelButton animator] setFrame:cancelButtonFrame];
-	else
-		m_cancelButton.frame = cancelButtonFrame;
+//	NSRect cancelButtonFrame = m_cancelButton.frame;
+//	NSRect startButtonFrame = m_startImportButton.frame;
+//	if (startButtonVisible){
+//		cancelButtonFrame.origin.x = NSMinX(startButtonFrame) - NSWidth(cancelButtonFrame) - 10.0f;
+//	}else{
+//		cancelButtonFrame.origin.x = NSMaxX(startButtonFrame) - NSWidth(cancelButtonFrame);
+//	}
+//	[m_startImportButton setHidden:!startButtonVisible];
+//	if (animated)
+//		[[m_cancelButton animator] setFrame:cancelButtonFrame];
+//	else
+//		m_cancelButton.frame = cancelButtonFrame;
 }
 
 

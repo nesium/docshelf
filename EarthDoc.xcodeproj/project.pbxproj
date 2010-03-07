@@ -11,6 +11,16 @@
 		2C1987841101F1FC00C3A1BD /* FHVImportContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C1987831101F1FC00C3A1BD /* FHVImportContext.m */; };
 		2C1987AD1101F4E000C3A1BD /* NSString+FHVUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C1987AC1101F4E000C3A1BD /* NSString+FHVUtils.m */; };
 		2C2E10A41103D4A00037769E /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C2E10A31103D4A00037769E /* libsqlite3.dylib */; };
+		2C2EF8B41142A74E0020A08C /* RegexKitLite.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C2EF8B31142A74E0020A08C /* RegexKitLite.m */; };
+		2C2EF8C71142A8120020A08C /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C2EF8C61142A8120020A08C /* libicucore.dylib */; };
+		2C2EFA0A1142E4B80020A08C /* NSMURLConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C2EFA091142E4B80020A08C /* NSMURLConnection.m */; };
+		2C2EFA1A1142E5930020A08C /* YAJL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C2EFA191142E5930020A08C /* YAJL.framework */; };
+		2C2EFA231142E5A50020A08C /* YAJL.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2C2EFA191142E5930020A08C /* YAJL.framework */; };
+		2C2EFA941142F0590020A08C /* error.png in Resources */ = {isa = PBXBuildFile; fileRef = 2C2EFA931142F0590020A08C /* error.png */; };
+		2C2EFA9B1142F16B0020A08C /* FHVAbstractImportPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C2EFA9A1142F16B0020A08C /* FHVAbstractImportPickerViewController.m */; };
+		2C2EFAA11142F3B30020A08C /* FHVLocalImportPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C2EFAA01142F3B30020A08C /* FHVLocalImportPickerViewController.m */; };
+		2C2EFAB91142F63E0020A08C /* FHVRemoteImportPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C2EFAB81142F63E0020A08C /* FHVRemoteImportPickerViewController.m */; };
+		2C2EFABC1142F6B20020A08C /* FHVPresetsImportPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C2EFABB1142F6B20020A08C /* FHVPresetsImportPickerViewController.m */; };
 		2C38EEA71100A36E00B04E4E /* PackageDetailParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CF5FB8D0DD5C3780049C53D /* PackageDetailParser.m */; };
 		2C38EEE81100AC5700B04E4E /* ClassDetailParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CF55D490DD6FFAC00FB13C7 /* ClassDetailParser.m */; };
 		2C38EFB61100D73E00B04E4E /* FHVClassParserOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C38EFB51100D73E00B04E4E /* FHVClassParserOperation.m */; };
@@ -81,6 +91,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				2C2EFA231142E5A50020A08C /* YAJL.framework in CopyFiles */,
 				2C98288A113D8BAA00D97695 /* Sparkle.framework in CopyFiles */,
 				2C5EB641110E56FB00BE8F30 /* BWToolkitFramework.framework in CopyFiles */,
 			);
@@ -103,6 +114,21 @@
 		2C1987AB1101F4E000C3A1BD /* NSString+FHVUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+FHVUtils.h"; path = "parser/NSString+FHVUtils.h"; sourceTree = "<group>"; };
 		2C1987AC1101F4E000C3A1BD /* NSString+FHVUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+FHVUtils.m"; path = "parser/NSString+FHVUtils.m"; sourceTree = "<group>"; };
 		2C2E10A31103D4A00037769E /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = /usr/lib/libsqlite3.dylib; sourceTree = "<absolute>"; };
+		2C2EF8B21142A74E0020A08C /* RegexKitLite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegexKitLite.h; sourceTree = "<group>"; };
+		2C2EF8B31142A74E0020A08C /* RegexKitLite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegexKitLite.m; sourceTree = "<group>"; };
+		2C2EF8C61142A8120020A08C /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
+		2C2EFA081142E4B80020A08C /* NSMURLConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSMURLConnection.h; sourceTree = "<group>"; };
+		2C2EFA091142E4B80020A08C /* NSMURLConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSMURLConnection.m; sourceTree = "<group>"; };
+		2C2EFA191142E5930020A08C /* YAJL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = YAJL.framework; path = Frameworks/YAJL.framework; sourceTree = "<group>"; };
+		2C2EFA931142F0590020A08C /* error.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = error.png; path = assets/error.png; sourceTree = "<group>"; };
+		2C2EFA991142F16B0020A08C /* FHVAbstractImportPickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FHVAbstractImportPickerViewController.h; sourceTree = "<group>"; };
+		2C2EFA9A1142F16B0020A08C /* FHVAbstractImportPickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FHVAbstractImportPickerViewController.m; sourceTree = "<group>"; };
+		2C2EFA9F1142F3B30020A08C /* FHVLocalImportPickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FHVLocalImportPickerViewController.h; sourceTree = "<group>"; };
+		2C2EFAA01142F3B30020A08C /* FHVLocalImportPickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FHVLocalImportPickerViewController.m; sourceTree = "<group>"; };
+		2C2EFAB71142F63E0020A08C /* FHVRemoteImportPickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FHVRemoteImportPickerViewController.h; sourceTree = "<group>"; };
+		2C2EFAB81142F63E0020A08C /* FHVRemoteImportPickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FHVRemoteImportPickerViewController.m; sourceTree = "<group>"; };
+		2C2EFABA1142F6B20020A08C /* FHVPresetsImportPickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FHVPresetsImportPickerViewController.h; sourceTree = "<group>"; };
+		2C2EFABB1142F6B20020A08C /* FHVPresetsImportPickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FHVPresetsImportPickerViewController.m; sourceTree = "<group>"; };
 		2C38EFB41100D73E00B04E4E /* FHVClassParserOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FHVClassParserOperation.h; sourceTree = "<group>"; };
 		2C38EFB51100D73E00B04E4E /* FHVClassParserOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FHVClassParserOperation.m; sourceTree = "<group>"; };
 		2C469B25113983EA0006E742 /* NSTreeController+NSMAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSTreeController+NSMAdditions.h"; sourceTree = "<group>"; };
@@ -209,6 +235,8 @@
 				2C2E10A41103D4A00037769E /* libsqlite3.dylib in Frameworks */,
 				2C5EB63C110E56E700BE8F30 /* BWToolkitFramework.framework in Frameworks */,
 				2C98287F113D8B9D00D97695 /* Sparkle.framework in Frameworks */,
+				2C2EF8C71142A8120020A08C /* libicucore.dylib in Frameworks */,
+				2C2EFA1A1142E5930020A08C /* YAJL.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -237,6 +265,8 @@
 				2CEE304A0DD65FC700CC762E /* WebKit.framework */,
 				1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */,
 				2C5EB63B110E56E700BE8F30 /* BWToolkitFramework.framework */,
+				2C2EF8C61142A8120020A08C /* libicucore.dylib */,
+				2C2EFA191142E5930020A08C /* YAJL.framework */,
 			);
 			name = "Linked Frameworks";
 			sourceTree = "<group>";
@@ -284,6 +314,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				2C2EFA931142F0590020A08C /* error.png */,
 				2CBDCDCC113EE6B700FB4C23 /* UpdatePreferences.xib */,
 				2C9828B0113D8BE900D97695 /* dsa_pub.pem */,
 				2C63E8DE1118829900B5E938 /* ImportWindow.xib */,
@@ -307,12 +338,48 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		2C2EF8B11142A74E0020A08C /* RegExKitLite */ = {
+			isa = PBXGroup;
+			children = (
+				2C2EF8B21142A74E0020A08C /* RegexKitLite.h */,
+				2C2EF8B31142A74E0020A08C /* RegexKitLite.m */,
+			);
+			path = RegExKitLite;
+			sourceTree = "<group>";
+		};
+		2C2EFA981142F1400020A08C /* Import Window */ = {
+			isa = PBXGroup;
+			children = (
+				2C63E8CF11184EC800B5E938 /* FHVImportWindowController.h */,
+				2C63E8D011184EC800B5E938 /* FHVImportWindowController.m */,
+				2C2EFABD1142F71C0020A08C /* Picker Controllers */,
+			);
+			name = "Import Window";
+			sourceTree = "<group>";
+		};
+		2C2EFABD1142F71C0020A08C /* Picker Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				2C2EFA991142F16B0020A08C /* FHVAbstractImportPickerViewController.h */,
+				2C2EFA9A1142F16B0020A08C /* FHVAbstractImportPickerViewController.m */,
+				2C2EFA9F1142F3B30020A08C /* FHVLocalImportPickerViewController.h */,
+				2C2EFAA01142F3B30020A08C /* FHVLocalImportPickerViewController.m */,
+				2C2EFAB71142F63E0020A08C /* FHVRemoteImportPickerViewController.h */,
+				2C2EFAB81142F63E0020A08C /* FHVRemoteImportPickerViewController.m */,
+				2C2EFABA1142F6B20020A08C /* FHVPresetsImportPickerViewController.h */,
+				2C2EFABB1142F6B20020A08C /* FHVPresetsImportPickerViewController.m */,
+			);
+			name = "Picker Controllers";
+			sourceTree = "<group>";
+		};
 		2C85836111359D6F00D58B15 /* NSMUtils */ = {
 			isa = PBXGroup;
 			children = (
 				2CE1F991113726EE00CB120C /* NSMMacros.h */,
 				2CBDCDD0113EE71300FB4C23 /* NSMPreferencesWindowController.h */,
 				2CBDCDD1113EE71300FB4C23 /* NSMPreferencesWindowController.m */,
+				2C2EFA081142E4B80020A08C /* NSMURLConnection.h */,
+				2C2EFA091142E4B80020A08C /* NSMURLConnection.m */,
 				2C8584A71135C36900D58B15 /* NSFileManager+NSMAdditions.h */,
 				2C8584A81135C36900D58B15 /* NSFileManager+NSMAdditions.m */,
 				2C8584A91135C36900D58B15 /* NSNumber+NSMAdditions.h */,
@@ -334,6 +401,7 @@
 		2CB33D37110B3ADC00A7C238 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				2C2EF8B11142A74E0020A08C /* RegExKitLite */,
 				2CB33D38110B3ADC00A7C238 /* Filterbar */,
 				2C85836111359D6F00D58B15 /* NSMUtils */,
 			);
@@ -417,6 +485,7 @@
 		2CEFC3C90DDF3B2100F92DC6 /* app */ = {
 			isa = PBXGroup;
 			children = (
+				2CB33EC0110B5A0100A7C238 /* Constants.h */,
 				2CEFC3CA0DDF3B3100F92DC6 /* FHVAppDelegate.h */,
 				2CEFC3CB0DDF3B3100F92DC6 /* FHVAppDelegate.m */,
 				2C910163110646790031698D /* FHVDocSet.h */,
@@ -427,11 +496,9 @@
 				2C9102D0110664F90031698D /* FHVDocSetModel.m */,
 				2CAE7E81110A2FFF00D5767F /* FHVSearchWorker.h */,
 				2CAE7E82110A2FFF00D5767F /* FHVSearchWorker.m */,
-				2CB33EC0110B5A0100A7C238 /* Constants.h */,
-				2C63E8CF11184EC800B5E938 /* FHVImportWindowController.h */,
-				2C63E8D011184EC800B5E938 /* FHVImportWindowController.m */,
 				2CBDCDAF113EE5C800FB4C23 /* FHVUpdatePreferencesViewController.h */,
 				2CBDCDB0113EE5C800FB4C23 /* FHVUpdatePreferencesViewController.m */,
+				2C2EFA981142F1400020A08C /* Import Window */,
 			);
 			path = app;
 			sourceTree = "<group>";
@@ -524,6 +591,7 @@
 				2C9828B1113D8BE900D97695 /* dsa_pub.pem in Resources */,
 				2CBDCDCE113EE6B700FB4C23 /* UpdatePreferences.xib in Resources */,
 				2CBDCDE4113EE7C100FB4C23 /* reload.tiff in Resources */,
+				2C2EFA941142F0590020A08C /* error.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -571,6 +639,12 @@
 				2CBDCDB1113EE5C800FB4C23 /* FHVUpdatePreferencesViewController.m in Sources */,
 				2CBDCDC1113EE63700FB4C23 /* NSDate+NSMAdditions.m in Sources */,
 				2CBDCDD2113EE71300FB4C23 /* NSMPreferencesWindowController.m in Sources */,
+				2C2EF8B41142A74E0020A08C /* RegexKitLite.m in Sources */,
+				2C2EFA0A1142E4B80020A08C /* NSMURLConnection.m in Sources */,
+				2C2EFA9B1142F16B0020A08C /* FHVAbstractImportPickerViewController.m in Sources */,
+				2C2EFAA11142F3B30020A08C /* FHVLocalImportPickerViewController.m in Sources */,
+				2C2EFAB91142F63E0020A08C /* FHVRemoteImportPickerViewController.m in Sources */,
+				2C2EFABC1142F6B20020A08C /* FHVPresetsImportPickerViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -669,6 +743,7 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = "-DDEBUG";
 				PREBINDING = NO;
