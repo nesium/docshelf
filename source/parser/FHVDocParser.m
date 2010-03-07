@@ -23,7 +23,6 @@
 
 - (id)initWithURL:(NSURL *)url docSetName:(NSString *)docSetName{
 	if (self = [super init]){
-		NDCLog(@"url: %@, name: %@", url, docSetName);
 		m_url = [url retain];
 		m_isCancelled = NO;
 		m_classParsingQueue = nil;
