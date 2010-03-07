@@ -8,10 +8,10 @@
 
 #import <Cocoa/Cocoa.h>
 #import <WebKit/WebKit.h>
-#import "AbstractXMLTreeParser.h"
+#import "FHVAbstractXMLTreeParser.h"
 
 
-@interface PackageSummaryParser : AbstractXMLTreeParser{
+@interface FHVPackageSummaryParser : FHVAbstractXMLTreeParser{
 }
 - (NSString *)title;
 - (NSArray *)packages;

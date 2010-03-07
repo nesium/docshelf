@@ -33,8 +33,8 @@
 		int i = 0;
 		for (NSDictionary *clazz in m_classes){
 			if ([self isCancelled]) break;
-			ClassDetailParser *classDetailParser = [[ClassDetailParser alloc] 
-				initWithFile:[clazz objectForKey:@"filepath"] context:m_context];
+			FHVClassDetailParser *classDetailParser = [[FHVClassDetailParser alloc] 
+				initWithURL:[clazz objectForKey:@"fileurl"] context:m_context];
 			NSArray *publicMethods = [classDetailParser methodsWithScope:PublicScope];
 			NSArray *protectedMethods = [classDetailParser methodsWithScope:ProtectedScope];
 			NSArray *publicProperties = [classDetailParser propertiesWithScope:PublicScope constants:NO];

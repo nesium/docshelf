@@ -6,12 +6,12 @@
 //  Copyright 2008 nesiumdotcom. All rights reserved.
 //
 
-#import "PackageDetailParser.h"
+#import "FHVPackageDetailParser.h"
 
-@implementation PackageDetailParser
+@implementation FHVPackageDetailParser
 
-- (id)initWithFile:(NSString *)file context:(FHVImportContext *)context{
-	if (self = [super initWithFile:file context:context]){
+- (id)initWithData:(NSData *)data fromURL:(NSURL *)anURL context:(FHVImportContext *)context{
+	if (self = [super initWithData:data fromURL:anURL context:context]){
 		m_name = [[[self firstNodeForXPath:@"/html/body/div[@id='banner'][1]/table[@class='titleTable'][1]//h1[1]" 
 			ofElement:nil] stringValue] retain];
 	}

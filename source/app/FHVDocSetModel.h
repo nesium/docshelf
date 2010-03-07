@@ -10,7 +10,7 @@
 #import "FHVDocSet.h"
 #import "NSString+FHVUtils.h"
 #import "FHVSearchWorker.h"
-#import "Constants.h"
+#import "FHVConstants.h"
 #import "NSTreeController+NSMAdditions.h"
 
 @interface FHVDocSetModel : NSObject{

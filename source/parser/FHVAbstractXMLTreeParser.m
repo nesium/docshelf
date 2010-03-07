@@ -6,27 +6,26 @@
 //  Copyright 2008 nesiumdotcom. All rights reserved.
 //
 
-#import "AbstractXMLTreeParser.h"
+#import "FHVAbstractXMLTreeParser.h"
 
-@implementation AbstractXMLTreeParser
+@implementation FHVAbstractXMLTreeParser
 
-- (id)initWithFile:(NSString *)file context:(FHVImportContext *)context{
-	NSData *data = [NSData dataWithContentsOfFile:file];
-	if (self = [self initWithData:data fromURL:[NSURL URLWithString:file] context:context]){
+- (id)initWithURL:(NSURL *)url context:(FHVImportContext *)context{
+	NSData *data = [NSData dataWithContentsOfURL:url];
+	if (self = [self initWithData:data fromURL:url context:context]){
 	}
 	return self;
 }
 
 - (id)initWithData:(NSData *)data fromURL:(NSURL *)anURL context:(FHVImportContext *)context{
 	if (self = [super init]){
-		m_filePath = [[anURL absoluteString] retain];
-		m_fileURL = [anURL retain];
+		m_url = [anURL retain];
 		m_context = [context retain];
 		NSError *error = nil;
 		m_xmlTree = [[NSXMLDocument alloc] initWithData:data options:NSXMLDocumentTidyHTML 
 			error:&error];
 		if (!m_xmlTree){
-			NSLog(@"error while parsing file %@: %@", m_filePath, error);
+			NSLog(@"error while parsing file %@: %@", m_url, error);
 			[self release];
 			return nil;
 		}
@@ -36,9 +35,8 @@
 
 - (void)dealloc{
 	[m_xmlTree release];
-	[m_filePath release];
+	[m_url release];
 	[m_context release];
-	[m_fileURL release];
 	[super dealloc];
 }
 
@@ -131,8 +129,7 @@
 		[(NSXMLElement *)[potentialDescriptions objectAtIndex:0] stringValue] : @"";
 	return [NSMutableDictionary dictionaryWithObjectsAndKeys:
 		url, @"url", 
-		[[m_filePath stringByDeletingLastPathComponent] 
-			stringByAppendingPathComponent:url], @"filepath", 
+		[[m_url URLByDeletingLastPathComponent] URLByAppendingPathComponent:url], @"fileurl", 
 		name, @"name", 
 		description, @"summary", nil];
 }
@@ -152,7 +149,7 @@
 		NSString *href = [hrefAttrib stringValue];
 		if (![href hasPrefix:@"/"] && ![href hasPrefix:@"http://"] && 
 			![href hasPrefix:@"https://"] && ![href hasPrefix:@"mailto://"]){
-			NSURL *url = [NSURL URLWithString:href relativeToURL:m_fileURL];
+			NSURL *url = [NSURL URLWithString:href relativeToURL:m_url];
 			NSString *newHref = [NSString stringWithFormat:@"fhelpv://%@", [self _urlToIdent:url]];
 			[hrefAttrib setStringValue:newHref];
 		}
@@ -164,24 +161,29 @@
 			[img detach];
 			continue;
 		}
-		NSURL *url = [NSURL URLWithString:[srcAttrib stringValue] relativeToURL:m_fileURL];
+		NSURL *url = [NSURL URLWithString:[srcAttrib stringValue] relativeToURL:m_url];
 		if ([[[url resourceSpecifier] lastPathComponent] isEqualToString:@"inherit-arrow.gif"])
 			continue;
-		NSString *imagePath = [url absoluteString];
-		NSString *ident = [m_context identForImageWithPath:imagePath];
+		NSString *ident = [m_context identForImageWithPath:[url path]];
 		if (!ident){
 			NSString *uuid = createUUID();
-			ident = [uuid stringByAppendingPathExtension:[[imagePath pathExtension] lowercaseString]];
+			ident = [uuid stringByAppendingPathExtension:[[url pathExtension] lowercaseString]];
+			NSString *targetPath = [[m_context imagesPath] stringByAppendingPathComponent:ident];
 			[uuid release];
 			NSError *error = nil;
-			[[NSFileManager defaultManager] 
-				copyItemAtPath:imagePath 
-				toPath:[[m_context imagesPath] stringByAppendingPathComponent:ident]
-				error:&error];
+			if ([url isFileURL]){
+				[[NSFileManager defaultManager] 
+					copyItemAtPath:[url path] 
+					toPath:targetPath
+					error:&error];
+			}else{
+				NSData *imageData = [NSData dataWithContentsOfURL:url];
+				[imageData writeToFile:targetPath options:0 error:&error];
+			}
 			if (error)
-				NSLog(@"Could not copy %@", imagePath);
+				NSLog(@"Could not copy %@", url);
 			else{
-				[m_context registerImageWithPath:imagePath ident:ident];
+				[m_context registerImageWithPath:[url path] ident:ident];
 			}
 		}
 		[srcAttrib setStringValue:ident];
@@ -198,7 +200,7 @@
 }
 
 - (NSString *)_urlToIdent:(NSURL *)url{
-	NSString *ident = [[[url absoluteURL] path] packageNameByResolvingAgainstBasePath:m_context.sourcePath];
+	NSString *ident = [[url absoluteURL] packageNameByResolvingAgainstBaseURL:m_context.sourceURL];
 	if ([url fragment])
 		ident = [NSString stringWithFormat:@"%@#%@", ident, [url fragment]];
 	return ident;

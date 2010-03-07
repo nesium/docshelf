@@ -25,10 +25,42 @@
 	return self;
 }
 
+- (void)awakeFromNib{
+	[m_presetsArrayController addObserver:self forKeyPath:@"selectionIndexes" options:0 context:NULL];
+}
+
 - (void)dealloc{
+	[m_presetsArrayController removeObserver:self forKeyPath:@"selectionIndexes"];
 	[m_presetsURLConnection cancel];
 	[m_presetsURLConnection release];
 	[super dealloc];
+}
+
+
+
+#pragma mark -
+#pragma mark Public methods
+
+- (void)reset{
+}
+
+
+
+#pragma mark -
+#pragma mark KVO Notifications
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change 
+	context:(void *)context{
+	if (![[m_presetsArrayController selectedObjects] count]){
+		[self _setURL:nil];
+		[self _setDocSetName:nil];
+		[self _setValid:NO];
+	}else{
+		NSDictionary *item = [[m_presetsArrayController selectedObjects] objectAtIndex:0];
+		[self _setURL:[NSURL URLWithString:[item objectForKey:@"url"]]];
+		[self _setDocSetName:[item objectForKey:@"name"]];
+		[self _setValid:YES];
+	}
 }
 
 

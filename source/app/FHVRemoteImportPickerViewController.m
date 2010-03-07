@@ -8,6 +8,12 @@
 
 #import "FHVRemoteImportPickerViewController.h"
 
+@interface FHVRemoteImportPickerViewController (Private)
+- (void)_performURLSanityCheck;
+- (void)_cancelURLSanityCheck;
+- (void)_updateValidity;
+@end
+
 
 @implementation FHVRemoteImportPickerViewController
 
@@ -17,8 +23,14 @@
 - (id)init{
 	if (self = [super init]){
 		m_connection = nil;
+		m_urlIsValid = NO;
 	}
 	return self;
+}
+
+- (void)awakeFromNib{
+	[m_remoteAddressTextField sendActionOn:NSAnyEventMask];
+	[m_nameTextField sendActionOn:NSAnyEventMask];
 }
 
 - (void)dealloc{
@@ -34,11 +46,52 @@
 
 - (void)setURLString:(NSString *)aString{
 	[m_remoteAddressTextField setStringValue:aString];
-	NSString *urlString = [aString stringByAppendingPathComponent:@"package-summary.html"];
-	m_connection = [[NSMURLConnection alloc] 
-		initWithURLRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:urlString]] 
-		delegate:self];
-	[self _setBusy:YES];
+	m_urlIsValid = NO;
+	[self _updateValidity];
+	[self _performURLSanityCheck];
+}
+
+- (void)reset{
+	[super reset];
+	m_urlIsValid = NO;
+	[self _cancelURLSanityCheck];
+	[m_remoteAddressTextField setStringValue:@""];
+	[m_nameTextField setStringValue:@""];
+	[m_warningIcon setHidden:YES];
+}
+
+- (NSURL *)URL{
+	return [NSURL URLWithString:[[m_remoteAddressTextField stringValue] 
+		stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]];
+}
+
+- (NSString *)docSetName{
+	return [[m_nameTextField stringValue] stringByTrimmingCharactersInSet:
+		[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+}
+
+
+
+#pragma mark -
+#pragma mark IB Actions
+
+- (IBAction)addressTextField_didEndEditing:(id)sender{
+	[self _performURLSanityCheck];
+}
+
+
+
+#pragma mark -
+#pragma mark NSTextField notifications
+
+- (void)controlTextDidChange:(NSNotification *)aNotification{
+	if ([aNotification object] == m_remoteAddressTextField){
+		[self _cancelURLSanityCheck];
+		m_urlIsValid = NO;
+		[self _setValid:NO];
+	}else{
+		[self _updateValidity];
+	}
 }
 
 
@@ -47,19 +100,76 @@
 #pragma mark NSMURLConnectionDelegate methods
 
 - (void)connectionDidFinishLoading:(NSMURLConnection *)connection success:(BOOL)success{
-	if (success){
-		PackageSummaryParser *parser = [[PackageSummaryParser alloc] initWithData:connection.data 
-			fromURL:[connection.request URL] context:nil];
-		NSString *title = parser.title;
-		success = title != nil;
-		if (title) [m_nameTextField setStringValue:parser.title];
+	if (!success){
+		[m_warningIcon setHidden:NO];
+		[m_warningIcon setToolTip:@"Could not load data from URL!"];
+		m_urlIsValid = NO;
+		[self _updateValidity];
+		[self _setBusy:NO];
+		return;
 	}
-	if (!success)
+	
+	FHVPackageSummaryParser *parser = [[FHVPackageSummaryParser alloc] initWithData:connection.data 
+		fromURL:[connection.request URL] context:nil];
+	NSString *title = parser.title;
+	if (title){
+		[m_warningIcon setHidden:YES];
+		[m_nameTextField setStringValue:title];
+		m_urlIsValid = YES;
+		[self _updateValidity];
+	}else{
+		[m_warningIcon setHidden:NO];
 		[m_warningIcon setToolTip:@"No valid ASDocs found at path"];
+		m_urlIsValid = NO;
+		[self _updateValidity];
+	}
+	[self _cancelURLSanityCheck];
+}
+
+
+
+#pragma mark -
+#pragma mark Private methods
+
+- (void)_performURLSanityCheck{
+	if (m_urlIsValid)
+		return;
+	
+	NSString *value = [[m_remoteAddressTextField stringValue] 
+		stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+		
+	if (![value length]){
+		[m_warningIcon setHidden:YES];
+		[self _cancelURLSanityCheck];
+		return;
+	}
+	if (![value nsm_isURL]){
+		[m_warningIcon setHidden:NO];
+		[m_warningIcon setToolTip:@"Not a valid URL!"];
+		[self _cancelURLSanityCheck];
+		return;
+	}
+	
+	NSURL *url = [NSURL URLWithString:[value stringByAppendingPathComponent:@"package-summary.html"]];
+	if ([[m_connection.request URL] isEqual:url])
+		return;
+	
+	[self _cancelURLSanityCheck];
+	m_connection = [[NSMURLConnection alloc] initWithURLRequest:[NSURLRequest requestWithURL:url] 
+		delegate:self];
+	[self _setBusy:YES];
+}
+
+- (void)_cancelURLSanityCheck{
+	[m_connection cancel];
 	[m_connection release];
 	m_connection = nil;
-	[m_warningIcon setHidden:success];
-	[self _setValid:success];
 	[self _setBusy:NO];
+}
+
+- (void)_updateValidity{
+	NSString *name = [[m_nameTextField stringValue] 
+		stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+	[self _setValid:(m_urlIsValid && [name length] > 0)];
 }
 @end

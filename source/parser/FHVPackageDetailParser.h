@@ -7,11 +7,11 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import "AbstractXMLTreeParser.h"
-#import "ClassDetailParser.h"
+#import "FHVAbstractXMLTreeParser.h"
+#import "FHVClassDetailParser.h"
 
 
-@interface PackageDetailParser : AbstractXMLTreeParser{
+@interface FHVPackageDetailParser : FHVAbstractXMLTreeParser{
 	NSString *m_name;
 }
 - (NSString *)name;

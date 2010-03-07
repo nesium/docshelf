@@ -26,19 +26,11 @@
 	if (self = [super init]){
 		m_mainWindowController = nil;
 		m_importWindowController = nil;
-		m_docSetModel = [[FHVDocSetModel alloc] initWithDocSetPath:[[self applicationSupportFolder] 
-			stringByAppendingPathComponent:@"DocSets"]];
+		m_docSetModel = [[FHVDocSetModel alloc] initWithDocSetPath:FHVDocSetsFolder()];
 		[m_docSetModel loadDocSets];
 		[self _showMainWindow];
 	}
 	return self;
-}
-
-- (NSString *)applicationSupportFolder{
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, 
-		NSUserDomainMask, YES);
-    NSString *basePath = ([paths count] > 0) ? [paths objectAtIndex:0] : NSTemporaryDirectory();
-    return [basePath stringByAppendingPathComponent:@"EarthDoc"];
 }
 
 - (IBAction)addDocSet:(id)sender{

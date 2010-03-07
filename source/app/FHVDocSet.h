@@ -8,7 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 #import "sqlite3.h"
-#import "Constants.h"
+#import "FHVConstants.h"
 
 
 @interface FHVDocSet : NSObject{

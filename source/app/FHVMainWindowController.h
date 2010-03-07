@@ -11,7 +11,7 @@
 #import "FHVDocSetModel.h"
 #import "HeadlineCell.h"
 #import "Filterbar.h"
-#import "Constants.h"
+#import "FHVConstants.h"
 #import "NSIndexPath+NSMAdditions.h"
 
 

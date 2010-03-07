@@ -6,10 +6,10 @@
 //  Copyright 2010 nesiumdotcom. All rights reserved.
 //
 
-#import "SQLiteImporter.h"
+#import "FHVSQLiteImporter.h"
 
 
-@implementation SQLiteImporter
+@implementation FHVSQLiteImporter
 
 - (id)initWithDBPath:(NSString *)aPath{
 	if (self = [super init]){

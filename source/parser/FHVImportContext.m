@@ -11,17 +11,17 @@
 
 @implementation FHVImportContext
 
-@synthesize sourcePath=m_sourcePath, 
+@synthesize sourceURL=m_sourceURL, 
 			imagesPath=m_imagesPath, 
 			importer=m_importer, 
 			temporaryTargetPath=m_tmpTargetPath, 
 			name=m_name;
 
-- (id)initWithName:(NSString *)aName sourcePath:(NSString *)aPath imagesPath:(NSString *)imagesPath 
-	importer:(SQLiteImporter *)importer temporaryTargetPath:(NSString *)aTargetPath{
+- (id)initWithName:(NSString *)aName sourceURL:(NSURL *)anURL imagesPath:(NSString *)imagesPath 
+	importer:(FHVSQLiteImporter *)importer temporaryTargetPath:(NSString *)aTargetPath{
 	if (self = [super init]){
 		m_name = [aName retain];
-		m_sourcePath = [aPath retain];
+		m_sourceURL = [anURL retain];
 		m_images = [[NSMutableDictionary alloc] init];
 		m_imagesPath = [imagesPath retain];
 		m_importer = [importer retain];
@@ -33,7 +33,7 @@
 - (void)dealloc{
 	[m_name release];
 	[m_importer release];
-	[m_sourcePath release];
+	[m_sourceURL release];
 	[m_images release];
 	[m_tmpTargetPath release];
 	[super dealloc];

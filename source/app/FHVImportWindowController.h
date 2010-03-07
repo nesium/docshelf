@@ -8,9 +8,9 @@
 
 #import <Cocoa/Cocoa.h>
 #import "FHVDocSetModel.h"
-#import "FlexDocsParser.h"
+#import "FHVDocParser.h"
 #import "NSWindow+NSMAdditions.h"
-#import "PackageSummaryParser.h"
+#import "FHVPackageSummaryParser.h"
 #import "NSString+NSMAdditions.h"
 #import "FHVLocalImportPickerViewController.h"
 #import "FHVRemoteImportPickerViewController.h"
@@ -22,14 +22,16 @@
 	IBOutlet FHVRemoteImportPickerViewController *m_remotePickerController;
 	IBOutlet FHVPresetsImportPickerViewController *m_presetsPickerController;
 	IBOutlet NSView *m_titleView;
-	IBOutlet NSButton *m_cancelButton;
+	IBOutlet NSProgressIndicator *m_activityIndicator;
 	IBOutlet NSButton *m_startImportButton;
-	IBOutlet NSView *m_progressView;
+	
+	IBOutlet NSWindow *m_progressWindow;
 	IBOutlet NSTextField *m_statusLabel;
 	IBOutlet NSProgressIndicator *m_progressIndicator;
+	
 	NSConnection *m_importConnection;
 	FHVDocSetModel *m_model;
-	FlexDocsParser *m_parser;
+	FHVDocParser *m_parser;
 	NSArray *m_pickerControllers;
 	FHVAbstractImportPickerViewController *m_selectedController;
 }

@@ -10,6 +10,7 @@
 		2C066F9E111752AC00AB755C /* DropView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C066F9D111752AC00AB755C /* DropView.m */; };
 		2C1987841101F1FC00C3A1BD /* FHVImportContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C1987831101F1FC00C3A1BD /* FHVImportContext.m */; };
 		2C1987AD1101F4E000C3A1BD /* NSString+FHVUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C1987AC1101F4E000C3A1BD /* NSString+FHVUtils.m */; };
+		2C2DA4A211441235007DD313 /* NSURL+FHVUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C2DA4A111441235007DD313 /* NSURL+FHVUtils.m */; };
 		2C2E10A41103D4A00037769E /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C2E10A31103D4A00037769E /* libsqlite3.dylib */; };
 		2C2EF8B41142A74E0020A08C /* RegexKitLite.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C2EF8B31142A74E0020A08C /* RegexKitLite.m */; };
 		2C2EF8C71142A8120020A08C /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C2EF8C61142A8120020A08C /* libicucore.dylib */; };
@@ -21,8 +22,8 @@
 		2C2EFAA11142F3B30020A08C /* FHVLocalImportPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C2EFAA01142F3B30020A08C /* FHVLocalImportPickerViewController.m */; };
 		2C2EFAB91142F63E0020A08C /* FHVRemoteImportPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C2EFAB81142F63E0020A08C /* FHVRemoteImportPickerViewController.m */; };
 		2C2EFABC1142F6B20020A08C /* FHVPresetsImportPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C2EFABB1142F6B20020A08C /* FHVPresetsImportPickerViewController.m */; };
-		2C38EEA71100A36E00B04E4E /* PackageDetailParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CF5FB8D0DD5C3780049C53D /* PackageDetailParser.m */; };
-		2C38EEE81100AC5700B04E4E /* ClassDetailParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CF55D490DD6FFAC00FB13C7 /* ClassDetailParser.m */; };
+		2C38EEA71100A36E00B04E4E /* FHVPackageDetailParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CF5FB8D0DD5C3780049C53D /* FHVPackageDetailParser.m */; };
+		2C38EEE81100AC5700B04E4E /* FHVClassDetailParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CF55D490DD6FFAC00FB13C7 /* FHVClassDetailParser.m */; };
 		2C38EFB61100D73E00B04E4E /* FHVClassParserOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C38EFB51100D73E00B04E4E /* FHVClassParserOperation.m */; };
 		2C469B27113983EB0006E742 /* NSTreeController+NSMAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C469B26113983EB0006E742 /* NSTreeController+NSMAdditions.m */; };
 		2C494BB31139E0A3009DB736 /* index.sql in Resources */ = {isa = PBXBuildFile; fileRef = 2C494B9F1139DE6C009DB736 /* index.sql */; };
@@ -51,7 +52,7 @@
 		2C85E6AE1107E585001920A7 /* interface.png in Resources */ = {isa = PBXBuildFile; fileRef = 2C85E6A71107E585001920A7 /* interface.png */; };
 		2C85E6AF1107E585001920A7 /* package.png in Resources */ = {isa = PBXBuildFile; fileRef = 2C85E6A81107E585001920A7 /* package.png */; };
 		2C85E6B01107E585001920A7 /* property.png in Resources */ = {isa = PBXBuildFile; fileRef = 2C85E6A91107E585001920A7 /* property.png */; };
-		2C8DC60E10FFF5D000DA41C9 /* PackageSummaryParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CFCB4510DD4F4FB0090049E /* PackageSummaryParser.m */; };
+		2C8DC60E10FFF5D000DA41C9 /* FHVPackageSummaryParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CFCB4510DD4F4FB0090049E /* FHVPackageSummaryParser.m */; };
 		2C910165110646790031698D /* FHVDocSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C910164110646790031698D /* FHVDocSet.m */; };
 		2C910259110659C60031698D /* FHVMainWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C910258110659C60031698D /* FHVMainWindowController.m */; };
 		2C91025E11065A100031698D /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2C91025C11065A100031698D /* MainWindow.xib */; };
@@ -70,14 +71,14 @@
 		2CBDCDD2113EE71300FB4C23 /* NSMPreferencesWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CBDCDD1113EE71300FB4C23 /* NSMPreferencesWindowController.m */; };
 		2CBDCDE4113EE7C100FB4C23 /* reload.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 2CBDCDE3113EE7C100FB4C23 /* reload.tiff */; };
 		2CCFC17F110500590019F014 /* schema.sql in Resources */ = {isa = PBXBuildFile; fileRef = 2CCFC17E110500590019F014 /* schema.sql */; };
-		2CCFC1B2110512990019F014 /* SQLiteImporter.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CCFC1B1110512990019F014 /* SQLiteImporter.m */; };
+		2CCFC1B2110512990019F014 /* FHVSQLiteImporter.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CCFC1B1110512990019F014 /* FHVSQLiteImporter.m */; };
 		2CE1FA31113732A600CB120C /* NSWindow+NSMAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CE1FA30113732A600CB120C /* NSWindow+NSMAdditions.m */; };
 		2CE366111108B6FD00F582E9 /* ImageAndTextCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CE366101108B6FD00F582E9 /* ImageAndTextCell.m */; };
 		2CEE304B0DD65FC700CC762E /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2CEE304A0DD65FC700CC762E /* WebKit.framework */; };
 		2CEE30BA0DD6698100CC762E /* NodeClassToIconTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CEE30B90DD6698100CC762E /* NodeClassToIconTransformer.m */; };
 		2CEFC3CC0DDF3B3100F92DC6 /* FHVAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CEFC3CB0DDF3B3100F92DC6 /* FHVAppDelegate.m */; };
-		2CF5FB860DD5BCB40049C53D /* FlexDocsParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CF5FB850DD5BCB40049C53D /* FlexDocsParser.m */; };
-		2CFCB7BE0DD52CDA0090049E /* AbstractXMLTreeParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CFCB7BD0DD52CDA0090049E /* AbstractXMLTreeParser.m */; };
+		2CF5FB860DD5BCB40049C53D /* FHVDocParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CF5FB850DD5BCB40049C53D /* FHVDocParser.m */; };
+		2CFCB7BE0DD52CDA0090049E /* FHVAbstractXMLTreeParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CFCB7BD0DD52CDA0090049E /* FHVAbstractXMLTreeParser.m */; };
 		8D11072A0486CEB800E47090 /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 29B97318FDCFA39411CA2CEA /* MainMenu.nib */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
@@ -113,6 +114,8 @@
 		2C1987831101F1FC00C3A1BD /* FHVImportContext.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FHVImportContext.m; sourceTree = "<group>"; };
 		2C1987AB1101F4E000C3A1BD /* NSString+FHVUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+FHVUtils.h"; path = "parser/NSString+FHVUtils.h"; sourceTree = "<group>"; };
 		2C1987AC1101F4E000C3A1BD /* NSString+FHVUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+FHVUtils.m"; path = "parser/NSString+FHVUtils.m"; sourceTree = "<group>"; };
+		2C2DA4A011441235007DD313 /* NSURL+FHVUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURL+FHVUtils.h"; sourceTree = "<group>"; };
+		2C2DA4A111441235007DD313 /* NSURL+FHVUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURL+FHVUtils.m"; sourceTree = "<group>"; };
 		2C2E10A31103D4A00037769E /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = /usr/lib/libsqlite3.dylib; sourceTree = "<absolute>"; };
 		2C2EF8B21142A74E0020A08C /* RegexKitLite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegexKitLite.h; sourceTree = "<group>"; };
 		2C2EF8B31142A74E0020A08C /* RegexKitLite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegexKitLite.m; sourceTree = "<group>"; };
@@ -188,7 +191,6 @@
 		2CB33D3D110B3ADC00A7C238 /* FilterbarGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FilterbarGroup.m; sourceTree = "<group>"; };
 		2CB33D3E110B3ADC00A7C238 /* FilterbarGroupItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FilterbarGroupItem.h; sourceTree = "<group>"; };
 		2CB33D3F110B3ADC00A7C238 /* FilterbarGroupItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FilterbarGroupItem.m; sourceTree = "<group>"; };
-		2CB33EC0110B5A0100A7C238 /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		2CBDCDAF113EE5C800FB4C23 /* FHVUpdatePreferencesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FHVUpdatePreferencesViewController.h; sourceTree = "<group>"; };
 		2CBDCDB0113EE5C800FB4C23 /* FHVUpdatePreferencesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FHVUpdatePreferencesViewController.m; sourceTree = "<group>"; };
 		2CBDCDBF113EE63700FB4C23 /* NSDate+NSMAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+NSMAdditions.h"; sourceTree = "<group>"; };
@@ -198,8 +200,8 @@
 		2CBDCDD1113EE71300FB4C23 /* NSMPreferencesWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSMPreferencesWindowController.m; sourceTree = "<group>"; };
 		2CBDCDE3113EE7C100FB4C23 /* reload.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = reload.tiff; sourceTree = "<group>"; };
 		2CCFC17E110500590019F014 /* schema.sql */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = schema.sql; path = Resources/schema.sql; sourceTree = "<group>"; };
-		2CCFC1B0110512990019F014 /* SQLiteImporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SQLiteImporter.h; sourceTree = "<group>"; };
-		2CCFC1B1110512990019F014 /* SQLiteImporter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SQLiteImporter.m; sourceTree = "<group>"; };
+		2CCFC1B0110512990019F014 /* FHVSQLiteImporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FHVSQLiteImporter.h; sourceTree = "<group>"; };
+		2CCFC1B1110512990019F014 /* FHVSQLiteImporter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FHVSQLiteImporter.m; sourceTree = "<group>"; };
 		2CE1F991113726EE00CB120C /* NSMMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSMMacros.h; sourceTree = "<group>"; };
 		2CE1FA2F113732A600CB120C /* NSWindow+NSMAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSWindow+NSMAdditions.h"; sourceTree = "<group>"; };
 		2CE1FA30113732A600CB120C /* NSWindow+NSMAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSWindow+NSMAdditions.m"; sourceTree = "<group>"; };
@@ -210,16 +212,16 @@
 		2CEE30B90DD6698100CC762E /* NodeClassToIconTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NodeClassToIconTransformer.m; sourceTree = "<group>"; };
 		2CEFC3CA0DDF3B3100F92DC6 /* FHVAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FHVAppDelegate.h; sourceTree = "<group>"; };
 		2CEFC3CB0DDF3B3100F92DC6 /* FHVAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FHVAppDelegate.m; sourceTree = "<group>"; };
-		2CF55D480DD6FFAC00FB13C7 /* ClassDetailParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ClassDetailParser.h; sourceTree = "<group>"; };
-		2CF55D490DD6FFAC00FB13C7 /* ClassDetailParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ClassDetailParser.m; sourceTree = "<group>"; };
-		2CF5FB840DD5BCB40049C53D /* FlexDocsParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlexDocsParser.h; sourceTree = "<group>"; };
-		2CF5FB850DD5BCB40049C53D /* FlexDocsParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FlexDocsParser.m; sourceTree = "<group>"; };
-		2CF5FB8C0DD5C3780049C53D /* PackageDetailParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PackageDetailParser.h; sourceTree = "<group>"; };
-		2CF5FB8D0DD5C3780049C53D /* PackageDetailParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PackageDetailParser.m; sourceTree = "<group>"; };
-		2CFCB4500DD4F4FB0090049E /* PackageSummaryParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PackageSummaryParser.h; sourceTree = "<group>"; };
-		2CFCB4510DD4F4FB0090049E /* PackageSummaryParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PackageSummaryParser.m; sourceTree = "<group>"; };
-		2CFCB7BC0DD52CDA0090049E /* AbstractXMLTreeParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AbstractXMLTreeParser.h; sourceTree = "<group>"; };
-		2CFCB7BD0DD52CDA0090049E /* AbstractXMLTreeParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AbstractXMLTreeParser.m; sourceTree = "<group>"; };
+		2CF55D480DD6FFAC00FB13C7 /* FHVClassDetailParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FHVClassDetailParser.h; sourceTree = "<group>"; };
+		2CF55D490DD6FFAC00FB13C7 /* FHVClassDetailParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FHVClassDetailParser.m; sourceTree = "<group>"; };
+		2CF5FB840DD5BCB40049C53D /* FHVDocParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FHVDocParser.h; sourceTree = "<group>"; };
+		2CF5FB850DD5BCB40049C53D /* FHVDocParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FHVDocParser.m; sourceTree = "<group>"; };
+		2CF5FB8C0DD5C3780049C53D /* FHVPackageDetailParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FHVPackageDetailParser.h; sourceTree = "<group>"; };
+		2CF5FB8D0DD5C3780049C53D /* FHVPackageDetailParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FHVPackageDetailParser.m; sourceTree = "<group>"; };
+		2CFCB4500DD4F4FB0090049E /* FHVPackageSummaryParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FHVPackageSummaryParser.h; sourceTree = "<group>"; };
+		2CFCB4510DD4F4FB0090049E /* FHVPackageSummaryParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FHVPackageSummaryParser.m; sourceTree = "<group>"; };
+		2CFCB7BC0DD52CDA0090049E /* FHVAbstractXMLTreeParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FHVAbstractXMLTreeParser.h; sourceTree = "<group>"; };
+		2CFCB7BD0DD52CDA0090049E /* FHVAbstractXMLTreeParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FHVAbstractXMLTreeParser.m; sourceTree = "<group>"; };
 		32CA4F630368D1EE00C91783 /* EarthDoc_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EarthDoc_Prefix.pch; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* EarthDoc.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EarthDoc.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -427,6 +429,8 @@
 			children = (
 				2C1987AB1101F4E000C3A1BD /* NSString+FHVUtils.h */,
 				2C1987AC1101F4E000C3A1BD /* NSString+FHVUtils.m */,
+				2C2DA4A011441235007DD313 /* NSURL+FHVUtils.h */,
+				2C2DA4A111441235007DD313 /* NSURL+FHVUtils.m */,
 			);
 			name = categories;
 			sourceTree = "<group>";
@@ -485,7 +489,6 @@
 		2CEFC3C90DDF3B2100F92DC6 /* app */ = {
 			isa = PBXGroup;
 			children = (
-				2CB33EC0110B5A0100A7C238 /* Constants.h */,
 				2CEFC3CA0DDF3B3100F92DC6 /* FHVAppDelegate.h */,
 				2CEFC3CB0DDF3B3100F92DC6 /* FHVAppDelegate.m */,
 				2C910163110646790031698D /* FHVDocSet.h */,
@@ -506,22 +509,22 @@
 		2CFCB44F0DD4F4FB0090049E /* parser */ = {
 			isa = PBXGroup;
 			children = (
-				2CFCB7BC0DD52CDA0090049E /* AbstractXMLTreeParser.h */,
-				2CFCB7BD0DD52CDA0090049E /* AbstractXMLTreeParser.m */,
-				2CFCB4500DD4F4FB0090049E /* PackageSummaryParser.h */,
-				2CFCB4510DD4F4FB0090049E /* PackageSummaryParser.m */,
-				2CF5FB840DD5BCB40049C53D /* FlexDocsParser.h */,
-				2CF5FB850DD5BCB40049C53D /* FlexDocsParser.m */,
-				2CF5FB8C0DD5C3780049C53D /* PackageDetailParser.h */,
-				2CF5FB8D0DD5C3780049C53D /* PackageDetailParser.m */,
-				2CF55D480DD6FFAC00FB13C7 /* ClassDetailParser.h */,
-				2CF55D490DD6FFAC00FB13C7 /* ClassDetailParser.m */,
+				2CF5FB840DD5BCB40049C53D /* FHVDocParser.h */,
+				2CF5FB850DD5BCB40049C53D /* FHVDocParser.m */,
+				2CFCB7BC0DD52CDA0090049E /* FHVAbstractXMLTreeParser.h */,
+				2CFCB7BD0DD52CDA0090049E /* FHVAbstractXMLTreeParser.m */,
+				2CFCB4500DD4F4FB0090049E /* FHVPackageSummaryParser.h */,
+				2CFCB4510DD4F4FB0090049E /* FHVPackageSummaryParser.m */,
+				2CF5FB8C0DD5C3780049C53D /* FHVPackageDetailParser.h */,
+				2CF5FB8D0DD5C3780049C53D /* FHVPackageDetailParser.m */,
+				2CF55D480DD6FFAC00FB13C7 /* FHVClassDetailParser.h */,
+				2CF55D490DD6FFAC00FB13C7 /* FHVClassDetailParser.m */,
 				2C38EFB41100D73E00B04E4E /* FHVClassParserOperation.h */,
 				2C38EFB51100D73E00B04E4E /* FHVClassParserOperation.m */,
 				2C1987821101F1FC00C3A1BD /* FHVImportContext.h */,
 				2C1987831101F1FC00C3A1BD /* FHVImportContext.m */,
-				2CCFC1B0110512990019F014 /* SQLiteImporter.h */,
-				2CCFC1B1110512990019F014 /* SQLiteImporter.m */,
+				2CCFC1B0110512990019F014 /* FHVSQLiteImporter.h */,
+				2CCFC1B1110512990019F014 /* FHVSQLiteImporter.m */,
 			);
 			path = parser;
 			sourceTree = "<group>";
@@ -603,21 +606,21 @@
 			buildActionMask = 2147483647;
 			files = (
 				8D11072D0486CEB800E47090 /* main.m in Sources */,
-				2CFCB7BE0DD52CDA0090049E /* AbstractXMLTreeParser.m in Sources */,
-				2CF5FB860DD5BCB40049C53D /* FlexDocsParser.m in Sources */,
+				2CFCB7BE0DD52CDA0090049E /* FHVAbstractXMLTreeParser.m in Sources */,
+				2CF5FB860DD5BCB40049C53D /* FHVDocParser.m in Sources */,
 				2CEE30BA0DD6698100CC762E /* NodeClassToIconTransformer.m in Sources */,
 				2CEFC3CC0DDF3B3100F92DC6 /* FHVAppDelegate.m in Sources */,
 				2C53681210B9D14600D9C0E4 /* RSVerticallyCenteredTextFieldCell.m in Sources */,
 				2C6D218D10BC97B3004A6A12 /* HeadlineCell.m in Sources */,
 				2C6D222010BCA4F0004A6A12 /* MultiCellTableColumn.m in Sources */,
-				2C8DC60E10FFF5D000DA41C9 /* PackageSummaryParser.m in Sources */,
-				2C38EEA71100A36E00B04E4E /* PackageDetailParser.m in Sources */,
-				2C38EEE81100AC5700B04E4E /* ClassDetailParser.m in Sources */,
+				2C8DC60E10FFF5D000DA41C9 /* FHVPackageSummaryParser.m in Sources */,
+				2C38EEA71100A36E00B04E4E /* FHVPackageDetailParser.m in Sources */,
+				2C38EEE81100AC5700B04E4E /* FHVClassDetailParser.m in Sources */,
 				2C38EFB61100D73E00B04E4E /* FHVClassParserOperation.m in Sources */,
 				2C1987841101F1FC00C3A1BD /* FHVImportContext.m in Sources */,
 				2C1987AD1101F4E000C3A1BD /* NSString+FHVUtils.m in Sources */,
 				2C64D50C11028577008D90E0 /* utils.m in Sources */,
-				2CCFC1B2110512990019F014 /* SQLiteImporter.m in Sources */,
+				2CCFC1B2110512990019F014 /* FHVSQLiteImporter.m in Sources */,
 				2C910165110646790031698D /* FHVDocSet.m in Sources */,
 				2C910259110659C60031698D /* FHVMainWindowController.m in Sources */,
 				2C9102D1110664F90031698D /* FHVDocSetModel.m in Sources */,
@@ -645,6 +648,7 @@
 				2C2EFAA11142F3B30020A08C /* FHVLocalImportPickerViewController.m in Sources */,
 				2C2EFAB91142F63E0020A08C /* FHVRemoteImportPickerViewController.m in Sources */,
 				2C2EFABC1142F6B20020A08C /* FHVPresetsImportPickerViewController.m in Sources */,
+				2C2DA4A211441235007DD313 /* NSURL+FHVUtils.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -741,6 +745,7 @@
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";

@@ -7,12 +7,12 @@
 //
 
 #import "FHVImportWindowController.h"
-#import "FlexDocsParser.h"
+#import "FHVDocParser.h"
 
 @interface FHVImportWindowController (Private)
 - (void)_updateToolbarSelection:(BOOL)animated;
 - (void)_updateVisibleView:(BOOL)animated;
-- (void)_parseDocsAtPath:(NSString *)aPath;
+- (void)_parseDocsAtURL:(NSURL *)anURL withName:(NSString *)aName;
 - (void)_selectController:(FHVAbstractImportPickerViewController *)aController 
 	animated:(BOOL)animated;
 - (void)_applySelectedViewControllerAttributes;
@@ -66,7 +66,14 @@
 #pragma mark IB Actions
 
 - (IBAction)startImport:(id)sender{
-//	[self _parseDocsAtPath:m_sourcePath];
+	[self _parseDocsAtURL:[m_selectedController URL] withName:[m_selectedController docSetName]];
+	[NSApp endSheet:self.window];
+	[[self window] orderOut:self];
+	[NSApp beginSheet:m_progressWindow 
+		modalForWindow:[NSApp mainWindow] 
+		modalDelegate:[NSApp delegate] 
+		didEndSelector:NULL 
+		contextInfo:NULL];
 }
 
 - (IBAction)cancel:(id)sender{
@@ -74,6 +81,7 @@
 		[self setStatusMessage:@"Cancelling ..."];
 		[self setProgressIsIndeterminate:YES];
 		[m_parser cancel];
+		[sender setEnabled:NO];
 		return;
 	}
 	[NSApp endSheet:self.window];
@@ -146,19 +154,19 @@
 
 - (void)_applySelectedViewControllerAttributes{
 	if (m_selectedController.busy)
-		[m_progressIndicator startAnimation:self];
+		[m_activityIndicator startAnimation:self];
 	else
-		[m_progressIndicator stopAnimation:self];
+		[m_activityIndicator stopAnimation:self];
 	[m_startImportButton setEnabled:m_selectedController.valid];
 }
 
-- (void)_parseDocsAtPath:(NSString *)aPath{
+- (void)_parseDocsAtURL:(NSURL *)anURL withName:(NSString *)aName{
 	m_importConnection = [[NSConnection alloc] init];
 	[m_importConnection setRootObject:self];
 	[m_importConnection registerName:@"com.nesium.FlexHelpViewer"];
-//	m_parser = [[FlexDocsParser alloc] initWithPath:aPath 
-//		docSetName:m_nameTextField.stringValue];
-//	[NSThread detachNewThreadSelector:@selector(parse) toTarget:m_parser withObject:nil];
+	m_parser = [[FHVDocParser alloc] initWithURL:anURL 
+		docSetName:aName];
+	[NSThread detachNewThreadSelector:@selector(parse) toTarget:m_parser withObject:nil];
 }
 
 - (void)_selectController:(FHVAbstractImportPickerViewController *)aController 
@@ -184,18 +192,6 @@
 		[aController.view setAlphaValue:0.0f];
 		[aController.view.animator setAlphaValue:1.0f];
 	}
-//	NSRect cancelButtonFrame = m_cancelButton.frame;
-//	NSRect startButtonFrame = m_startImportButton.frame;
-//	if (startButtonVisible){
-//		cancelButtonFrame.origin.x = NSMinX(startButtonFrame) - NSWidth(cancelButtonFrame) - 10.0f;
-//	}else{
-//		cancelButtonFrame.origin.x = NSMaxX(startButtonFrame) - NSWidth(cancelButtonFrame);
-//	}
-//	[m_startImportButton setHidden:!startButtonVisible];
-//	if (animated)
-//		[[m_cancelButton animator] setFrame:cancelButtonFrame];
-//	else
-//		m_cancelButton.frame = cancelButtonFrame;
 }
 
 
@@ -223,8 +219,8 @@
 }
 
 - (void)parsingComplete:(NSError *)error{
-	[NSApp endSheet:self.window];
-	[[self window] orderOut:self];
+	[NSApp endSheet:m_progressWindow];
+	[m_progressWindow orderOut:self];
 	[m_importConnection registerName:nil];
 	[m_importConnection setRootObject:nil];
 	[[m_importConnection receivePort] invalidate];

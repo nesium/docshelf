@@ -7,7 +7,7 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import "AbstractXMLTreeParser.h"
+#import "FHVAbstractXMLTreeParser.h"
 #import "utils.h"
 
 typedef enum _ASScope{
@@ -16,7 +16,7 @@ typedef enum _ASScope{
 } ASScope;
 
 
-@interface ClassDetailParser : AbstractXMLTreeParser{
+@interface FHVClassDetailParser : FHVAbstractXMLTreeParser{
 	NSString *m_name;
 	NSString *m_ident;
 }

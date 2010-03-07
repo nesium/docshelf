@@ -62,4 +62,12 @@
 	}
 	return nil;
 }
+
+- (NSString *)stringWithDateFormat:(NSString *)aFormat{
+	NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+	[formatter setDateFormat:aFormat];
+	NSString *result = [formatter stringFromDate:self];
+	[formatter release];
+	return result;
+}
 @end

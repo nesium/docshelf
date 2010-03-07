@@ -12,7 +12,7 @@
 #import "FHVImportWindowController.h"
 #import "FHVUpdatePreferencesViewController.h"
 #import "NSMPreferencesWindowController.h"
-#import "Constants.h"
+#import "FHVConstants.h"
 
 
 @interface FHVAppDelegate : NSObject{
@@ -25,6 +25,5 @@
 	IBOutlet NSTextField *m_progressLabel;
 	NSMPreferencesWindowController *m_prefsWindowController;
 }
-- (NSString *)applicationSupportFolder;
 - (IBAction)showPreferences:(id)sender;
 @end

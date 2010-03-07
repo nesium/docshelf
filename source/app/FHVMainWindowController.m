@@ -315,6 +315,10 @@ static HeadlineCell *g_headlineCell = nil;
 		[m_docSetModel selectItemWithURLInCurrentDocSet:[request URL]];
 		[listener ignore];
 		return;
+	}else if ([[[request URL] scheme] hasPrefix:@"http"]){
+		[[NSWorkspace sharedWorkspace] openURL:[request URL]];
+		[listener ignore];
+		return;
 	}
 	[listener use];
 }
@@ -579,7 +583,6 @@ static HeadlineCell *g_headlineCell = nil;
 		[m_history addObject:anURL];
 		m_historyIndex = [m_history count] - 1;
 	}
-	NDCLog(@"%@", m_history);
 	[self _updateBackForwardControl];
 }
 

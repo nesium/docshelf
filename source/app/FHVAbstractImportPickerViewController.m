@@ -13,7 +13,8 @@
 
 @synthesize valid=m_valid, 
 			busy=m_busy, 
-			URL=m_url;
+			URL=m_url, 
+			docSetName=m_docSetName;
 
 #pragma mark -
 #pragma mark Initialization & Deallocation
@@ -21,6 +22,7 @@
 - (id)init{
 	if (self = [super init]){
 		m_url = nil;
+		m_docSetName = nil;
 		[self reset];
 	}
 	return self;
@@ -31,9 +33,16 @@
 	[super dealloc];
 }
 
+
+
+#pragma mark -
+#pragma mark Public methods
+
 - (void)reset{
 	[m_url release];
 	m_url = nil;
+	[m_docSetName release];
+	m_docSetName = nil;
 	m_valid = NO;
 	m_busy = NO;
 }
@@ -61,5 +70,13 @@
 	[self willChangeValueForKey:@"valid"];
 	m_valid = bFlag;
 	[self didChangeValueForKey:@"valid"];
+}
+
+- (void)_setDocSetName:(NSString *)aName{
+	[self willChangeValueForKey:@"docSetName"];
+	[aName retain];
+	[m_docSetName release];
+	m_docSetName = aName;
+	[self didChangeValueForKey:@"docSetName"];
 }
 @end

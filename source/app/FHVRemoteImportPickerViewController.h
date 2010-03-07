@@ -9,7 +9,8 @@
 #import <Cocoa/Cocoa.h>
 #import "FHVAbstractImportPickerViewController.h"
 #import "NSMURLConnection.h"
-#import "PackageSummaryParser.h"
+#import "FHVPackageSummaryParser.h"
+#import "NSString+NSMAdditions.h"
 
 
 @interface FHVRemoteImportPickerViewController : FHVAbstractImportPickerViewController 
@@ -18,6 +19,8 @@
 	IBOutlet NSTextField *m_remoteAddressTextField;
 	IBOutlet NSImageView *m_warningIcon;
 	NSMURLConnection *m_connection;
+	BOOL m_urlIsValid;
 }
 - (void)setURLString:(NSString *)aString;
+- (IBAction)addressTextField_didEndEditing:(id)sender;
 @end

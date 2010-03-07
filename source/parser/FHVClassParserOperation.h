@@ -7,7 +7,7 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import "ClassDetailParser.h"
+#import "FHVClassDetailParser.h"
 #import "FHVImportContext.h"
 
 

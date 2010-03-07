@@ -13,10 +13,12 @@
 	BOOL m_valid;
 	BOOL m_busy;
 	NSURL *m_url;
+	NSString *m_docSetName;
 }
 @property (readonly) BOOL valid;
 @property (readonly) BOOL busy;
 @property (readonly) NSURL *URL;
+@property (readonly) NSString *docSetName;
 - (void)reset;
 @end
 
@@ -25,4 +27,5 @@
 - (void)_setURL:(NSURL *)anURL;
 - (void)_setBusy:(BOOL)bFlag;
 - (void)_setValid:(BOOL)bFlag;
+- (void)_setDocSetName:(NSString *)aName;
 @end

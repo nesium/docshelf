@@ -6,19 +6,19 @@
 //  Copyright 2008 nesiumdotcom. All rights reserved.
 //
 
-#import "ClassDetailParser.h"
+#import "FHVClassDetailParser.h"
 
-@interface ClassDetailParser (Private)
+@interface FHVClassDetailParser (Private)
 - (NSArray *)_rowsForClassSummaryTable:(NSString *)tableId;
 @end
 
 
-@implementation ClassDetailParser
+@implementation FHVClassDetailParser
 
-- (id)initWithFile:(NSString *)file context:(FHVImportContext *)context{
+- (id)initWithData:(NSData *)data fromURL:(NSURL *)anURL context:(FHVImportContext *)context{
 	m_name = nil;
-	if (self = [super initWithFile:file context:context]){
-		if ([[[file lastPathComponent] lowercaseString] isEqualToString:@"package.html"])
+	if (self = [super initWithData:data fromURL:anURL context:context]){
+		if ([[[anURL lastPathComponent] lowercaseString] isEqualToString:@"package.html"])
 			m_name = nil;
 		else{
 			NSString *signatureExpr = @"/html/body/div[@class='MainContent'][1]/table[@class='classHeaderTable'][1]/tr/td[@class='classSignature'][1]";
@@ -27,7 +27,7 @@
 			NSArray *parts = [classSignature componentsSeparatedByString:@" "];
 			m_name = [[parts objectAtIndex:[parts count] - 1] retain];
 		}
-		m_ident = [[file packageNameByResolvingAgainstBasePath:context.sourcePath] retain];
+		m_ident = [[anURL packageNameByResolvingAgainstBaseURL:context.sourceURL] retain];
 	}
 	return self;
 }
@@ -72,13 +72,13 @@
 		NSXMLElement *signatureLink = [self firstNodeForXPath:signatureLinkExpr ofElement:signature];
 		NSString *signatureLinkHref = [[signatureLink attributeForName:@"href"] stringValue];
 		
-		NSURL *linkURL = [NSURL URLWithString:signatureLinkHref relativeToURL:m_fileURL];
+		NSURL *linkURL = [NSURL URLWithString:signatureLinkHref relativeToURL:m_url];
 		BOOL isInherited = owner != nil;
 		NSURL *implementorURL = nil;
 		
 		if (isInherited){
 			implementorURL = [NSURL URLWithString:[[owner attributeForName:@"href"] stringValue] 
-				relativeToURL:m_fileURL];
+				relativeToURL:m_url];
 //			NSLog(@"%@", [[implementorURL absoluteString] 
 //				packageNameByResolvingAgainstBasePath:m_context.path]);
 		}
@@ -122,8 +122,7 @@
 		[summary detach];
 		NSXMLElement *owner = [self firstNodeForXPath:ownerExpr ofElement:row];
 		
-		NSURL *linkURL = [NSURL URLWithString:signatureLinkHref 
-			relativeToURL:[NSURL URLWithString:m_filePath]];
+		NSURL *linkURL = [NSURL URLWithString:signatureLinkHref relativeToURL:m_url];
 		BOOL isInherited = m_name != nil && ![[[owner stringValue] 
 			stringByTrimmingCharactersInSet:set] isEqualToString:m_name];
 		NSDictionary *property = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -156,8 +155,7 @@
 		NSString *signatureLink = [[[self firstNodeForXPath:signatureLinkExpr ofElement:signature] 
 			attributeForName:@"href"] stringValue];
 		
-		NSURL *linkURL = [NSURL URLWithString:signatureLink 
-			relativeToURL:[NSURL URLWithString:m_filePath]];
+		NSURL *linkURL = [NSURL URLWithString:signatureLink relativeToURL:m_url];
 		BOOL isInherited = ![[[owner stringValue] 
 			stringByTrimmingCharactersInSet:set] isEqualToString:m_name];
 		

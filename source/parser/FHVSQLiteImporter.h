@@ -8,11 +8,11 @@
 
 #import <Cocoa/Cocoa.h>
 #import "sqlite3.h"
-#import "Constants.h"
+#import "FHVConstants.h"
 
 enum {HAS_DATA, NO_DATA};
 
-@interface SQLiteImporter : NSObject {
+@interface FHVSQLiteImporter : NSObject {
 	NSString *m_path;
 	sqlite3 *m_db;
 	sqlite3_stmt *m_packageInsertStmt;

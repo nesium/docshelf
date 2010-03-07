@@ -11,4 +11,5 @@
 
 @interface NSDate (NSMAdditions)
 - (NSString *)relativeDateStringFromDate:(NSDate *)date oldDateFormat:(NSString *)oldDateFormat;
+- (NSString *)stringWithDateFormat:(NSString *)aFormat;
 @end

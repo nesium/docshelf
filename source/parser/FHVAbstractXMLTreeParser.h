@@ -9,20 +9,20 @@
 #import <Cocoa/Cocoa.h>
 #import "FHVImportContext.h"
 #import "NSString+FHVUtils.h"
+#import "NSURL+FHVUtils.h"
 #import "utils.h"
 
 
-@interface AbstractXMLTreeParser : NSObject{
-	NSString *m_filePath;
-	NSURL *m_fileURL;
+@interface FHVAbstractXMLTreeParser : NSObject{
+	NSURL *m_url;
 	NSXMLDocument *m_xmlTree;
 	FHVImportContext *m_context;
 }
-- (id)initWithFile:(NSString *)file context:(FHVImportContext *)context;
+- (id)initWithURL:(NSURL *)url context:(FHVImportContext *)context;
 - (id)initWithData:(NSData *)data fromURL:(NSURL *)anURL context:(FHVImportContext *)context;
 @end
 
-@interface AbstractXMLTreeParser (Protected)
+@interface FHVAbstractXMLTreeParser (Protected)
 - (NSXMLElement *)firstNodeForXPath:(NSString *)query ofElement:(NSXMLElement *)elem;
 - (NSXMLElement *)summaryTable;
 - (NSXMLElement *)summaryTableForType:(NSString *)type;
