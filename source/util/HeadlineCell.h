@@ -11,5 +11,7 @@
 
 
 @interface HeadlineCell : RSVerticallyCenteredTextFieldCell{
+	BOOL m_drawsTopBorder;
 }
+@property (nonatomic, assign) BOOL drawsTopBorder;
 @end

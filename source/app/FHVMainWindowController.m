@@ -85,6 +85,7 @@
 	[m_webView setResourceLoadDelegate:self];
 	[m_webView setPolicyDelegate:self];
 	[m_webView setFrameLoadDelegate:self];
+	[m_webView setUIDelegate:self];
 	[m_searchField setNextKeyView:m_outlineView];
 	m_filterBar.startingColor = [NSColor colorWithCalibratedRed:0.816 green:0.816 blue:0.816 alpha:1.0];
 	m_filterBar.endingColor = [NSColor colorWithCalibratedRed:0.912 green:0.912 blue:0.912 alpha:1.0];
@@ -226,6 +227,9 @@ static HeadlineCell *g_headlineCell = nil;
 	forTableColumn:(NSTableColumn *)tableColumn item:(id)item{
 	BOOL itemWantsHeaderCell = [self _itemWantsHeaderCell:[item representedObject]];
 	if ([[[item representedObject] objectForKey:@"inherited"] boolValue] || itemWantsHeaderCell){
+		NSInteger row = [outlineView rowForItem:item];
+		[(HeadlineCell *)cell setDrawsTopBorder:(row > 0 && 
+			![self _itemWantsHeaderCell:[[outlineView itemAtRow:row - 1] representedObject]])];
 		[cell setTextColor:[NSColor colorWithCalibratedRed:0.459 green:0.459 blue:0.459 alpha:1.0]];
 	}else{
 		[cell setTextColor:[NSColor blackColor]];
@@ -343,6 +347,22 @@ static HeadlineCell *g_headlineCell = nil;
 
 
 #pragma mark -
+#pragma mark WebUIDelegate methods
+
+- (NSArray *)webView:(WebView *)sender contextMenuItemsForElement:(NSDictionary *)element 
+	defaultMenuItems:(NSArray *)defaultMenuItems{
+	NSMutableArray *items = [NSMutableArray array];
+	for (NSMenuItem *item in defaultMenuItems){
+		if ([item tag] == WebMenuItemTagReload)
+			continue;
+		[items addObject:item];
+	}
+	return [[items copy] autorelease];
+}
+
+
+
+#pragma mark -
 #pragma mark FilterbarDelegate methods
 
 - (NSArray *)filterbar:(Filterbar *)filterBar itemIdentifiersForGroup:(NSString *)groupIdentifier{
@@ -407,7 +427,7 @@ static HeadlineCell *g_headlineCell = nil;
 	NSRect filterBarBounds = [m_filterBar bounds];
 	if (bFlag){
 		[m_outerSplitView setFrame:(NSRect){-1, 0, NSWidth(contentViewBounds) + 1, 
-			NSHeight(contentViewBounds) - NSHeight(filterBarBounds) + 1}];
+			NSHeight(contentViewBounds) - NSHeight(filterBarBounds)}];
 		[m_filterBar setFrame:(NSRect){0, NSHeight(contentViewBounds) - NSHeight(filterBarBounds), 
 			NSWidth(contentViewBounds), NSHeight(filterBarBounds)}];
 		[[self.window contentView] addSubview:m_filterBar];

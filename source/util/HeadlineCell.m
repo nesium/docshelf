@@ -11,10 +11,30 @@
 
 @implementation HeadlineCell
 
-- (void)drawWithFrame:(NSRect)cellFrame inView:(NSView*)controlView{
-	NSRect frame = (NSRect){0, NSMinY(cellFrame) - 1, NSWidth([controlView bounds]), NSHeight(cellFrame) + 1};
+@synthesize drawsTopBorder=m_drawsTopBorder;
+
+- (id)init{
+	if (self = [super init]){
+		m_drawsTopBorder = NO;
+	}
+	return self;
+}
+
+- (id)copyWithZone:(NSZone *)zone{
+	HeadlineCell *cell = [[[self class] alloc] init];
+	cell.drawsTopBorder = m_drawsTopBorder;
+	return cell;
+}
+
+- (void)drawWithFrame:(NSRect)cellFrame inView:(NSView *)controlView{
+	NSRect frame = (NSRect){0, NSMinY(cellFrame), NSWidth([controlView bounds]), NSHeight(cellFrame)};
 	[[NSColor colorWithCalibratedRed:0.669 green:0.669 blue:0.669 alpha:1.0] drawSwatchInRect:frame];
-	frame = NSInsetRect(frame, 0, 1);
+	if (m_drawsTopBorder){
+		frame = NSInsetRect(frame, 0, 1);
+	}else{
+		frame.size.height -= 1.0f;
+	}
+		
 	[[NSColor whiteColor] drawSwatchInRect:frame];
 	frame.origin.y += 1.0;
 	frame.size.height -= 1.0;

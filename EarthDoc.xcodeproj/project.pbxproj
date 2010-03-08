@@ -25,6 +25,7 @@
 		2C38EEA71100A36E00B04E4E /* FHVPackageDetailParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CF5FB8D0DD5C3780049C53D /* FHVPackageDetailParser.m */; };
 		2C38EEE81100AC5700B04E4E /* FHVClassDetailParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CF55D490DD6FFAC00FB13C7 /* FHVClassDetailParser.m */; };
 		2C38EFB61100D73E00B04E4E /* FHVClassParserOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C38EFB51100D73E00B04E4E /* FHVClassParserOperation.m */; };
+		2C436D4F11459ACF006DCACA /* bug.png in Resources */ = {isa = PBXBuildFile; fileRef = 2C436D4E11459ACF006DCACA /* bug.png */; };
 		2C469B27113983EB0006E742 /* NSTreeController+NSMAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C469B26113983EB0006E742 /* NSTreeController+NSMAdditions.m */; };
 		2C494BB31139E0A3009DB736 /* index.sql in Resources */ = {isa = PBXBuildFile; fileRef = 2C494B9F1139DE6C009DB736 /* index.sql */; };
 		2C494CE7113A0192009DB736 /* NSIndexPath+NSMAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C494CE6113A0192009DB736 /* NSIndexPath+NSMAdditions.m */; };
@@ -135,6 +136,7 @@
 		2C2EFABB1142F6B20020A08C /* FHVPresetsImportPickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FHVPresetsImportPickerViewController.m; sourceTree = "<group>"; };
 		2C38EFB41100D73E00B04E4E /* FHVClassParserOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FHVClassParserOperation.h; sourceTree = "<group>"; };
 		2C38EFB51100D73E00B04E4E /* FHVClassParserOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FHVClassParserOperation.m; sourceTree = "<group>"; };
+		2C436D4E11459ACF006DCACA /* bug.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bug.png; sourceTree = "<group>"; };
 		2C469B25113983EA0006E742 /* NSTreeController+NSMAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSTreeController+NSMAdditions.h"; sourceTree = "<group>"; };
 		2C469B26113983EB0006E742 /* NSTreeController+NSMAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSTreeController+NSMAdditions.m"; sourceTree = "<group>"; };
 		2C494B9F1139DE6C009DB736 /* index.sql */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = index.sql; sourceTree = "<group>"; };
@@ -451,6 +453,7 @@
 		2CEE30A00DD668D300CC762E /* icons */ = {
 			isa = PBXGroup;
 			children = (
+				2C436D4E11459ACF006DCACA /* bug.png */,
 				2CE28C07114541AD00D55FEA /* implemented-by-arrow.png */,
 				2C85E6A31107E585001920A7 /* class.png */,
 				2C85E6A41107E585001920A7 /* constant.png */,
@@ -599,6 +602,7 @@
 				2CBDCDE4113EE7C100FB4C23 /* reload.tiff in Resources */,
 				2C2EFA941142F0590020A08C /* error.png in Resources */,
 				2CE28C08114541AD00D55FEA /* implemented-by-arrow.png in Resources */,
+				2C436D4F11459ACF006DCACA /* bug.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

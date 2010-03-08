@@ -85,6 +85,11 @@
 	[m_prefsWindowController showWindow:self];
 }
 
+- (IBAction)reportBug:(id)sender{
+	[[NSWorkspace sharedWorkspace] openURL:
+		[NSURL URLWithString:@"http://bugs.nesium.net/projects/earthdoc/issues/new"]];
+}
+
 
 
 #pragma mark -
