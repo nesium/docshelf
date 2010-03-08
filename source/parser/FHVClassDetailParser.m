@@ -74,23 +74,30 @@
 		
 		NSURL *linkURL = [NSURL URLWithString:signatureLinkHref relativeToURL:m_url];
 		BOOL isInherited = owner != nil;
-		NSURL *implementorURL = nil;
+		NSString *implementorIdent = nil;
+		NSString *implementorName = nil;
 		
 		if (isInherited){
-			implementorURL = [NSURL URLWithString:[[owner attributeForName:@"href"] stringValue] 
+			NSURL *implementorURL = [NSURL URLWithString:[[owner attributeForName:@"href"] stringValue] 
 				relativeToURL:m_url];
-//			NSLog(@"%@", [[implementorURL absoluteString] 
-//				packageNameByResolvingAgainstBasePath:m_context.path]);
+			implementorIdent = [implementorURL packageNameByResolvingAgainstBaseURL:
+				m_context.sourceURL];
+			implementorName = [[owner stringValue] stringByTrimmingCharactersInSet:set];
 		}
 		
-		NSDictionary *method = [NSDictionary dictionaryWithObjectsAndKeys: 
+		NSMutableDictionary *method = [NSMutableDictionary dictionaryWithObjectsAndKeys:
 			[self _urlToIdent:linkURL], @"ident", 
 			[signatureLink stringValue], @"name", 
 			[self _prepareAttributesInElement:signature], @"signature", 
 			[[summary stringValue] stringByTrimmingCharactersInSet:set], @"summary", 
 			[NSNumber numberWithBool:isInherited], @"inherited", 
-			(isInherited ? nil : [self _detailStringForLinkName:signatureLinkHref]), @"detail", 
 			nil];
+		if (isInherited){
+			[method setObject:implementorIdent forKey:@"implementorIdent"];
+			[method setObject:implementorName forKey:@"implementorName"];
+		}else{
+			[method setObject:[self _detailStringForLinkName:signatureLinkHref] forKey:@"detail"];
+		}
 		[methods addObject:method];
 	}
 	return methods;
@@ -123,17 +130,34 @@
 		NSXMLElement *owner = [self firstNodeForXPath:ownerExpr ofElement:row];
 		
 		NSURL *linkURL = [NSURL URLWithString:signatureLinkHref relativeToURL:m_url];
-		BOOL isInherited = m_name != nil && ![[[owner stringValue] 
-			stringByTrimmingCharactersInSet:set] isEqualToString:m_name];
-		NSDictionary *property = [NSDictionary dictionaryWithObjectsAndKeys:
+		NSString *implementorName = [[owner stringValue] stringByTrimmingCharactersInSet:set];
+		NSString *implementorIdent = nil;
+		BOOL isInherited = m_name != nil && ![implementorName isEqualToString:m_name];
+		if (isInherited){
+			NSXMLElement *anchor = [self firstNodeForXPath:@"a[1]" ofElement:owner];
+			if (anchor){
+				NSURL *implementorURL = [NSURL URLWithString:[[anchor attributeForName:@"href"] 
+					stringValue] relativeToURL:m_url];
+				implementorIdent = [implementorURL packageNameByResolvingAgainstBaseURL:
+					m_context.sourceURL];
+			}
+		}
+		
+		NSMutableDictionary *property = [NSMutableDictionary dictionaryWithObjectsAndKeys:
 			[self _urlToIdent:linkURL], @"ident", 
 			[signatureLink stringValue], @"name", 
 			[[summary stringValue] stringByTrimmingCharactersInSet:set], @"summary", 
 			[signatureContainer stringValue], @"signature", 
 			[NSNumber numberWithBool:isInherited], @"inherited", 
 			[NSNumber numberWithBool:parseConstants], @"constant", 
-			(isInherited ? nil : [self _detailStringForLinkName:signatureLinkHref]), @"detail", 
 			nil];
+		if (isInherited){
+			[property setObject:implementorName forKey:@"implementorName"];
+			if (implementorIdent)
+				[property setObject:implementorIdent forKey:@"implementorIdent"];
+		}else{
+			[property setObject:[self _detailStringForLinkName:signatureLinkHref] forKey:@"detail"];
+		}
 		[properties addObject:property];
 	}
 	return properties;
@@ -156,17 +180,35 @@
 			attributeForName:@"href"] stringValue];
 		
 		NSURL *linkURL = [NSURL URLWithString:signatureLink relativeToURL:m_url];
-		BOOL isInherited = ![[[owner stringValue] 
-			stringByTrimmingCharactersInSet:set] isEqualToString:m_name];
+		NSString *implementorName = [[owner stringValue] stringByTrimmingCharactersInSet:set];
+		NSString *implementorIdent = nil;
+		BOOL isInherited = ![implementorName isEqualToString:m_name];
 		
-		NSDictionary *event = [NSDictionary dictionaryWithObjectsAndKeys: 
+		if (isInherited){
+			NSXMLElement *anchor = [self firstNodeForXPath:@"a[1]" ofElement:owner];
+			if (anchor){
+				NSURL *implementorURL = [NSURL URLWithString:[[anchor attributeForName:@"href"] 
+					stringValue] relativeToURL:m_url];
+				implementorIdent = [implementorURL packageNameByResolvingAgainstBaseURL:
+					m_context.sourceURL];
+			}
+		}
+		
+		NSMutableDictionary *event = [NSMutableDictionary dictionaryWithObjectsAndKeys: 
 			[signature stringValue], @"name", 
 			[self _prepareAttributesInElement:signature], @"signature", 
 			[self _urlToIdent:linkURL], @"ident", 
 			[[summary stringValue] stringByTrimmingCharactersInSet:set], @"summary", 
 			[NSNumber numberWithBool:isInherited], @"inherited", 
-			(isInherited ? nil : [self _detailStringForLinkName:signatureLink]), @"detail", 
 			nil];
+		if (isInherited){
+			[event setObject:implementorName forKey:@"implementorName"];
+			if (implementorIdent)
+				[event setObject:implementorIdent forKey:@"implementorIdent"];
+		}else{
+			[event setObject:[self _detailStringForLinkName:signatureLink] forKey:@"detail"];
+		}
+			
 		[events addObject:event];
 	}
 	return events;

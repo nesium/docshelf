@@ -147,8 +147,8 @@
 		nodeType = kSigTypeConstant;
 	if (m_signatureInsertStmt == NULL){
 		sqlite3_prepare_v2(m_db, "INSERT INTO `fhv_signatures` \
-(`parent_id`, `parent_type`, `parent_name`, `ident`, `name`, `signature`, `summary`, `detail`, `inherited`, `type`) \
-VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", -1, &m_signatureInsertStmt, 0);
+(`parent_id`, `parent_type`, `parent_name`, `ident`, `name`, `signature`, `summary`, `detail`, `inherited`, `type`, `implementor_name`, `implementor_ident`) \
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", -1, &m_signatureInsertStmt, 0);
 	}
 	sqlite3_bind_int64(m_signatureInsertStmt, 1, [parentId longLongValue]);
 	sqlite3_bind_int(m_signatureInsertStmt, 2, parentType);
@@ -160,6 +160,8 @@ VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", -1, &m_signatureInsertStmt, 0);
 	sqlite3_bind_text(m_signatureInsertStmt, 8, [[attribs objectForKey:@"detail"] UTF8String], -1, SQLITE_STATIC);
 	sqlite3_bind_int(m_signatureInsertStmt, 9, [[attribs objectForKey:@"inherited"] intValue]);
 	sqlite3_bind_int(m_signatureInsertStmt, 10, nodeType);
+	sqlite3_bind_text(m_signatureInsertStmt, 11, [[attribs objectForKey:@"implementorName"] UTF8String], -1, SQLITE_STATIC);
+	sqlite3_bind_text(m_signatureInsertStmt, 12, [[attribs objectForKey:@"implementorIdent"] UTF8String], -1, SQLITE_STATIC);
 	if (!sqlite3_step(m_signatureInsertStmt) == SQLITE_DONE){
 		NSLog(@"Could not save signature node %@ to database", [attribs objectForKey:@"name"]);
 	}

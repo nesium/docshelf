@@ -117,5 +117,22 @@ div.detailBody table td:first-child{
 
 div.detailBody table tr:nth-child(2n){
 	height: 0;
-	line-height: 0;
+/*	line-height: 0;*/
+}
+
+div.inherited_box{
+	padding: 10px 20px 10px 50px;
+	border-bottom: 1px solid #fff;
+	background: #E9E9E9 url(implemented-by-arrow.png) no-repeat 20px 50%;
+	margin: -1px -20px 0px -20px;
+	font-size: 12px;
+	font-weight: bold;
+}
+
+div.inherited_box.first{
+	margin-top: 0px;
+}
+
+div.inherited_box a{
+	color: #666666;
 }

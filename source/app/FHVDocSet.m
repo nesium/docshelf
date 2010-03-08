@@ -203,7 +203,7 @@ NSString *sqlite3_column_nsstring(sqlite3_stmt *stmt, int col){
 	NSMutableArray *signatures = [NSMutableArray array];
 	NSString *sql = @"SELECT \
 `id`, `parent_id`, `parent_type`, `ident`, `name`, `signature`, `summary`, `inherited`, `type`, `parent_name`"; 
-	if (includeDetail) sql = [sql stringByAppendingString:@", `detail`"];
+	if (includeDetail) sql = [sql stringByAppendingString:@", `detail`, `implementor_name`, `implementor_ident`"];
 	sql = [sql stringByAppendingString:@" FROM `fhv_signatures`"];
 	if (whereClause != nil) sql = [NSString stringWithFormat:@"%@ WHERE %@", sql, whereClause];
 	if (preventSorting) sql = [sql stringByAppendingString:@" ORDER BY `type`, `name`"];
@@ -226,6 +226,8 @@ NSString *sqlite3_column_nsstring(sqlite3_stmt *stmt, int col){
 			[NSNumber numberWithInt:sqlite3_column_int(stmt, 8)], @"type", 
 			sqlite3_column_nsstring(stmt, 9), @"parentName", 
 			includeDetail ? sqlite3_column_nsstring(stmt, 10) : nil, @"detail", 
+			includeDetail ? sqlite3_column_nsstring(stmt, 11) : nil, @"implementorName", 
+			includeDetail ? sqlite3_column_nsstring(stmt, 12) : nil, @"implementorIdent", 
 			nil];
 		[signatures addObject:sig];
 	}

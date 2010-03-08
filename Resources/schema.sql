@@ -24,4 +24,6 @@ CREATE TABLE "fhv_signatures" (
 "summary" TEXT DEFAULT NULL,
 "detail" TEXT DEFAULT NULL,
 "inherited" INTEGER DEFAULT NULL,
+"implementor_name" TEXT DEFAULT NULL, 
+"implementor_ident" TEXT DEFAULT NULL, 
 "type" INTEGER DEFAULT NULL);

@@ -12,7 +12,7 @@
 
 enum {HAS_DATA, NO_DATA};
 
-@interface FHVSQLiteImporter : NSObject {
+@interface FHVSQLiteImporter : NSObject{
 	NSString *m_path;
 	sqlite3 *m_db;
 	sqlite3_stmt *m_packageInsertStmt;

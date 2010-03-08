@@ -261,9 +261,10 @@ static BOOL g_initialLoad = YES;
 			}
 		}
 		[m_secondLevelController setSelectedObject:itemToSelect];
+	}else{
+		[self willChangeValueForKey:@"selectionURL"];
+		[self didChangeValueForKey:@"selectionURL"];
 	}
-	[self willChangeValueForKey:@"selectionURL"];
-	[self didChangeValueForKey:@"selectionURL"];
 }
 
 - (NSURL *)URLForImageWithName:(NSString *)imageName{
@@ -575,6 +576,20 @@ static BOOL g_initialLoad = YES;
 		for (int j = 0; j < [children count]; j++){
 			NSDictionary *sig = [children objectAtIndex:j];
 			[htmlString appendFormat:@"<a name='%@'></a>", [self anchorForItem:sig]];
+			NSString *implementorName = [sig objectForKey:@"implementorName"];
+			NSString *implementorIdent = [sig objectForKey:@"implementorIdent"];
+			if ([[sig objectForKey:@"implementorName"] length] > 0){
+				[htmlString appendFormat:@"<div class='inherited_box%@'>", (j == 0 ? @" first" : @"")];
+				if ([implementorIdent length] > 0){
+					[htmlString appendFormat:@"<a href='fhelpv://%@#%@'>", implementorIdent, 
+						[self anchorForItem:sig]];
+				}
+				[htmlString appendFormat:@"Implemented by %@", implementorName];
+				if ([implementorIdent length] > 0){
+					[htmlString appendString:@"</a>"];
+				}
+				[htmlString appendFormat:@"</div>"];
+			}
 			[htmlString appendFormat:@"<h3>%@</h3>", [sig objectForKey:@"signature"]];
 			NSString *detail = [sig objectForKey:@"detail"];
 			NSString *summary = [sig objectForKey:@"summary"];

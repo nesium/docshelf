@@ -15,6 +15,9 @@
 
 @implementation FHVAppDelegate
 
+#pragma mark -
+#pragma mark Initialization & Deallocation
+
 + (void)initialize{
 	NSMutableDictionary *dict = [NSMutableDictionary dictionary];
 	[dict setObject:[NSNumber numberWithInt:kFHVDocSetSearchModePrefix] forKey:@"FHVDocSetSearchMode"];
@@ -32,6 +35,20 @@
 	}
 	return self;
 }
+
+- (void)awakeFromNib{
+	NSArray *items = [[[[NSApp mainMenu] itemAtIndex:0] submenu] itemArray];
+	for (NSMenuItem *item in items){
+		[item setTitle:[[item title] stringByReplacingOccurrencesOfString:@"NewApplication" 
+			withString:[[[NSBundle mainBundle] infoDictionary] 
+				objectForKey:(NSString *)kCFBundleNameKey]]];
+	}
+}
+
+
+
+#pragma mark -
+#pragma mark IBActions
 
 - (IBAction)addDocSet:(id)sender{
 	if (!m_importWindowController){
@@ -68,6 +85,11 @@
 	[m_prefsWindowController showWindow:self];
 }
 
+
+
+#pragma mark -
+#pragma mark NSApplicationDelegate methods
+
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification{
 	if(getenv("NSZombieEnabled") || getenv("NSAutoreleaseFreedObjectCheckEnabled")){
 		NDCLog(@"NSZombieEnabled/NSAutoreleaseFreedObjectCheckEnabled enabled!");
@@ -77,6 +99,11 @@
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)theApplication{
 	return YES;
 }
+
+
+
+#pragma mark -
+#pragma mark Private methods
 
 - (void)_showMainWindow{
 	if (!m_mainWindowController)

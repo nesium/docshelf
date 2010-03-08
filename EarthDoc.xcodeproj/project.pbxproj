@@ -73,6 +73,7 @@
 		2CCFC17F110500590019F014 /* schema.sql in Resources */ = {isa = PBXBuildFile; fileRef = 2CCFC17E110500590019F014 /* schema.sql */; };
 		2CCFC1B2110512990019F014 /* FHVSQLiteImporter.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CCFC1B1110512990019F014 /* FHVSQLiteImporter.m */; };
 		2CE1FA31113732A600CB120C /* NSWindow+NSMAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CE1FA30113732A600CB120C /* NSWindow+NSMAdditions.m */; };
+		2CE28C08114541AD00D55FEA /* implemented-by-arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 2CE28C07114541AD00D55FEA /* implemented-by-arrow.png */; };
 		2CE366111108B6FD00F582E9 /* ImageAndTextCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CE366101108B6FD00F582E9 /* ImageAndTextCell.m */; };
 		2CEE304B0DD65FC700CC762E /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2CEE304A0DD65FC700CC762E /* WebKit.framework */; };
 		2CEE30BA0DD6698100CC762E /* NodeClassToIconTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CEE30B90DD6698100CC762E /* NodeClassToIconTransformer.m */; };
@@ -205,6 +206,7 @@
 		2CE1F991113726EE00CB120C /* NSMMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSMMacros.h; sourceTree = "<group>"; };
 		2CE1FA2F113732A600CB120C /* NSWindow+NSMAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSWindow+NSMAdditions.h"; sourceTree = "<group>"; };
 		2CE1FA30113732A600CB120C /* NSWindow+NSMAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSWindow+NSMAdditions.m"; sourceTree = "<group>"; };
+		2CE28C07114541AD00D55FEA /* implemented-by-arrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "implemented-by-arrow.png"; sourceTree = "<group>"; };
 		2CE3660F1108B6FD00F582E9 /* ImageAndTextCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageAndTextCell.h; sourceTree = "<group>"; };
 		2CE366101108B6FD00F582E9 /* ImageAndTextCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageAndTextCell.m; sourceTree = "<group>"; };
 		2CEE304A0DD65FC700CC762E /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = /System/Library/Frameworks/WebKit.framework; sourceTree = "<absolute>"; };
@@ -449,6 +451,7 @@
 		2CEE30A00DD668D300CC762E /* icons */ = {
 			isa = PBXGroup;
 			children = (
+				2CE28C07114541AD00D55FEA /* implemented-by-arrow.png */,
 				2C85E6A31107E585001920A7 /* class.png */,
 				2C85E6A41107E585001920A7 /* constant.png */,
 				2C85E6A51107E585001920A7 /* event.png */,
@@ -595,6 +598,7 @@
 				2CBDCDCE113EE6B700FB4C23 /* UpdatePreferences.xib in Resources */,
 				2CBDCDE4113EE7C100FB4C23 /* reload.tiff in Resources */,
 				2C2EFA941142F0590020A08C /* error.png in Resources */,
+				2CE28C08114541AD00D55FEA /* implemented-by-arrow.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

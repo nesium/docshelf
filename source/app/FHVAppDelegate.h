@@ -19,11 +19,8 @@
 	FHVDocSetModel *m_docSetModel;
 	FHVMainWindowController *m_mainWindowController;
 	FHVImportWindowController *m_importWindowController;
-	IBOutlet NSWindow *m_importWindow;
-	IBOutlet NSWindow *m_newDocSetSheet;
-	IBOutlet NSProgressIndicator *m_progressIndicator;
-	IBOutlet NSTextField *m_progressLabel;
 	NSMPreferencesWindowController *m_prefsWindowController;
 }
+- (IBAction)addDocSet:(id)sender;
 - (IBAction)showPreferences:(id)sender;
 @end
