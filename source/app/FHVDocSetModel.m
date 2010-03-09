@@ -11,11 +11,16 @@
 
 @interface FHVDocSetModel (Private)
 - (void)_loadDocSets;
+- (void)_selectFirstLevelItem:(id)item;
 - (NSString *)_classHTMLStringWithClassNode:(NSDictionary *)classNode 
 	signatures:(NSArray *)signatures;
 - (NSString *)_globalFunctionHTMLWithNode:(NSDictionary *)node;
 - (NSString *)_globalConstantHTMLWithNode:(NSDictionary *)node;
 - (void)_setHTMLBody:(NSString *)body usingTemplate:(NSString *)templateName;
+- (void)_addSelectionObserver;
+- (void)_removeSelectionObserver;
+- (void)_updateSelectionURL;
+- (void)_updateDetailSelectionAnchor;
 @end
 
 
@@ -31,7 +36,8 @@ static BOOL g_initialLoad = YES;
 			searchMode=m_searchMode, 
 			docSets=m_docSets, 
 			firstLevelController=m_firstLevelController, 
-			secondLevelController=m_secondLevelController;
+			secondLevelController=m_secondLevelController, 
+			selectionURL=m_selectionURL;
 
 #pragma mark -
 #pragma mark Initialization & Deallocation
@@ -50,6 +56,7 @@ static BOOL g_initialLoad = YES;
 		m_lastSearchTerm = nil;
 		m_detailSelectionIndex = -1;
 		m_detailSelectionAnchor = nil;
+		m_selectionURL = nil;
 		m_searchMode = [[defaults objectForKey:@"FHVDocSetSearchMode"] intValue];
 		[self _loadDocSets];
 		m_searchWorkerConnection = [[NSConnection alloc] init];
@@ -61,13 +68,10 @@ static BOOL g_initialLoad = YES;
 		[m_firstLevelController setChildrenKeyPath:@"children"];
 		[m_firstLevelController setLeafKeyPath:@"leaf"];
 		[m_firstLevelController setAvoidsEmptySelection:NO];
-		[m_firstLevelController addObserver:self forKeyPath:@"selectionIndexPaths" 
-			options:0 context:NULL];
 		m_secondLevelController = [[NSTreeController alloc] init];
 		[m_secondLevelController setChildrenKeyPath:@"children"];
 		[m_secondLevelController setAvoidsEmptySelection:NO];
-		[m_secondLevelController addObserver:self forKeyPath:@"selectionIndexPaths" 
-			options:0 context:NULL];
+		[self _addSelectionObserver];
 	}
 	return self;
 }
@@ -79,6 +83,7 @@ static BOOL g_initialLoad = YES;
 	[m_searchWorkerConnection release];
 	[m_path release];
 	[m_docSets release];
+	[m_selectionURL release];
 	[super dealloc];
 }
 
@@ -122,14 +127,306 @@ static BOOL g_initialLoad = YES;
 	[m_mainData release];
 	m_mainData = nil;
 
-	[self selectFirstLevelItem:nil];
+	[self _selectFirstLevelItem:nil];
+	[self _updateSelectionURL];
 
 	[self _loadDocSets];
 	[self loadDocSets];
 	[m_searchWorker setDocSets:m_docSets];
 }
 
-- (void)selectFirstLevelItem:(id)item{
+- (NSURL *)URLForImageWithName:(NSString *)imageName{
+	FHVDocSet *docSet = [self docSetForItem:m_selectedItem];
+	return [NSURL fileURLWithPath:[[docSet imagePath] stringByAppendingPathComponent:imageName]];
+}
+
+- (NSString *)anchorForItem:(id)item{
+	NSString *ident = [item objectForKey:@"ident"];
+	NSRange hashRange = [ident rangeOfString:@"#" options:NSBackwardsSearch];
+	if (hashRange.location == NSNotFound || hashRange.location == [ident length] - 1) 
+		return nil;
+	return [ident substringFromIndex:(hashRange.location + 1)];
+}
+
+- (void)setShowsInheritedSignatures:(BOOL)bFlag{
+	if (m_showsInheritedSignatures == bFlag) return;
+	[[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithBool:bFlag] 
+		forKey:@"FHVDocSetShowsInheritedSignatures"];
+	m_showsInheritedSignatures = bFlag;
+	[self _selectFirstLevelItem:m_selectedItem];
+}
+
+- (void)setSearchTerm:(NSString *)filter{
+	if (filter == m_lastSearchTerm || [m_lastSearchTerm isEqualToString:filter])
+		return;
+	
+	[NSObject cancelPreviousPerformRequestsWithTarget:self];
+	[m_searchWorker cancelSearch];
+	[m_lastSearchTerm release];
+	m_lastSearchTerm = [filter copy];
+	
+	if (filter == nil){
+		m_inSearchMode = NO;
+		[m_firstLevelController setContent:m_mainData];
+		[m_searchResults release];
+		m_searchResults = nil;
+		return;
+	}
+	
+	m_inSearchMode = YES;
+	[self performSelector:@selector(_performSearchWithTerm:) withObject:filter 
+		afterDelay:0.2];
+}
+
+- (void)setSearchMode:(FHVDocSetSearchMode)mode{
+	if (m_searchMode == mode) return;
+	m_searchMode = mode;
+	[[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithInt:mode] 
+		forKey:@"FHVDocSetSearchMode"];
+	if (!m_inSearchMode) return;
+	[NSObject cancelPreviousPerformRequestsWithTarget:self];
+	[self performSelector:@selector(_performSearchWithTerm:) withObject:m_lastSearchTerm 
+		afterDelay:0.2];
+}
+
+- (void)setDocSetWithIndex:(NSUInteger)index inSearchIncluded:(BOOL)bFlag{
+	FHVDocSet *docSet = [m_docSets objectAtIndex:index];
+	if (docSet.inSearchIncluded == bFlag)
+		return;
+	docSet.inSearchIncluded = bFlag;
+	if (!m_inSearchMode) return;
+	[NSObject cancelPreviousPerformRequestsWithTarget:self];
+	[self performSelector:@selector(_performSearchWithTerm:) withObject:m_lastSearchTerm 
+		afterDelay:0.2];
+}
+
+- (NSImage *)imageForItem:(id)item{
+	NSString *imageName = @"method";
+	FHVItemType itemType = [[item objectForKey:@"itemType"] intValue];
+	if (itemType == kItemTypePackage){
+		imageName = @"package";
+	}else if (itemType == kItemTypeClass){
+		imageName = [[item objectForKey:@"type"] intValue] == kClassTypeInterface 
+			? @"interface" : @"class";
+	}else{
+		FHVSignatureType sigType = [[item objectForKey:@"type"] intValue];
+		FHVSignatureParentType sigParentType = [[item objectForKey:@"parentType"] intValue];
+		if (sigType == kSigTypeFunction){
+			imageName = sigParentType == kSigParentTypeClass ? @"method" : @"function";
+		}else if (sigType == kSigTypeVariable){
+			imageName = @"property";
+		}else if (sigType == kSigTypeConstant){
+			imageName = @"constant";
+		}else if (sigType == kSigTypeEvent){
+			imageName = @"event";
+		}
+	}
+	return [NSImage imageNamed:[NSString stringWithFormat:@"%@.png", imageName]];
+}
+
+- (void)loadChildrenOfPackage:(NSDictionary *)package{
+	if ([[package objectForKey:@"itemType"] intValue] != kItemTypePackage || 
+		[package objectForKey:@"children"] != nil)
+		return;
+	FHVDocSet *docSet = [self docSetForItem:package];
+	NSMutableArray *children = [NSMutableArray array];
+	[children addObjectsFromArray:[docSet classesWithParentId:[package objectForKey:@"dbId"]]];
+	[children addObjectsFromArray:[docSet signaturesWithPackageId:[package objectForKey:@"dbId"]]];
+	[(NSMutableDictionary *)package setObject:children forKey:@"children"];
+}
+
+- (void)selectItemWithURLInCurrentDocSet:(NSURL *)anURL{
+	[self selectItemWithURL:anURL 
+		inDocSet:[self docSetForDocSetId:[[m_selectedItem objectForKey:@"docSetId"] intValue]]];
+}
+
+- (void)selectItemWithURLInAnyDocSet:(NSURL *)anURL{
+	FHVDocSet *currentDocSet = [self docSetForDocSetId:[[m_selectedItem objectForKey:@"docSetId"] 
+		intValue]];
+	if ([self selectItemWithURL:anURL inDocSet:currentDocSet])
+		return;
+	for (FHVDocSet *docSet in m_docSets){
+		if (docSet == currentDocSet)
+			continue;
+		if ([self selectItemWithURL:anURL inDocSet:docSet]){
+			return;
+		}
+	}
+}
+
+- (BOOL)selectItemWithURL:(NSURL *)anURL inDocSet:(FHVDocSet *)aDocSet{
+	NSAssert(anURL != nil, @"URL must not be nil!");
+	if (aDocSet == nil)
+		return NO;
+	NDCLog(@"%@", anURL);
+	// searchedIdent may be nil, if the url points to a global function, eg. escape(), the 
+	// resulting url will then look like fhelpv://#escape()
+	// thus in this method searchedIdent is checked for nil multiple times
+	NSString *searchedIdent = [anURL host];
+	NSDictionary *searchedPackage = nil;
+	NSDictionary *topLevelPackage = nil;
+	NSArray *packages = [[self docSetItemForDocSetId:aDocSet.docSetId] objectForKey:@"children"];
+	for (NSDictionary *package in packages){
+		NSString *packageIdent = [package objectForKey:@"ident"];
+		if ([searchedIdent hasPrefix:packageIdent]){
+			searchedPackage = package;
+			break;
+		}else if ([packageIdent isEqualToString:@"Top Level"]){
+			topLevelPackage = package;
+			if (searchedIdent == nil){
+				searchedPackage = package;
+				break;
+			}
+		}
+	}
+	if (searchedPackage == nil)
+		searchedPackage = topLevelPackage;
+	if ([[searchedPackage objectForKey:@"ident"] isEqualToString:searchedIdent]){
+		[m_firstLevelController setSelectedObject:searchedPackage];
+		return YES;
+	}
+	
+	[self loadChildrenOfPackage:searchedPackage];
+	NSArray *contents = [searchedPackage objectForKey:@"children"];
+	NSDictionary *searchedItem = nil;
+	NSString *searchedFragment = searchedIdent == nil 
+		? [NSString stringWithFormat:@"#%@", [anURL fragment]] 
+		: nil;
+	for (NSDictionary *item in contents){
+		NSString *itemIdent = [item objectForKey:@"ident"];
+		if ([itemIdent isEqualToString:searchedIdent] || 
+			(searchedIdent == nil && [itemIdent isEqualToString:searchedFragment])){
+			searchedItem = item;
+			break;
+		}
+	}
+	
+	if (!searchedItem){
+		return NO;
+	}
+	
+	BOOL selectionURLNeedsUpdate = NO;
+	[self _removeSelectionObserver];
+	
+	// we first check if the searched item is contained by the firstlevelcontroller. if searchmode 
+	// is active it may be the case that the searched item isn't contained, so we simply load 
+	// the required html
+	NSIndexPath *searchedItemIndexPath = [m_firstLevelController indexPathForObject:searchedItem];
+	if (searchedItemIndexPath){
+		[m_firstLevelController setSelectionIndexPath:searchedItemIndexPath];
+		[self _selectFirstLevelItem:searchedItem];
+		selectionURLNeedsUpdate = YES;
+	}else{
+		[m_firstLevelController setSelectionIndexPath:nil];
+		[self _selectFirstLevelItem:searchedItem];
+	}
+	
+	if (!searchedIdent){
+		if (selectionURLNeedsUpdate)
+			[self _updateSelectionURL];
+		[self _addSelectionObserver];
+		return YES;
+	}
+	
+	if ([anURL fragment]){
+		for (NSDictionary *section in [m_secondLevelController content]){
+			NSArray *children = [section objectForKey:@"children"];
+			for (NSDictionary *item in children){
+				if ([[self anchorForItem:item] isEqualToString:[anURL fragment]]){
+					[m_secondLevelController setSelectedObject:item];
+					break;
+				}
+			}
+		}
+	}else{
+		[m_secondLevelController setSelectionIndexPath:nil];
+	}
+	
+	[self _updateSelectionURL];
+	[self _updateDetailSelectionAnchor];
+	[self _addSelectionObserver];
+	return YES;
+}
+
+- (NSDictionary *)docSetItemForItem:(id)item{
+	NSInteger docSetId = [[item objectForKey:@"docSetId"] intValue];
+	for (NSInteger i = 0; i < [m_docSets count]; i++){
+		FHVDocSet *docSet = [m_docSets objectAtIndex:i];
+		if (docSet.index == docSetId)
+			return [m_mainData objectAtIndex:i];
+	}
+	return nil;
+}
+
+- (FHVDocSet *)docSetForItem:(id)item{
+	NSInteger docSetId = [[item objectForKey:@"docSetId"] intValue];
+	return [self docSetForDocSetId:docSetId];
+}
+
+- (FHVDocSet *)docSetForDocSetId:(NSInteger)docSetId{
+	for (FHVDocSet *docSet in m_docSets){
+		if (docSet.index == docSetId)
+			return docSet;
+	}
+	return nil;
+}
+
+- (NSDictionary *)docSetItemForDocSetId:(NSString *)docSetId{
+	for (NSInteger i = 0; i < [m_docSets count]; i++){
+		FHVDocSet *docSet = [m_docSets objectAtIndex:i];
+		if ([docSet.docSetId isEqualToString:docSetId])
+			return [m_mainData objectAtIndex:i];
+	}
+	return nil;
+}
+
+
+
+#pragma mark -
+#pragma mark KVO Notifications
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change 
+	context:(void *)context{
+	if (object == m_firstLevelController){
+		if ([[m_firstLevelController selectedObjects] count]){
+			[self _removeSelectionObserver];
+			[self _selectFirstLevelItem:[[m_firstLevelController selectedObjects] objectAtIndex:0]];
+			[self _addSelectionObserver];
+			[self _updateSelectionURL];
+		}
+	}else if (object == m_secondLevelController){
+		[self _updateSelectionURL];
+		[self _updateDetailSelectionAnchor];
+	}
+}
+
+
+
+#pragma mark -
+#pragma mark Private methods
+
+- (void)_loadDocSets{
+	NSArray *files = [[NSFileManager defaultManager] 
+		contentsOfDirectoryAtPath:m_path error:nil];
+	NSMutableArray *docSets = [NSMutableArray array];
+	for (NSString *file in files){
+		if ([[[file pathExtension] lowercaseString] isEqualToString:@"fhvdocset"]){
+			FHVDocSet *docSet = [[FHVDocSet alloc] initWithPath:
+				[m_path stringByAppendingPathComponent:file] index:[docSets count]];
+			[docSets addObject:docSet];
+			[docSet release];
+		}
+	}
+	[docSets sortUsingComparator:^(id obj1, id obj2){
+		return [[obj1 valueForKey:@"name"] compare:[obj2 valueForKey:@"name"]];
+	}];
+	[m_docSets release];
+	[self willChangeValueForKey:@"docSets"];
+	m_docSets = [docSets copy];
+	[self didChangeValueForKey:@"docSets"];
+}
+
+- (void)_selectFirstLevelItem:(id)item{
 	m_detailSelectionIndex = -1;
 	
 	NSNumber *itemType = [item objectForKey:@"itemType"];
@@ -156,8 +453,6 @@ static BOOL g_initialLoad = YES;
 			[m_selectedItem release];
 			m_selectedItem = item;
 			[m_secondLevelController setContent:nil];
-			[self willChangeValueForKey:@"selectionURL"];
-			[self didChangeValueForKey:@"selectionURL"];
 			return;
 		}else{
 			idToSelect = [item objectForKey:@"dbId"];
@@ -261,306 +556,7 @@ static BOOL g_initialLoad = YES;
 			}
 		}
 		[m_secondLevelController setSelectedObject:itemToSelect];
-	}else{
-		[self willChangeValueForKey:@"selectionURL"];
-		[self didChangeValueForKey:@"selectionURL"];
 	}
-}
-
-- (NSURL *)URLForImageWithName:(NSString *)imageName{
-	FHVDocSet *docSet = [self docSetForItem:m_selectedItem];
-	return [NSURL fileURLWithPath:[[docSet imagePath] stringByAppendingPathComponent:imageName]];
-}
-
-- (NSString *)anchorForItem:(id)item{
-	NSString *ident = [item objectForKey:@"ident"];
-	NSRange hashRange = [ident rangeOfString:@"#" options:NSBackwardsSearch];
-	if (hashRange.location == NSNotFound || hashRange.location == [ident length] - 1) 
-		return nil;
-	return [ident substringFromIndex:(hashRange.location + 1)];
-}
-
-- (void)setShowsInheritedSignatures:(BOOL)bFlag{
-	if (m_showsInheritedSignatures == bFlag) return;
-	[[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithBool:bFlag] 
-		forKey:@"FHVDocSetShowsInheritedSignatures"];
-	m_showsInheritedSignatures = bFlag;
-	[self selectFirstLevelItem:m_selectedItem];
-}
-
-- (void)setSearchTerm:(NSString *)filter{
-	if (filter == m_lastSearchTerm || [m_lastSearchTerm isEqualToString:filter])
-		return;
-	
-	[NSObject cancelPreviousPerformRequestsWithTarget:self];
-	[m_searchWorker cancelSearch];
-	[m_lastSearchTerm release];
-	m_lastSearchTerm = [filter copy];
-	
-	if (filter == nil){
-		m_inSearchMode = NO;
-		[m_firstLevelController setContent:m_mainData];
-		[m_searchResults release];
-		m_searchResults = nil;
-		return;
-	}
-	
-	m_inSearchMode = YES;
-	[self performSelector:@selector(_performSearchWithTerm:) withObject:filter 
-		afterDelay:0.2];
-}
-
-- (void)setSearchMode:(FHVDocSetSearchMode)mode{
-	if (m_searchMode == mode) return;
-	m_searchMode = mode;
-	[[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithInt:mode] 
-		forKey:@"FHVDocSetSearchMode"];
-	if (!m_inSearchMode) return;
-	[NSObject cancelPreviousPerformRequestsWithTarget:self];
-	[self performSelector:@selector(_performSearchWithTerm:) withObject:m_lastSearchTerm 
-		afterDelay:0.2];
-}
-
-- (void)setDocSetWithIndex:(NSUInteger)index inSearchIncluded:(BOOL)bFlag{
-	FHVDocSet *docSet = [m_docSets objectAtIndex:index];
-	if (docSet.inSearchIncluded == bFlag)
-		return;
-	docSet.inSearchIncluded = bFlag;
-	if (!m_inSearchMode) return;
-	[NSObject cancelPreviousPerformRequestsWithTarget:self];
-	[self performSelector:@selector(_performSearchWithTerm:) withObject:m_lastSearchTerm 
-		afterDelay:0.2];
-}
-
-- (NSImage *)imageForItem:(id)item{
-	NSString *imageName = @"method";
-	FHVItemType itemType = [[item objectForKey:@"itemType"] intValue];
-	if (itemType == kItemTypePackage){
-		imageName = @"package";
-	}else if (itemType == kItemTypeClass){
-		imageName = [[item objectForKey:@"type"] intValue] == kClassTypeInterface 
-			? @"interface" : @"class";
-	}else{
-		FHVSignatureType sigType = [[item objectForKey:@"type"] intValue];
-		FHVSignatureParentType sigParentType = [[item objectForKey:@"parentType"] intValue];
-		if (sigType == kSigTypeFunction){
-			imageName = sigParentType == kSigParentTypeClass ? @"method" : @"function";
-		}else if (sigType == kSigTypeVariable){
-			imageName = @"property";
-		}else if (sigType == kSigTypeConstant){
-			imageName = @"constant";
-		}else if (sigType == kSigTypeEvent){
-			imageName = @"event";
-		}
-	}
-	return [NSImage imageNamed:[NSString stringWithFormat:@"%@.png", imageName]];
-}
-
-- (void)loadChildrenOfPackage:(NSDictionary *)package{
-	if ([[package objectForKey:@"itemType"] intValue] != kItemTypePackage || 
-		[package objectForKey:@"children"] != nil)
-		return;
-	FHVDocSet *docSet = [self docSetForItem:package];
-	NSMutableArray *children = [NSMutableArray array];
-	[children addObjectsFromArray:[docSet classesWithParentId:[package objectForKey:@"dbId"]]];
-	[children addObjectsFromArray:[docSet signaturesWithPackageId:[package objectForKey:@"dbId"]]];
-	[(NSMutableDictionary *)package setObject:children forKey:@"children"];
-}
-
-- (void)selectItemWithURLInCurrentDocSet:(NSURL *)anURL{
-	[self selectItemWithURL:anURL 
-		inDocSet:[self docSetForDocSetId:[[m_selectedItem objectForKey:@"docSetId"] intValue]]];
-}
-
-- (void)selectItemWithURLInAnyDocSet:(NSURL *)anURL{
-	FHVDocSet *currentDocSet = [self docSetForDocSetId:[[m_selectedItem objectForKey:@"docSetId"] 
-		intValue]];
-	if ([self selectItemWithURL:anURL inDocSet:currentDocSet])
-		return;
-	for (FHVDocSet *docSet in m_docSets){
-		if (docSet == currentDocSet)
-			continue;
-		if ([self selectItemWithURL:anURL inDocSet:docSet])
-			return;
-	}
-}
-
-- (BOOL)selectItemWithURL:(NSURL *)anURL inDocSet:(FHVDocSet *)aDocSet{
-	NSAssert(anURL != nil, @"URL must not be nil!");
-	NDCLog(@"%@", anURL);
-	if (aDocSet == nil)
-		return NO;
-	
-	// searchedIdent may be nil, if the url points to a global function, eg. escape(), the 
-	// resulting url will then look like fhelpv://#escape()
-	// thus in this method searchedIdent is checked for nil multiple times
-	NSString *searchedIdent = [anURL host];
-	NSDictionary *searchedPackage = nil;
-	NSDictionary *topLevelPackage = nil;
-	NSArray *packages = [[self docSetItemForItem:m_selectedItem] objectForKey:@"children"];
-	for (NSDictionary *package in packages){
-		NSString *packageIdent = [package objectForKey:@"ident"];
-		if ([searchedIdent hasPrefix:packageIdent]){
-			searchedPackage = package;
-			break;
-		}else if ([packageIdent isEqualToString:@"Top Level"]){
-			topLevelPackage = package;
-			if (searchedIdent == nil){
-				searchedPackage = package;
-				break;
-			}
-		}
-	}
-	if (searchedPackage == nil)
-		searchedPackage = topLevelPackage;
-	
-	if ([[searchedPackage objectForKey:@"ident"] isEqualToString:searchedIdent]){
-		[m_firstLevelController setSelectedObject:searchedPackage];
-		return YES;
-	}
-	
-	[self loadChildrenOfPackage:searchedPackage];
-	NSArray *contents = [searchedPackage objectForKey:@"children"];
-	NSDictionary *searchedItem = nil;
-	NSString *searchedFragment = searchedIdent == nil 
-		? [NSString stringWithFormat:@"#%@", [anURL fragment]] 
-		: nil;
-	for (NSDictionary *item in contents){
-		NSString *itemIdent = [item objectForKey:@"ident"];
-		if ([itemIdent isEqualToString:searchedIdent] || 
-			(searchedIdent == nil && [itemIdent isEqualToString:searchedFragment])){
-			searchedItem = item;
-			break;
-		}
-	}
-	
-	if (!searchedItem){
-		return NO;
-	}
-	
-	// we first check if the searched item is contained by the firstlevelcontroller. if searchmode 
-	// is active it may be the case that the searched item isn't contained, so we simply load 
-	// the required html
-	NSIndexPath *searchedItemIndexPath = [m_firstLevelController indexPathForObject:searchedItem];
-	if (searchedItemIndexPath)
-		[m_firstLevelController setSelectionIndexPath:searchedItemIndexPath];
-	else{
-		[m_firstLevelController setSelectionIndexPath:nil];
-		[self selectFirstLevelItem:searchedItem];
-	}
-	
-	if (!searchedIdent)
-		return YES;
-	
-	if ([anURL fragment]){
-		for (NSDictionary *section in [m_secondLevelController content]){
-			NSArray *children = [section objectForKey:@"children"];
-			for (NSDictionary *item in children){
-				if ([[self anchorForItem:item] isEqualToString:[anURL fragment]]){
-					[m_secondLevelController setSelectedObject:item];
-					break;
-				}
-			}
-		}
-	}else{
-		[m_secondLevelController setSelectionIndexPath:nil];
-	}
-	return YES;
-}
-
-- (NSDictionary *)docSetItemForItem:(id)item{
-	NSInteger docSetId = [[item objectForKey:@"docSetId"] intValue];
-	for (NSInteger i = 0; i < [m_docSets count]; i++){
-		FHVDocSet *docSet = [m_docSets objectAtIndex:i];
-		if (docSet.index == docSetId)
-			return [m_mainData objectAtIndex:i];
-	}
-	return nil;
-}
-
-- (FHVDocSet *)docSetForItem:(id)item{
-	NSInteger docSetId = [[item objectForKey:@"docSetId"] intValue];
-	return [self docSetForDocSetId:docSetId];
-}
-
-- (FHVDocSet *)docSetForDocSetId:(NSInteger)docSetId{
-	for (FHVDocSet *docSet in m_docSets){
-		if (docSet.index == docSetId)
-			return docSet;
-	}
-	return nil;
-}
-
-- (NSDictionary *)docSetItemForDocSetId:(NSString *)docSetId{
-	for (NSInteger i = 0; i < [m_docSets count]; i++){
-		FHVDocSet *docSet = [m_docSets objectAtIndex:i];
-		if ([docSet.docSetId isEqualToString:docSetId])
-			return [m_mainData objectAtIndex:i];
-	}
-	return nil;
-}
-
-- (NSURL *)selectionURL{
-	if (!m_selectedItem)
-		return nil;
-	NSString *urlString = [NSString stringWithFormat:@"fhelpv://%@", 
-		[m_selectedItem objectForKey:@"ident"]];
-	if ([[m_secondLevelController selectedObjects] count]){
-		NSDictionary *selectedItem = [[m_secondLevelController selectedObjects] objectAtIndex:0];
-		urlString = [urlString stringByAppendingFormat:@"#%@", [self anchorForItem:selectedItem]];
-	}
-	return [NSURL URLWithString:urlString];
-}
-
-
-
-#pragma mark -
-#pragma mark KVO Notifications
-
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change 
-	context:(void *)context{
-	if (object == m_firstLevelController){
-		if ([[m_firstLevelController selectedObjects] count])
-			[self selectFirstLevelItem:[[m_firstLevelController selectedObjects] objectAtIndex:0]];
-	}else if (object == m_secondLevelController){
-		NSString *anchor = @"#top";
-		if ([[m_secondLevelController selectedObjects] count]){
-			NSDictionary *item = [[m_secondLevelController selectedObjects] objectAtIndex:0];
-			anchor = [self anchorForItem:item];
-		}	
-		[self willChangeValueForKey:@"detailSelectionAnchor"];
-		[m_detailSelectionAnchor release];
-		m_detailSelectionAnchor = [anchor retain];
-		[self didChangeValueForKey:@"detailSelectionAnchor"];
-		[self willChangeValueForKey:@"selectionURL"];
-		[self didChangeValueForKey:@"selectionURL"];
-	}
-}
-
-
-
-#pragma mark -
-#pragma mark Private methods
-
-- (void)_loadDocSets{
-	NSArray *files = [[NSFileManager defaultManager] 
-		contentsOfDirectoryAtPath:m_path error:nil];
-	NSMutableArray *docSets = [NSMutableArray array];
-	for (NSString *file in files){
-		if ([[[file pathExtension] lowercaseString] isEqualToString:@"fhvdocset"]){
-			FHVDocSet *docSet = [[FHVDocSet alloc] initWithPath:
-				[m_path stringByAppendingPathComponent:file] index:[docSets count]];
-			[docSets addObject:docSet];
-			[docSet release];
-		}
-	}
-	[docSets sortUsingComparator:^(id obj1, id obj2){
-		return [[obj1 valueForKey:@"name"] compare:[obj2 valueForKey:@"name"]];
-	}];
-	[m_docSets release];
-	[self willChangeValueForKey:@"docSets"];
-	m_docSets = [docSets copy];
-	[self didChangeValueForKey:@"docSets"];
 }
 
 - (NSString *)_classHTMLStringWithClassNode:(NSDictionary *)classNode 
@@ -630,6 +626,53 @@ static BOOL g_initialLoad = YES;
 	[m_detailData release];
 	m_detailData = [html copy];
 	[self didChangeValueForKey:@"detailData"];
+}
+
+- (void)_addSelectionObserver{
+	[m_firstLevelController addObserver:self forKeyPath:@"selectionIndexPaths" 
+		options:0 context:NULL];
+	[m_secondLevelController addObserver:self forKeyPath:@"selectionIndexPaths" 
+		options:0 context:NULL];
+}
+
+- (void)_removeSelectionObserver{
+	[m_firstLevelController removeObserver:self forKeyPath:@"selectionIndexPaths"];
+	[m_secondLevelController removeObserver:self forKeyPath:@"selectionIndexPaths"];
+}
+
+- (void)_updateSelectionURL{
+	NSURL *newSelectionURL = nil;
+	if (m_selectedItem){
+		NSString *urlString = [NSString stringWithFormat:@"fhelpv://%@", 
+			[m_selectedItem objectForKey:@"ident"]];
+		if ([[m_secondLevelController selectedObjects] count]){
+			NSDictionary *selectedItem = [[m_secondLevelController selectedObjects] objectAtIndex:0];
+			urlString = [urlString stringByAppendingFormat:@"#%@", [self anchorForItem:selectedItem]];
+		}
+		newSelectionURL = [NSURL URLWithString:urlString];
+	}
+	if ((newSelectionURL != nil || m_selectionURL != nil) && 
+		![newSelectionURL isEqual:m_selectionURL]){
+		[self willChangeValueForKey:@"selectionURL"];
+		[m_selectionURL release];
+		m_selectionURL = [newSelectionURL retain];
+		[self didChangeValueForKey:@"selectionURL"];
+	}
+}
+
+- (void)_updateDetailSelectionAnchor{
+	NSString *newAnchor = @"#top";
+	if ([[m_secondLevelController selectedObjects] count]){
+		NSDictionary *item = [[m_secondLevelController selectedObjects] objectAtIndex:0];
+		newAnchor = [self anchorForItem:item];
+	}
+	if ((newAnchor != nil || m_detailSelectionAnchor != nil) && 
+		![newAnchor isEqualToString:m_detailSelectionAnchor]){
+		[self willChangeValueForKey:@"detailSelectionAnchor"];
+		[m_detailSelectionAnchor release];
+		m_detailSelectionAnchor = [newAnchor retain];
+		[self didChangeValueForKey:@"detailSelectionAnchor"];
+	}
 }
 
 

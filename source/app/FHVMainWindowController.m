@@ -25,7 +25,6 @@
 - (FHVDocSetSearchMode)_searchModeForIdentifier:(NSString *)identifier;
 - (void)_reloadOutlineView:(NSOutlineView *)anOutlineView;
 - (void)_setDetailOutlineViewVisible:(BOOL)bFlag;
-- (void)_serializeTreeState;
 - (void)_restoreTreeState;
 - (void)_serializeSplitViewPositions;
 - (void)_restoreSplitViewPositions;
@@ -36,6 +35,15 @@
 
 
 @implementation FHVMainWindowController
+
+enum{
+	kKVOContextDetailData, 
+	kKVOContextDetailSelectionAnchor, 
+	kKVOContextDocSets, 
+	kKVOContextSelectionURL, 
+	kKVOContextFirstLevelControllerContent, 
+	kKVOContextSecondLevelControllerContent
+};
 
 #pragma mark -
 #pragma mark Initialization & Deallocation
@@ -57,11 +65,12 @@
 
 - (void)dealloc{
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
-	[m_docSetModel removeObserver:self forKeyPath:@"currentData"];
-	[m_docSetModel removeObserver:self forKeyPath:@"selectionData"];
 	[m_docSetModel removeObserver:self forKeyPath:@"detailData"];
+	[m_docSetModel removeObserver:self forKeyPath:@"detailSelectionAnchor"];
 	[m_docSetModel removeObserver:self forKeyPath:@"docSets"];
 	[m_docSetModel removeObserver:self forKeyPath:@"selectionURL"];
+	[m_docSetModel.firstLevelController removeObserver:self forKeyPath:@"content"];
+	[m_docSetModel.secondLevelController removeObserver:self forKeyPath:@"content"];
 	[m_innerSplitView release];
 	[m_history release];
 	[super dealloc];
@@ -70,7 +79,54 @@
 
 
 #pragma mark -
-#pragma mark Protected methods
+#pragma mark Public methods
+
+- (void)saveTreeState{
+	if (m_docSetModel.inSearchMode)
+		return;
+
+	NSInteger count = [m_outlineView numberOfRows];
+	NSMutableDictionary *tree = [NSMutableDictionary dictionary];
+	for (NSInteger i = 0; i < count; i++){
+		id item = [m_outlineView itemAtRow:i];
+		NSInteger level = [m_outlineView levelForRow:i];
+		if (![m_outlineView isItemExpanded:item] || level == -1 || level > 2)
+			continue;
+		item = [item representedObject];
+		if (level == 0){
+			NSString *docSetId = [m_docSetModel docSetForItem:item].docSetId;
+			[tree setObject:[NSMutableArray array] forKey:docSetId];
+		}else{
+			id parentItem = [m_docSetModel docSetItemForItem:item];
+			NSString *docSetId = [m_docSetModel docSetForItem:item].docSetId;
+			NSInteger index = [[parentItem objectForKey:@"children"] indexOfObject:item];
+			NSMutableArray *arr = [tree objectForKey:docSetId];
+			[arr addObject:[NSNumber numberWithInt:index]];
+		}
+	}
+	
+	NSMutableArray *selection = [NSMutableArray array];
+	if ([[m_docSetModel.firstLevelController selectedObjects] count]){
+		id selectedItem = [[m_docSetModel.firstLevelController selectedObjects] objectAtIndex:0];
+		NSString *docSetId = [m_docSetModel docSetForItem:selectedItem].docSetId;
+		[selection addObject:docSetId];
+		[selection addObject:[[m_docSetModel.firstLevelController selectionIndexPath] allIndexes]];
+		
+		if ([[m_docSetModel.secondLevelController selectedObjects] count]){
+			selectedItem = [[m_docSetModel.secondLevelController selectedObjects] objectAtIndex:0];
+			[selection addObject:[[m_docSetModel.secondLevelController selectionIndexPath] 
+				allIndexes]];
+		}
+	}
+	
+	[[NSUserDefaults standardUserDefaults] setObject:tree forKey:@"FHVTreeState"];
+	[[NSUserDefaults standardUserDefaults] setObject:selection forKey:@"FHVSelection"];
+}
+
+
+
+#pragma mark -
+#pragma mark NSWindowController methods
 
 - (void)windowDidLoad{
 	// we remove the inner splitview from its parent eventually, so retain it for safety reasons
@@ -78,9 +134,12 @@
 	[m_outlineView setIntercellSpacing:(NSSize){3, 0}];
 	[m_selectionOutlineView setIntercellSpacing:(NSSize){3, 0}];
 	
-	[m_docSetModel addObserver:self forKeyPath:@"detailData" options:0 context:(void *)3];
-	[m_docSetModel addObserver:self forKeyPath:@"detailSelectionAnchor" options:0 context:(void *)4];
-	[m_docSetModel addObserver:self forKeyPath:@"docSets" options:0 context:(void *)5];
+	[m_docSetModel addObserver:self forKeyPath:@"detailData" options:0 
+		context:(void *)kKVOContextDetailData];
+	[m_docSetModel addObserver:self forKeyPath:@"detailSelectionAnchor" options:0 
+		context:(void *)kKVOContextDetailSelectionAnchor];
+	[m_docSetModel addObserver:self forKeyPath:@"docSets" options:0 
+		context:(void *)kKVOContextDocSets];
 	m_detailSelectionAnchorBound = YES;
 	[m_webView setResourceLoadDelegate:self];
 	[m_webView setPolicyDelegate:self];
@@ -100,7 +159,7 @@
 		withKeyPath:@"selectionIndexPaths" options:nil];
 	[m_outlineView setDelegate:self];
 	[m_docSetModel.firstLevelController addObserver:self forKeyPath:@"content" options:0 
-		context:(void *)1];
+		context:(void *)kKVOContextFirstLevelControllerContent];
 	
 	[m_selectionOutlineView bind:@"content" toObject:m_docSetModel.secondLevelController 
 		withKeyPath:@"arrangedObjects" options:nil];
@@ -111,13 +170,18 @@
 		withKeyPath:@"selectionIndexPaths" options:nil];
 	[m_selectionOutlineView setDelegate:self];
 	[m_docSetModel.secondLevelController addObserver:self forKeyPath:@"content" options:0 
-		context:(void *)2];
+		context:(void *)kKVOContextSecondLevelControllerContent];
 		
 	[self _restoreSplitViewPositions];
 	[self _restoreTreeState];
 	if ([[m_docSetModel.secondLevelController content] count] == 0)
 		[self _setDetailOutlineViewVisible:NO];
-	[m_docSetModel addObserver:self forKeyPath:@"selectionURL" options:0 context:(void *)6];
+	if (!m_docSetModel.detailData){
+		[[m_webView mainFrame] loadRequest:[NSURLRequest requestWithURL:[NSURL fileURLWithPath:
+			[[NSBundle mainBundle] pathForResource:@"blank" ofType:@"html"]]]];
+	}
+	[m_docSetModel addObserver:self forKeyPath:@"selectionURL" options:0 
+		context:(void *)kKVOContextSelectionURL];
 	if (m_docSetModel.selectionURL)
 		[self _recordHistoryItem:m_docSetModel.selectionURL];
 	else{
@@ -147,7 +211,7 @@
 		return;
 	}
 	if (!m_docSetModel.inSearchMode){
-		[self _serializeTreeState];
+		[self saveTreeState];
 		[self _setFilterBarVisible:YES];
 	}
 	[m_docSetModel setSearchTerm:[m_searchField stringValue]];
@@ -161,7 +225,8 @@
 	}
 	[m_docSetModel removeObserver:self forKeyPath:@"selectionURL"];
 	[m_docSetModel selectItemWithURLInAnyDocSet:[m_history objectAtIndex:m_historyIndex]];
-	[m_docSetModel addObserver:self forKeyPath:@"selectionURL" options:0 context:(void *)6];
+	[m_docSetModel addObserver:self forKeyPath:@"selectionURL" options:0 
+		context:(void *)kKVOContextSelectionURL];
 	[self _updateBackForwardControl];
 }
 
@@ -180,7 +245,7 @@
 #pragma mark Notifications
 
 - (void)applicationWillTerminate:(NSNotification *)notification{
-	[self _serializeTreeState];
+	[self saveTreeState];
 	[self _serializeSplitViewPositions];
 }
 
@@ -191,28 +256,40 @@
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object 
 	change:(NSDictionary *)change context:(void *)context{
-	if ((int)context == 1){
-		[m_outlineView setIndentationPerLevel:m_docSetModel.inSearchMode ? 0 : 10];
-		if (m_docSetModel.inSearchMode) [m_outlineView expandItem:nil expandChildren:YES];
-		else [self _restoreTreeState];
-	}else if ((int)context == 2){
-		[self _setDetailOutlineViewVisible:[[m_docSetModel.secondLevelController content] count] > 0];
-		[m_selectionOutlineView expandItem:nil expandChildren:YES];
-	}else if ((int)context == 3){
-		if (m_detailSelectionAnchorBound){
-			[m_docSetModel removeObserver:self forKeyPath:@"detailSelectionAnchor"];
-			m_detailSelectionAnchorBound = NO;
-		}
-		[[m_webView mainFrame] loadHTMLString:m_docSetModel.detailData  
-			baseURL:[NSURL fileURLWithPath:[[NSBundle mainBundle] resourcePath]]];
-	}else if ((int)context == 4){
-		if (m_docSetModel.detailSelectionAnchor)
-			[self _jumpToAnchor:m_docSetModel.detailSelectionAnchor];
-	}else if ((int)context == 5){
-		NSAssert([[NSThread currentThread] isMainThread], @"Not on main thread");
-		[self _updateFilterBar];
-	}else if ((int)context == 6){
-		[self _recordHistoryItem:m_docSetModel.selectionURL];
+	switch ((int)context){
+		case kKVOContextFirstLevelControllerContent:
+			[m_outlineView setIndentationPerLevel:m_docSetModel.inSearchMode ? 0 : 10];
+			if (m_docSetModel.inSearchMode) [m_outlineView expandItem:nil expandChildren:YES];
+			else [self _restoreTreeState];
+			break;
+		
+		case kKVOContextSecondLevelControllerContent:
+			[self _setDetailOutlineViewVisible:[[m_docSetModel.secondLevelController content] count] > 0];
+			[m_selectionOutlineView expandItem:nil expandChildren:YES];
+			break;
+			
+		case kKVOContextDetailData:
+			if (m_detailSelectionAnchorBound){
+				[m_docSetModel removeObserver:self forKeyPath:@"detailSelectionAnchor"];
+				m_detailSelectionAnchorBound = NO;
+			}
+			[[m_webView mainFrame] loadHTMLString:m_docSetModel.detailData  
+				baseURL:[NSURL fileURLWithPath:[[NSBundle mainBundle] resourcePath]]];
+			break;
+		
+		case kKVOContextDetailSelectionAnchor:
+			if (m_docSetModel.detailSelectionAnchor)
+				[self _jumpToAnchor:m_docSetModel.detailSelectionAnchor];
+			break;
+			
+		case kKVOContextDocSets:
+			NSAssert([[NSThread currentThread] isMainThread], @"Not on main thread");
+			[self _updateFilterBar];
+			break;
+			
+		case kKVOContextSelectionURL:
+			[self _recordHistoryItem:m_docSetModel.selectionURL];
+			break;
 	}
 }
 
@@ -227,9 +304,11 @@ static HeadlineCell *g_headlineCell = nil;
 	forTableColumn:(NSTableColumn *)tableColumn item:(id)item{
 	BOOL itemWantsHeaderCell = [self _itemWantsHeaderCell:[item representedObject]];
 	if ([[[item representedObject] objectForKey:@"inherited"] boolValue] || itemWantsHeaderCell){
-		NSInteger row = [outlineView rowForItem:item];
-		[(HeadlineCell *)cell setDrawsTopBorder:(row > 0 && 
-			![self _itemWantsHeaderCell:[[outlineView itemAtRow:row - 1] representedObject]])];
+		if (itemWantsHeaderCell){
+			NSInteger row = [outlineView rowForItem:item];
+			[(HeadlineCell *)cell setDrawsTopBorder:(row > 0 && 
+				![self _itemWantsHeaderCell:[[outlineView itemAtRow:row - 1] representedObject]])];
+		}
 		[cell setTextColor:[NSColor colorWithCalibratedRed:0.459 green:0.459 blue:0.459 alpha:1.0]];
 	}else{
 		[cell setTextColor:[NSColor blackColor]];
@@ -340,7 +419,8 @@ static HeadlineCell *g_headlineCell = nil;
 	if (anchor){
 		[self _jumpToAnchor:anchor];
 	}
-	[m_docSetModel addObserver:self forKeyPath:@"detailSelectionAnchor" options:0 context:(void *)4];
+	[m_docSetModel addObserver:self forKeyPath:@"detailSelectionAnchor" options:0 
+		context:(void *)kKVOContextDetailSelectionAnchor];
 	m_detailSelectionAnchorBound = YES;
 }
 
@@ -496,7 +576,6 @@ static HeadlineCell *g_headlineCell = nil;
 	if ([m_innerSplitView superview]){
 		[[NSUserDefaults standardUserDefaults] setObject:NSStringFromRect(m_webView.frame) 
 			forKey:@"FHVWebViewFrame"];
-		NDCLog(@"save %@", NSStringFromRect(m_webView.frame));
 		[[NSUserDefaults standardUserDefaults] setObject:NSStringFromRect(m_innerSplitView.frame) 
 			forKey:@"FHVInnerSplitViewFrame"];
 	}else{
@@ -510,7 +589,6 @@ static HeadlineCell *g_headlineCell = nil;
 		objectForKey:@"FHVInnerSplitViewFrame"];
 	NSString *webViewFrame = [[NSUserDefaults standardUserDefaults] 
 		objectForKey:@"FHVWebViewFrame"];
-	NDCLog(@"%@", webViewFrame);
 	// first launch
 	if (!innerSplitViewFrame)
 		return;
@@ -522,48 +600,6 @@ static HeadlineCell *g_headlineCell = nil;
 		 	NSWidth(NSRectFromString(webViewFrame)) - [m_innerSplitView dividerThickness]) 
 			ofDividerAtIndex:0];
 	}
-}
-
-- (void)_serializeTreeState{
-	if (m_docSetModel.inSearchMode)
-		return;
-
-	NSInteger count = [m_outlineView numberOfRows];
-	NSMutableDictionary *tree = [NSMutableDictionary dictionary];
-	for (NSInteger i = 0; i < count; i++){
-		id item = [m_outlineView itemAtRow:i];
-		NSInteger level = [m_outlineView levelForRow:i];
-		if (![m_outlineView isItemExpanded:item] || level == -1 || level > 2)
-			continue;
-		item = [item representedObject];
-		if (level == 0){
-			NSString *docSetId = [m_docSetModel docSetForItem:item].docSetId;
-			[tree setObject:[NSMutableArray array] forKey:docSetId];
-		}else{
-			id parentItem = [m_docSetModel docSetItemForItem:item];
-			NSString *docSetId = [m_docSetModel docSetForItem:item].docSetId;
-			NSInteger index = [[parentItem objectForKey:@"children"] indexOfObject:item];
-			NSMutableArray *arr = [tree objectForKey:docSetId];
-			[arr addObject:[NSNumber numberWithInt:index]];
-		}
-	}
-	
-	NSMutableArray *selection = [NSMutableArray array];
-	if ([[m_docSetModel.firstLevelController selectedObjects] count]){
-		id selectedItem = [[m_docSetModel.firstLevelController selectedObjects] objectAtIndex:0];
-		NSString *docSetId = [m_docSetModel docSetForItem:selectedItem].docSetId;
-		[selection addObject:docSetId];
-		[selection addObject:[[m_docSetModel.firstLevelController selectionIndexPath] allIndexes]];
-		
-		if ([[m_docSetModel.secondLevelController selectedObjects] count]){
-			selectedItem = [[m_docSetModel.secondLevelController selectedObjects] objectAtIndex:0];
-			[selection addObject:[[m_docSetModel.secondLevelController selectionIndexPath] 
-				allIndexes]];
-		}
-	}
-	
-	[[NSUserDefaults standardUserDefaults] setObject:tree forKey:@"FHVTreeState"];
-	[[NSUserDefaults standardUserDefaults] setObject:selection forKey:@"FHVSelection"];
 }
 
 - (void)_restoreTreeState{

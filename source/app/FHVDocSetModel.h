@@ -28,6 +28,7 @@
 	NSInteger m_detailSelectionIndex;
 	NSString *m_detailSelectionAnchor;
 	FHVDocSetSearchMode m_searchMode;
+	NSURL *m_selectionURL;
 	
 	NSTreeController *m_firstLevelController;
 	NSTreeController *m_secondLevelController;
@@ -46,7 +47,6 @@
 - (id)initWithDocSetPath:(NSString *)path;
 - (void)loadDocSets;
 - (void)reloadDocSets;
-- (void)selectFirstLevelItem:(id)item;
 - (NSURL *)URLForImageWithName:(NSString *)imageName;
 - (NSString *)anchorForItem:(id)item;
 - (void)setSearchTerm:(NSString *)filter;

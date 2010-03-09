@@ -35,4 +35,5 @@
 - (id)initWithWindowNibName:(NSString *)windowNibName docSetModel:(FHVDocSetModel *)docSetModel;
 - (IBAction)updateFilter:(id)sender;
 - (IBAction)navigateInHistory:(id)sender;
+- (void)saveTreeState;
 @end

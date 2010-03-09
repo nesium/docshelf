@@ -28,7 +28,7 @@
 }
 
 - (void)main{
-	@try{
+//	@try{
 		NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 		int i = 0;
 		for (NSDictionary *clazz in m_classes){
@@ -81,6 +81,10 @@
 			}
 		}
 		[pool release];
-	}@catch(...){}
+//	}@catch(NSException *exception){
+//		NSLog(@"An exception occured while importing! Name: %@, Reason: %@, UserInfo: %@\n%@", 
+//			[exception name], [exception reason], [exception userInfo], 
+//			[exception callStackSymbols]);
+//	}
 }
 @end

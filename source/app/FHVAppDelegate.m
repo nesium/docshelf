@@ -51,6 +51,7 @@
 #pragma mark IBActions
 
 - (IBAction)addDocSet:(id)sender{
+	[m_mainWindowController saveTreeState];
 	if (!m_importWindowController){
 		m_importWindowController = [[FHVImportWindowController alloc] 
 			initWithWindowNibName:@"ImportWindow" model:m_docSetModel];
