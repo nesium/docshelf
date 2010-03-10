@@ -26,14 +26,13 @@
 	// In the application bundle SUFeedURL is by default set to the major releases feed
 	// so, obviously if SUFeedURL in the UserDefaultController is not equal to the url 
 	// specified in the bundle, it is set to beta
-	[m_updateTypePopUpButton selectItemWithTag:([[[[NSUserDefaultsController 
-		sharedUserDefaultsController] values] valueForKey:@"SUFeedURL"] 
-		isEqualToString:[[[NSBundle mainBundle] infoDictionary] 
+	[m_updateTypePopUpButton selectItemWithTag:([[[NSUserDefaults standardUserDefaults] 
+		objectForKey:@"SUFeedURL"] isEqualToString:[[[NSBundle mainBundle] infoDictionary] 
 		objectForKey:@"SUFeedURL"]] ? 0 : 1)];
 	
 	// update frequency popupbutton
-	BOOL checkForUpdatesOnStartup = [[[[NSUserDefaultsController sharedUserDefaultsController]
-		values] valueForKey:@"ZZCheckForUpdatesOnStartup"] boolValue];
+	BOOL checkForUpdatesOnStartup = [[[NSUserDefaults standardUserDefaults] 
+		objectForKey:@"FHVCheckForUpdatesOnStartup"] boolValue];
 	if (checkForUpdatesOnStartup)
 		[m_updateFrequencyPopUpButton selectItemWithTag:0];
 	else if (![m_updater automaticallyChecksForUpdates])
@@ -57,6 +56,7 @@
 #pragma mark IB methods
 
 - (IBAction)checkForUpdates:(id)sender{
+	[m_activityIndicator startAnimation:self];
 	[[SUUpdater sharedUpdater] setDelegate:self];
 	[[SUUpdater sharedUpdater] checkForUpdateInformation];
 }
@@ -66,8 +66,7 @@
 	NSString *feedURL = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"SUFeedURL"];
 	if (includeBetaReleases)
 		feedURL = [NSString stringWithFormat:@"%@/Beta", feedURL];
-	[[[NSUserDefaultsController sharedUserDefaultsController] values] 
-		setValue:feedURL forKey:@"SUFeedURL"];
+	[[NSUserDefaults standardUserDefaults] setObject:feedURL forKey:@"SUFeedURL"];
 }
 
 - (IBAction)updateFrequencyPopUpButton_change:(id)sender{
@@ -82,10 +81,9 @@
 	}
 	else
 		[m_updater setUpdateCheckInterval:tag];
-
-	[[[NSUserDefaultsController sharedUserDefaultsController] values] 
-		setValue:[NSNumber numberWithBool:checkForUpdatesOnStartup] 
-			forKey:@"ZZCheckForUpdatesOnStartup"];
+	
+	[[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithBool:checkForUpdatesOnStartup] 
+		forKey:@"FHVCheckForUpdatesOnStartup"];
 }
 
 
@@ -94,10 +92,8 @@
 #pragma mark Private methods
 
 - (void)_updateLastUpdateCheckDate{
-	NSDate *lastCheckDate = [[[NSUserDefaultsController sharedUserDefaultsController] values]
-		valueForKey:@"SULastCheckTime"];
-	if (lastCheckDate == nil)
-	{
+	NSDate *lastCheckDate = [[NSUserDefaults standardUserDefaults] objectForKey:@"SULastCheckTime"];
+	if (lastCheckDate == nil){
 		[m_updateDateText setStringValue:NSLocalizedString(@"Never", @"")];
 		return;
 	}	
@@ -112,8 +108,8 @@
 #pragma mark SUStatusChecker delegate methods
 
 - (void)updater:(SUUpdater *)updater didFindValidUpdate:(SUAppcastItem *)update{
-	[[[NSUserDefaultsController sharedUserDefaultsController] values] 
-		setValue:[NSDate date] forKey:@"SULastCheckTime"];
+	[m_activityIndicator stopAnimation:self];
+	[[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:@"SULastCheckTime"];
 	[self _updateLastUpdateCheckDate];
 	NSString *infoString = [NSString stringWithFormat:@"Newest version is %@. You have version %@ installed.", 
 			[update displayVersionString], [[[NSBundle mainBundle] infoDictionary] 
@@ -123,8 +119,8 @@
 }
 
 - (void)updaterDidNotFindUpdate:(SUUpdater *)update{
-	[[[NSUserDefaultsController sharedUserDefaultsController] values] 
-		setValue:[NSDate date] forKey:@"SULastCheckTime"];
+	[m_activityIndicator stopAnimation:self];
+	[[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:@"SULastCheckTime"];
 	[self _updateLastUpdateCheckDate];
 	[m_updateInfoText setStringValue:@"You're up to date!"];
 	[m_installUpdateButton setHidden:YES];

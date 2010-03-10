@@ -31,6 +31,7 @@
 - (void)_updateFilterBar;
 - (void)_recordHistoryItem:(NSURL *)anURL;
 - (void)_updateBackForwardControl;
+- (void)_showNoDocSetsViewIfNeeded;
 @end
 
 
@@ -72,6 +73,8 @@ enum{
 	[m_docSetModel.firstLevelController removeObserver:self forKeyPath:@"content"];
 	[m_docSetModel.secondLevelController removeObserver:self forKeyPath:@"content"];
 	[m_innerSplitView release];
+	[m_noDocSetsView release];
+	[m_outerSplitView release];
 	[m_history release];
 	[super dealloc];
 }
@@ -130,7 +133,10 @@ enum{
 
 - (void)windowDidLoad{
 	// we remove the inner splitview from its parent eventually, so retain it for safety reasons
+	[m_outerSplitView retain];
 	[m_innerSplitView retain];
+	[m_noDocSetsView retain];
+	
 	[m_outlineView setIntercellSpacing:(NSSize){3, 0}];
 	[m_selectionOutlineView setIntercellSpacing:(NSSize){3, 0}];
 	
@@ -171,7 +177,26 @@ enum{
 	[m_selectionOutlineView setDelegate:self];
 	[m_docSetModel.secondLevelController addObserver:self forKeyPath:@"content" options:0 
 		context:(void *)kKVOContextSecondLevelControllerContent];
-		
+	
+	// style large button in the no-docsets-view
+	NSShadow *titleShadow = [[NSShadow alloc] init];
+	[titleShadow setShadowColor:[NSColor whiteColor]];
+	[titleShadow setShadowOffset:(NSSize){0.0f, -1.0f}];
+	NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+	[paragraphStyle setAlignment:NSCenterTextAlignment];
+	NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:
+		titleShadow, NSShadowAttributeName, 
+		[NSFont boldSystemFontOfSize:16.0f], NSFontAttributeName, 
+		[NSColor colorWithDeviceWhite:0.33f alpha:1.0f], NSForegroundColorAttributeName, 
+		paragraphStyle, NSParagraphStyleAttributeName, 
+		nil];
+	NSAttributedString *addDocSetButtonTitle = [[NSAttributedString alloc] initWithString:@"Add DocSet" 
+		attributes:attributes];
+	[m_addDocSetButton setAttributedTitle:addDocSetButtonTitle];
+	[titleShadow release];
+	[paragraphStyle release];
+	[addDocSetButtonTitle release];
+	
 	[self _restoreSplitViewPositions];
 	[self _restoreTreeState];
 	if ([[m_docSetModel.secondLevelController content] count] == 0)
@@ -188,6 +213,8 @@ enum{
 		[m_backForwardSegmentedCell setEnabled:NO forSegment:0];
 		[m_backForwardSegmentedCell setEnabled:NO forSegment:1];
 	}
+	
+	[self _showNoDocSetsViewIfNeeded];
 }
 
 
@@ -285,6 +312,7 @@ enum{
 		case kKVOContextDocSets:
 			NSAssert([[NSThread currentThread] isMainThread], @"Not on main thread");
 			[self _updateFilterBar];
+			[self _showNoDocSetsViewIfNeeded];
 			break;
 			
 		case kKVOContextSelectionURL:
@@ -646,5 +674,32 @@ static HeadlineCell *g_headlineCell = nil;
 	[m_backForwardSegmentedCell setEnabled:(m_historyIndex > 0) forSegment:0];
 	[m_backForwardSegmentedCell setEnabled:([m_history count] && m_historyIndex < [m_history count] - 1) 
 		forSegment:1];
+}
+
+- (void)_showNoDocSetsViewIfNeeded{
+	BOOL needed = [m_docSetModel.docSets count] < 1;
+	if ((needed && [m_noDocSetsView superview] != nil) || 
+		(!needed && [m_noDocSetsView superview] == nil)){
+		return;
+	}
+	[m_searchField setEnabled:!needed];
+	if (needed){
+		[m_history removeAllObjects];
+		m_historyIndex = 0;
+		[self _updateBackForwardControl];
+		NSRect contentViewFrame = [[self.window contentView] frame];
+		NSRect noDocSetsViewFrame = m_noDocSetsView.frame;
+		noDocSetsViewFrame.origin.x = roundf((NSWidth(contentViewFrame) - 
+			NSWidth(noDocSetsViewFrame)) / 2.0f);
+		noDocSetsViewFrame.origin.y = roundf((NSHeight(contentViewFrame) - 
+			NSHeight(noDocSetsViewFrame)) / 2.0f) + 30.0f;
+		[m_noDocSetsView setFrame:noDocSetsViewFrame];
+		[m_outerSplitView removeFromSuperview];
+		[[self.window contentView] addSubview:m_noDocSetsView];
+	}else{
+		[m_noDocSetsView removeFromSuperview];
+		[m_outerSplitView setFrame:[[self.window contentView] bounds]];
+		[[self.window contentView] addSubview:m_outerSplitView];
+	}
 }
 @end

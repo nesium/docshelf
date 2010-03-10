@@ -19,6 +19,7 @@
 	IBOutlet NSButton *m_installUpdateButton;
 	IBOutlet NSPopUpButton *m_updateTypePopUpButton;
 	IBOutlet NSPopUpButton *m_updateFrequencyPopUpButton;
+	IBOutlet NSProgressIndicator *m_activityIndicator;
 }
 - (IBAction)checkForUpdates:(id)sender;
 - (IBAction)updateTypePopUpButton_change:(id)sender;

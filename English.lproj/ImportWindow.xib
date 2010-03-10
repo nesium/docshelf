@@ -12,6 +12,7 @@
 		</dictionary>
 		<array class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<integer value="281"/>
+			<integer value="230"/>
 		</array>
 		<array key="IBDocument.PluginDependencies">
 			<string>com.brandonwalkin.BWToolkit</string>
@@ -551,12 +552,12 @@
 				<string key="NSClassName">NSView</string>
 			</object>
 			<object class="NSCustomView" id="625676322">
-				<nil key="NSNextResponder"/>
+				<reference key="NSNextResponder"/>
 				<int key="NSvFlags">288</int>
 				<array class="NSMutableArray" key="NSSubviews">
 					<object class="NSScrollView" id="428214766">
 						<reference key="NSNextResponder" ref="625676322"/>
-						<int key="NSvFlags">4352</int>
+						<int key="NSvFlags">4370</int>
 						<array class="NSMutableArray" key="NSSubviews">
 							<object class="NSClipView" id="802410172">
 								<reference key="NSNextResponder" ref="428214766"/>
@@ -565,7 +566,7 @@
 									<object class="NSTableView" id="154055388">
 										<reference key="NSNextResponder" ref="802410172"/>
 										<int key="NSvFlags">256</int>
-										<string key="NSFrameSize">{472, 200}</string>
+										<string key="NSFrameSize">{472, 190}</string>
 										<reference key="NSSuperview" ref="802410172"/>
 										<bool key="NSEnabled">YES</bool>
 										<object class="_NSCornerView" key="NSCornerView">
@@ -636,7 +637,7 @@
 										<int key="NSTableViewDraggingDestinationStyle">0</int>
 									</object>
 								</array>
-								<string key="NSFrameSize">{472, 200}</string>
+								<string key="NSFrameSize">{472, 190}</string>
 								<reference key="NSSuperview" ref="428214766"/>
 								<reference key="NSNextKeyView" ref="154055388"/>
 								<reference key="NSDocView" ref="154055388"/>
@@ -663,7 +664,7 @@
 								<double key="NSPercent">0.57142859697341919</double>
 							</object>
 						</array>
-						<string key="NSFrameSize">{472, 200}</string>
+						<string key="NSFrameSize">{472, 190}</string>
 						<reference key="NSSuperview" ref="625676322"/>
 						<reference key="NSNextKeyView" ref="802410172"/>
 						<int key="NSsFlags">528</int>
@@ -673,7 +674,8 @@
 						<bytes key="NSScrollAmts">QSAAAEEgAABBmAAAQZgAAA</bytes>
 					</object>
 				</array>
-				<string key="NSFrameSize">{472, 200}</string>
+				<string key="NSFrameSize">{472, 190}</string>
+				<reference key="NSSuperview"/>
 				<string key="NSClassName">NSView</string>
 			</object>
 			<object class="NSArrayController" id="881988300">
@@ -1196,9 +1198,9 @@
 								</dictionary>
 								<object class="NSMutableData" key="BWSTHWindowSizesByIdentifier">
 									<bytes key="NS.bytes">BAtzdHJlYW10eXBlZIHoA4QBQISEhAxOU0RpY3Rpb25hcnkAhIQITlNPYmplY3QAhYQBaQKShISECE5T
-U3RyaW5nAZSEASskMEQ1OTUwRDEtRDRBOC00NEM2LTlEQkMtMjUxQ0ZFRjg1MkUyhpKEhIQHTlNWYWx1
-ZQCUhAEqhIQMe19OU1NpemU9ZmZ9moHYAYHrAIaShJaXJDgyMzBFN0Q2LTVDRDgtNDhFQy05REVGLTRE
-RkFEMzE3RDMwNYaShJiZmZqDMPxKF4OYqjeWhoY</bytes>
+U3RyaW5nAZSEASskODIzMEU3RDYtNUNEOC00OEVDLTlERUYtNERGQUQzMTdEMzA1hpKEhIQHTlNWYWx1
+ZQCUhAEqhIQMe19OU1NpemU9ZmZ9moMw/EoXg5iqN5aGkoSWlyQwRDU5NTBEMS1ENEE4LTQ0QzYtOURC
+Qy0yNTFDRkVGODUyRTKGkoSYmZmagdgBgesAhoY</bytes>
 								</object>
 								<string key="BWSTHSelectedIdentifier">0D5950D1-D4A8-44C6-9DBC-251CFEF852E2</string>
 								<string key="BWSTHOldWindowTitle">DocSet Assistant</string>
@@ -1767,7 +1769,7 @@ RkFEMzE3RDMwNYaShJiZmZqDMPxKF4OYqjeWhoY</bytes>
 				<string key="226.IBPluginDependency">com.brandonwalkin.BWToolkit</string>
 				<string key="227.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="228.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
-				<string key="230.IBEditorWindowLastContentRect">{{463, 399}, {472, 200}}</string>
+				<string key="230.IBEditorWindowLastContentRect">{{463, 409}, {472, 190}}</string>
 				<string key="230.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="231.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="232.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>

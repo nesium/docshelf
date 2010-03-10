@@ -59,6 +59,7 @@
 - (BOOL)selectItemWithURL:(NSURL *)anURL inDocSet:(FHVDocSet *)aDocSet;
 - (NSDictionary *)docSetItemForItem:(id)item;
 - (FHVDocSet *)docSetForItem:(id)item;
-- (FHVDocSet *)docSetForDocSetId:(NSInteger)docSetId;
+- (FHVDocSet *)docSetForIndex:(NSInteger)docSetId;
+- (FHVDocSet *)docSetForDocSetId:(NSString *)docSetId;
 - (NSDictionary *)docSetItemForDocSetId:(NSString *)docSetId;
 @end

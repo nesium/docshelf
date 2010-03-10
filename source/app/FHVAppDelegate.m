@@ -76,6 +76,11 @@
 		m_prefsWindowController = [[NSMPreferencesWindowController alloc] initWithWindow:window];
 		m_prefsWindowController.toolbarIdentifier = @"FHVPreferencesToolbar";
 		m_prefsWindowController.windowAutosaveName = @"FHVPreferencesWindowOrigin";
+		FHVManageDocSetsPreferencesViewController *manageDocSetsPrefsController = 
+			[[FHVManageDocSetsPreferencesViewController alloc] initWithNibName:@"ManageDocSetsPreferences" 
+				bundle:nil model:m_docSetModel];
+		[m_prefsWindowController addPrefPaneWithController:manageDocSetsPrefsController 
+			icon:[NSImage imageNamed:@"reload.tiff"]];
 		FHVUpdatePreferencesViewController *updatePrefsController = 
 			[[FHVUpdatePreferencesViewController alloc] initWithNibName:@"UpdatePreferences" 
 				bundle:nil];
@@ -100,6 +105,10 @@
 	if(getenv("NSZombieEnabled") || getenv("NSAutoreleaseFreedObjectCheckEnabled")){
 		NDCLog(@"NSZombieEnabled/NSAutoreleaseFreedObjectCheckEnabled enabled!");
 	}
+	BOOL checkForUpdatesOnStartup = [[[NSUserDefaults standardUserDefaults] 
+		objectForKey:@"FHVCheckForUpdatesOnStartup"] boolValue];
+	if (checkForUpdatesOnStartup)
+		[[SUUpdater sharedUpdater] checkForUpdatesInBackground];
 }
 
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)theApplication{

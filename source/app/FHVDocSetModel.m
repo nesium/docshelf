@@ -237,11 +237,11 @@ static BOOL g_initialLoad = YES;
 
 - (void)selectItemWithURLInCurrentDocSet:(NSURL *)anURL{
 	[self selectItemWithURL:anURL 
-		inDocSet:[self docSetForDocSetId:[[m_selectedItem objectForKey:@"docSetId"] intValue]]];
+		inDocSet:[self docSetForIndex:[[m_selectedItem objectForKey:@"docSetId"] intValue]]];
 }
 
 - (void)selectItemWithURLInAnyDocSet:(NSURL *)anURL{
-	FHVDocSet *currentDocSet = [self docSetForDocSetId:[[m_selectedItem objectForKey:@"docSetId"] 
+	FHVDocSet *currentDocSet = [self docSetForIndex:[[m_selectedItem objectForKey:@"docSetId"] 
 		intValue]];
 	if ([self selectItemWithURL:anURL inDocSet:currentDocSet])
 		return;
@@ -360,12 +360,20 @@ static BOOL g_initialLoad = YES;
 
 - (FHVDocSet *)docSetForItem:(id)item{
 	NSInteger docSetId = [[item objectForKey:@"docSetId"] intValue];
-	return [self docSetForDocSetId:docSetId];
+	return [self docSetForIndex:docSetId];
 }
 
-- (FHVDocSet *)docSetForDocSetId:(NSInteger)docSetId{
+- (FHVDocSet *)docSetForIndex:(NSInteger)docSetId{
 	for (FHVDocSet *docSet in m_docSets){
 		if (docSet.index == docSetId)
+			return docSet;
+	}
+	return nil;
+}
+
+- (FHVDocSet *)docSetForDocSetId:(NSString *)docSetId{
+	for (FHVDocSet *docSet in m_docSets){
+		if ([docSet.docSetId isEqualToString:docSetId])
 			return docSet;
 	}
 	return nil;

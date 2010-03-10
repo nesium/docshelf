@@ -24,6 +24,8 @@
 	IBOutlet NSSplitView *m_outerSplitView;
 	IBOutlet NSSplitView *m_innerSplitView;
 	IBOutlet NSSegmentedCell *m_backForwardSegmentedCell;
+	IBOutlet NSView *m_noDocSetsView;
+	IBOutlet NSButton *m_addDocSetButton;
 	
 	BOOL m_detailSelectionAnchorBound;
 	NSTimeInterval m_lastOutlineViewUpdateTime;

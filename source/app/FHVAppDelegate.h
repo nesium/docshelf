@@ -7,10 +7,12 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import <Sparkle/SUUpdater.h>
 #import "FHVDocSetModel.h"
 #import "FHVMainWindowController.h"
 #import "FHVImportWindowController.h"
 #import "FHVUpdatePreferencesViewController.h"
+#import "FHVManageDocSetsPreferencesViewController.h"
 #import "NSMPreferencesWindowController.h"
 #import "FHVConstants.h"
 

@@ -74,6 +74,10 @@
 		2CBDCDE4113EE7C100FB4C23 /* reload.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 2CBDCDE3113EE7C100FB4C23 /* reload.tiff */; };
 		2CCFC17F110500590019F014 /* schema.sql in Resources */ = {isa = PBXBuildFile; fileRef = 2CCFC17E110500590019F014 /* schema.sql */; };
 		2CCFC1B2110512990019F014 /* FHVSQLiteImporter.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CCFC1B1110512990019F014 /* FHVSQLiteImporter.m */; };
+		2CDA76561147DA6A00A62860 /* start_button_down.png in Resources */ = {isa = PBXBuildFile; fileRef = 2CDA76541147DA6A00A62860 /* start_button_down.png */; };
+		2CDA76571147DA6A00A62860 /* start_button_up.png in Resources */ = {isa = PBXBuildFile; fileRef = 2CDA76551147DA6A00A62860 /* start_button_up.png */; };
+		2CDA76DE1147EE6400A62860 /* ManageDocSetsPreferences.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2CDA76DC1147EE6400A62860 /* ManageDocSetsPreferences.xib */; };
+		2CDA76E41147EFCA00A62860 /* FHVManageDocSetsPreferencesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CDA76E31147EFCA00A62860 /* FHVManageDocSetsPreferencesViewController.m */; };
 		2CE1FA31113732A600CB120C /* NSWindow+NSMAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CE1FA30113732A600CB120C /* NSWindow+NSMAdditions.m */; };
 		2CE28C08114541AD00D55FEA /* implemented-by-arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 2CE28C07114541AD00D55FEA /* implemented-by-arrow.png */; };
 		2CE366111108B6FD00F582E9 /* ImageAndTextCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CE366101108B6FD00F582E9 /* ImageAndTextCell.m */; };
@@ -207,6 +211,11 @@
 		2CCFC17E110500590019F014 /* schema.sql */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = schema.sql; path = Resources/schema.sql; sourceTree = "<group>"; };
 		2CCFC1B0110512990019F014 /* FHVSQLiteImporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FHVSQLiteImporter.h; sourceTree = "<group>"; };
 		2CCFC1B1110512990019F014 /* FHVSQLiteImporter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FHVSQLiteImporter.m; sourceTree = "<group>"; };
+		2CDA76541147DA6A00A62860 /* start_button_down.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = start_button_down.png; sourceTree = "<group>"; };
+		2CDA76551147DA6A00A62860 /* start_button_up.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = start_button_up.png; sourceTree = "<group>"; };
+		2CDA76DD1147EE6400A62860 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/ManageDocSetsPreferences.xib; sourceTree = "<group>"; };
+		2CDA76E21147EFCA00A62860 /* FHVManageDocSetsPreferencesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FHVManageDocSetsPreferencesViewController.h; sourceTree = "<group>"; };
+		2CDA76E31147EFCA00A62860 /* FHVManageDocSetsPreferencesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FHVManageDocSetsPreferencesViewController.m; sourceTree = "<group>"; };
 		2CE1F991113726EE00CB120C /* NSMMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSMMacros.h; sourceTree = "<group>"; };
 		2CE1FA2F113732A600CB120C /* NSWindow+NSMAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSWindow+NSMAdditions.h"; sourceTree = "<group>"; };
 		2CE1FA30113732A600CB120C /* NSWindow+NSMAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSWindow+NSMAdditions.m"; sourceTree = "<group>"; };
@@ -324,6 +333,7 @@
 			children = (
 				2C2EFA931142F0590020A08C /* error.png */,
 				2CBDCDCC113EE6B700FB4C23 /* UpdatePreferences.xib */,
+				2CDA76DC1147EE6400A62860 /* ManageDocSetsPreferences.xib */,
 				2C9828B0113D8BE900D97695 /* dsa_pub.pem */,
 				2C63E8DE1118829900B5E938 /* ImportWindow.xib */,
 				2CCFC17E110500590019F014 /* schema.sql */,
@@ -444,6 +454,8 @@
 		2CEE309F0DD668D300CC762E /* assets */ = {
 			isa = PBXGroup;
 			children = (
+				2CDA76541147DA6A00A62860 /* start_button_down.png */,
+				2CDA76551147DA6A00A62860 /* start_button_up.png */,
 				2CBDCDE3113EE7C100FB4C23 /* reload.tiff */,
 				2CEE30A00DD668D300CC762E /* icons */,
 				2C53671210B9BC9500D9C0E4 /* styles.css */,
@@ -510,6 +522,8 @@
 				2CAE7E82110A2FFF00D5767F /* FHVSearchWorker.m */,
 				2CBDCDAF113EE5C800FB4C23 /* FHVUpdatePreferencesViewController.h */,
 				2CBDCDB0113EE5C800FB4C23 /* FHVUpdatePreferencesViewController.m */,
+				2CDA76E21147EFCA00A62860 /* FHVManageDocSetsPreferencesViewController.h */,
+				2CDA76E31147EFCA00A62860 /* FHVManageDocSetsPreferencesViewController.m */,
 				2C2EFA981142F1400020A08C /* Import Window */,
 			);
 			path = app;
@@ -607,6 +621,9 @@
 				2CE28C08114541AD00D55FEA /* implemented-by-arrow.png in Resources */,
 				2C436D4F11459ACF006DCACA /* bug.png in Resources */,
 				2C2D0FF41146C19800CA4683 /* blank.html in Resources */,
+				2CDA76561147DA6A00A62860 /* start_button_down.png in Resources */,
+				2CDA76571147DA6A00A62860 /* start_button_up.png in Resources */,
+				2CDA76DE1147EE6400A62860 /* ManageDocSetsPreferences.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -661,6 +678,7 @@
 				2C2EFAB91142F63E0020A08C /* FHVRemoteImportPickerViewController.m in Sources */,
 				2C2EFABC1142F6B20020A08C /* FHVPresetsImportPickerViewController.m in Sources */,
 				2C2DA4A211441235007DD313 /* NSURL+FHVUtils.m in Sources */,
+				2CDA76E41147EFCA00A62860 /* FHVManageDocSetsPreferencesViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -705,6 +723,14 @@
 				2CBDCDCD113EE6B700FB4C23 /* English */,
 			);
 			name = UpdatePreferences.xib;
+			sourceTree = "<group>";
+		};
+		2CDA76DC1147EE6400A62860 /* ManageDocSetsPreferences.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				2CDA76DD1147EE6400A62860 /* English */,
+			);
+			name = ManageDocSetsPreferences.xib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
