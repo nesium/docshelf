@@ -369,6 +369,14 @@ static HeadlineCell *g_headlineCell = nil;
 - (void)outlineViewArrowLeftKeyWasPressed:(NSOutlineView *)outlineView{
 	if (outlineView == m_selectionOutlineView){
 		[[self window] makeFirstResponder:m_outlineView];
+	}else{
+		id selectedItem = [m_outlineView itemAtRow:[m_outlineView selectedRow]];
+		id parentItem = [m_outlineView parentForItem:selectedItem];
+		if (parentItem){
+			[m_outlineView collapseItem:parentItem];
+			[m_outlineView selectRowIndexes:[NSIndexSet indexSetWithIndex:
+				[m_outlineView rowForItem:parentItem]] byExtendingSelection:NO];
+		}
 	}
 }
 
