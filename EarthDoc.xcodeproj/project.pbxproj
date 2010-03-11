@@ -10,6 +10,7 @@
 		2C066F9E111752AC00AB755C /* DropView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C066F9D111752AC00AB755C /* DropView.m */; };
 		2C1987841101F1FC00C3A1BD /* FHVImportContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C1987831101F1FC00C3A1BD /* FHVImportContext.m */; };
 		2C1987AD1101F4E000C3A1BD /* NSString+FHVUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C1987AC1101F4E000C3A1BD /* NSString+FHVUtils.m */; };
+		2C274E49114819A900287526 /* docshelf.png in Resources */ = {isa = PBXBuildFile; fileRef = 2C274E48114819A900287526 /* docshelf.png */; };
 		2C2D0FF41146C19800CA4683 /* blank.html in Resources */ = {isa = PBXBuildFile; fileRef = 2C2D0FF31146C19800CA4683 /* blank.html */; };
 		2C2DA4A211441235007DD313 /* NSURL+FHVUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C2DA4A111441235007DD313 /* NSURL+FHVUtils.m */; };
 		2C2E10A41103D4A00037769E /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C2E10A31103D4A00037769E /* libsqlite3.dylib */; };
@@ -121,6 +122,7 @@
 		2C1987831101F1FC00C3A1BD /* FHVImportContext.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FHVImportContext.m; sourceTree = "<group>"; };
 		2C1987AB1101F4E000C3A1BD /* NSString+FHVUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+FHVUtils.h"; path = "parser/NSString+FHVUtils.h"; sourceTree = "<group>"; };
 		2C1987AC1101F4E000C3A1BD /* NSString+FHVUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+FHVUtils.m"; path = "parser/NSString+FHVUtils.m"; sourceTree = "<group>"; };
+		2C274E48114819A900287526 /* docshelf.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = docshelf.png; sourceTree = "<group>"; };
 		2C2D0FF31146C19800CA4683 /* blank.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = blank.html; sourceTree = "<group>"; };
 		2C2DA4A011441235007DD313 /* NSURL+FHVUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURL+FHVUtils.h"; sourceTree = "<group>"; };
 		2C2DA4A111441235007DD313 /* NSURL+FHVUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURL+FHVUtils.m"; sourceTree = "<group>"; };
@@ -454,6 +456,7 @@
 		2CEE309F0DD668D300CC762E /* assets */ = {
 			isa = PBXGroup;
 			children = (
+				2C274E48114819A900287526 /* docshelf.png */,
 				2CDA76541147DA6A00A62860 /* start_button_down.png */,
 				2CDA76551147DA6A00A62860 /* start_button_up.png */,
 				2CBDCDE3113EE7C100FB4C23 /* reload.tiff */,
@@ -624,6 +627,7 @@
 				2CDA76561147DA6A00A62860 /* start_button_down.png in Resources */,
 				2CDA76571147DA6A00A62860 /* start_button_up.png in Resources */,
 				2CDA76DE1147EE6400A62860 /* ManageDocSetsPreferences.xib in Resources */,
+				2C274E49114819A900287526 /* docshelf.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

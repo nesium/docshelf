@@ -12,6 +12,11 @@
 
 @interface HeadlineCell : RSVerticallyCenteredTextFieldCell{
 	BOOL m_drawsTopBorder;
+	BOOL m_highlighted;
+	SEL m_action;
+	id m_target;
 }
 @property (nonatomic, assign) BOOL drawsTopBorder;
+@property (nonatomic, assign) SEL action;
+@property (nonatomic, assign) id target;
 @end

@@ -260,6 +260,20 @@ enum{
 
 
 #pragma mark -
+#pragma mark Other action methods
+
+- (void)headlineCellWasClicked:(id)sender{
+	NSOutlineView *outlineView = (NSOutlineView *)[(NSCell *)sender controlView];
+	id item = [outlineView itemAtRow:[sender tag]];
+	if ([outlineView isItemExpanded:item])
+		[outlineView collapseItem:item];
+	else
+		[outlineView expandItem:item];
+}
+
+
+
+#pragma mark -
 #pragma mark WindowDelegate methods
 
 - (void)windowDidBecomeKey:(NSNotification *)notification{
@@ -334,8 +348,12 @@ static HeadlineCell *g_headlineCell = nil;
 	if ([[[item representedObject] objectForKey:@"inherited"] boolValue] || itemWantsHeaderCell){
 		if (itemWantsHeaderCell){
 			NSInteger row = [outlineView rowForItem:item];
-			[(HeadlineCell *)cell setDrawsTopBorder:(row > 0 && 
+			HeadlineCell *headlineCell = (HeadlineCell *)cell;
+			[headlineCell setDrawsTopBorder:(row > 0 && 
 				![self _itemWantsHeaderCell:[[outlineView itemAtRow:row - 1] representedObject]])];
+			headlineCell.target = self;
+			headlineCell.tag = [outlineView rowForItem:item];
+			headlineCell.action = @selector(headlineCellWasClicked:);
 		}
 		[cell setTextColor:[NSColor colorWithCalibratedRed:0.459 green:0.459 blue:0.459 alpha:1.0]];
 	}else{
@@ -362,6 +380,11 @@ static HeadlineCell *g_headlineCell = nil;
 	return ![self _itemWantsHeaderCell:[item representedObject]];
 }
 
+- (BOOL)outlineView:(NSOutlineView *)outlineView shouldTrackCell:(NSCell *)cell 
+	forTableColumn:(NSTableColumn *)tableColumn item:(id)item{
+	return YES;
+}
+
 - (CGFloat)outlineView:(NSOutlineView *)outlineView heightOfRowByItem:(id)item{
 	return [self _itemWantsHeaderCell:[item representedObject]] ? 20.0 : 19.0;
 }
@@ -370,12 +393,12 @@ static HeadlineCell *g_headlineCell = nil;
 	if (outlineView == m_selectionOutlineView){
 		[[self window] makeFirstResponder:m_outlineView];
 	}else{
-		id selectedItem = [m_outlineView itemAtRow:[m_outlineView selectedRow]];
-		id parentItem = [m_outlineView parentForItem:selectedItem];
-		if (parentItem){
-			[m_outlineView collapseItem:parentItem];
-			[m_outlineView selectRowIndexes:[NSIndexSet indexSetWithIndex:
-				[m_outlineView rowForItem:parentItem]] byExtendingSelection:NO];
+		id selectedItem = [outlineView itemAtRow:[outlineView selectedRow]];
+		id parentItem = [outlineView parentForItem:selectedItem];
+		if (parentItem && [outlineView levelForRow:[outlineView rowForItem:parentItem]] >= 1){
+			[outlineView collapseItem:parentItem];
+			[outlineView selectRowIndexes:[NSIndexSet indexSetWithIndex:
+				[outlineView rowForItem:parentItem]] byExtendingSelection:NO];
 		}
 	}
 }

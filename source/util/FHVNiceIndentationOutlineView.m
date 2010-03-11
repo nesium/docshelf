@@ -31,11 +31,12 @@
 }
 
 - (void)keyDown:(NSEvent *)theEvent{
-	if ([self isExpandable:[self itemAtRow:[self selectedRow]]]){
+	id item = [self itemAtRow:[self selectedRow]];
+	if ([self isExpandable:item] && ([theEvent keyCode] == 124 || 
+		([theEvent keyCode] == 123 && [self isItemExpanded:item]))){
 		[super keyDown:theEvent];
 		return;
 	}
-
 	switch ([theEvent keyCode]){
 		case 123: // left
 			if ([[self delegate] respondsToSelector:@selector(outlineViewArrowLeftKeyWasPressed:)]){

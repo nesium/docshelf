@@ -12,6 +12,7 @@
 
 @interface FHVManageDocSetsPreferencesViewController : NSViewController{
 	IBOutlet NSArrayController *m_docSetsController;
+	IBOutlet NSTableView *m_tableView;
 	FHVDocSetModel *m_model;
 }
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil 

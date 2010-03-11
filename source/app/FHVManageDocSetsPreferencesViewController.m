@@ -24,6 +24,27 @@
 
 - (void)awakeFromNib{
 	[m_docSetsController bind:@"content" toObject:m_model withKeyPath:@"docSets" options:nil];
+	
+	// style large button in the no-docsets-view
+	NSShadow *titleShadow = [[NSShadow alloc] init];
+	[titleShadow setShadowColor:[NSColor whiteColor]];
+	[titleShadow setShadowOffset:(NSSize){0.0f, -1.0f}];
+	NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+	[paragraphStyle setAlignment:NSCenterTextAlignment];
+	NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:
+		titleShadow, NSShadowAttributeName, 
+		[NSFont boldSystemFontOfSize:8.0f], NSFontAttributeName, 
+		[NSColor colorWithDeviceWhite:0.4f alpha:1.0f], NSForegroundColorAttributeName, 
+		paragraphStyle, NSParagraphStyleAttributeName, 
+		nil];
+	NSAttributedString *cellTitle = [[NSAttributedString alloc] initWithString:@"REMOVE" 
+		attributes:attributes];
+	NSButtonCell *cell = (NSButtonCell *)[[m_tableView tableColumnWithIdentifier:@"buttonColumn"] 
+		dataCell];
+	[cell setAttributedTitle:cellTitle];
+	[titleShadow release];
+	[paragraphStyle release];
+	[cellTitle release];
 }
 
 
@@ -72,4 +93,18 @@
 	NSString *docSetId = (NSString *)contextInfo;
 	[docSetId release];
 }
+
+
+
+//#pragma mark -
+//#pragma mark NSOutlineViewDelegate Protocol
+//
+//static HeadlineCell *g_headlineCell = nil;
+//
+//- (void)outlineView:(NSOutlineView *)outlineView willDisplayCell:(id)cell 
+//	forTableColumn:(NSTableColumn *)tableColumn item:(id)item{
+//	if ([[tableColumn identifier] isEqualToString:@"buttonColumn"]){
+//		[(NSButtonCell *)cell setAttributedTitle:
+//	}
+//}
 @end
