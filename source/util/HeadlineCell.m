@@ -32,6 +32,7 @@
 	cell.target = self.target;
 	cell.action = self.action;
 	cell.tag = self.tag;
+	cell.lineBreakMode = self.lineBreakMode;
 	cell->m_highlighted = m_highlighted;
 	return cell;
 }
