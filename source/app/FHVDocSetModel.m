@@ -101,7 +101,7 @@ static BOOL g_initialLoad = YES;
 			docSet.name, @"name", 
 			docSetPackages, @"children", 
 			[NSNumber numberWithBool:NO], @"leaf", 
-			[NSNumber numberWithInt:docSet.index], @"docSetId", 
+			docSet.docSetId, @"docSetId", 
 			[NSNumber numberWithBool:YES], @"root", 
 			nil];
 		[allDocSets addObject:docSetItem];
@@ -189,8 +189,8 @@ static BOOL g_initialLoad = YES;
 		afterDelay:0.2];
 }
 
-- (void)setDocSetWithIndex:(NSUInteger)index inSearchIncluded:(BOOL)bFlag{
-	FHVDocSet *docSet = [m_docSets objectAtIndex:index];
+- (void)setDocSetWithDocSetId:(NSString *)docSetId inSearchIncluded:(BOOL)bFlag{
+	FHVDocSet *docSet = [self docSetForDocSetId:docSetId];
 	if (docSet.inSearchIncluded == bFlag)
 		return;
 	docSet.inSearchIncluded = bFlag;
@@ -237,12 +237,11 @@ static BOOL g_initialLoad = YES;
 
 - (void)selectItemWithURLInCurrentDocSet:(NSURL *)anURL{
 	[self selectItemWithURL:anURL 
-		inDocSet:[self docSetForIndex:[[m_selectedItem objectForKey:@"docSetId"] intValue]]];
+		inDocSet:[self docSetForDocSetId:[m_selectedItem objectForKey:@"docSetId"]]];
 }
 
 - (void)selectItemWithURLInAnyDocSet:(NSURL *)anURL{
-	FHVDocSet *currentDocSet = [self docSetForIndex:[[m_selectedItem objectForKey:@"docSetId"] 
-		intValue]];
+	FHVDocSet *currentDocSet = [self docSetForDocSetId:[m_selectedItem objectForKey:@"docSetId"]];
 	if ([self selectItemWithURL:anURL inDocSet:currentDocSet])
 		return;
 	for (FHVDocSet *docSet in m_docSets){
@@ -349,26 +348,11 @@ static BOOL g_initialLoad = YES;
 }
 
 - (NSDictionary *)docSetItemForItem:(id)item{
-	NSInteger docSetId = [[item objectForKey:@"docSetId"] intValue];
-	for (NSInteger i = 0; i < [m_docSets count]; i++){
-		FHVDocSet *docSet = [m_docSets objectAtIndex:i];
-		if (docSet.index == docSetId)
-			return [m_mainData objectAtIndex:i];
-	}
-	return nil;
+	return [self docSetItemForDocSetId:[item objectForKey:@"docSetId"]];	
 }
 
 - (FHVDocSet *)docSetForItem:(id)item{
-	NSInteger docSetId = [[item objectForKey:@"docSetId"] intValue];
-	return [self docSetForIndex:docSetId];
-}
-
-- (FHVDocSet *)docSetForIndex:(NSInteger)docSetId{
-	for (FHVDocSet *docSet in m_docSets){
-		if (docSet.index == docSetId)
-			return docSet;
-	}
-	return nil;
+	return [self docSetForDocSetId:[item objectForKey:@"docSetId"]];
 }
 
 - (FHVDocSet *)docSetForDocSetId:(NSString *)docSetId{
@@ -420,13 +404,13 @@ static BOOL g_initialLoad = YES;
 	for (NSString *file in files){
 		if ([[[file pathExtension] lowercaseString] isEqualToString:@"fhvdocset"]){
 			FHVDocSet *docSet = [[FHVDocSet alloc] initWithPath:
-				[m_path stringByAppendingPathComponent:file] index:[docSets count]];
+				[m_path stringByAppendingPathComponent:file]];
 			[docSets addObject:docSet];
 			[docSet release];
 		}
 	}
 	[docSets sortUsingComparator:^(id obj1, id obj2){
-		return [[obj1 valueForKey:@"name"] compare:[obj2 valueForKey:@"name"]];
+		return [[obj1 valueForKey:@"name"] caseInsensitiveCompare:[obj2 valueForKey:@"name"]];
 	}];
 	[m_docSets release];
 	[self willChangeValueForKey:@"docSets"];

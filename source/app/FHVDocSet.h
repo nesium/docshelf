@@ -14,18 +14,16 @@
 @interface FHVDocSet : NSObject{
 	NSString *m_path;
 	NSString *m_name;
-	NSNumber *m_index;
 	NSString *m_docSetId;
 	NSMutableDictionary *m_infoPlist;
 	sqlite3 *m_db;
 	BOOL m_inSearchIncluded;
 }
 @property (readonly) NSString *name;
-@property (readonly) NSUInteger index;
 @property (readonly) NSString *path;
 @property (readonly) NSString *docSetId;
 @property (nonatomic, assign) BOOL inSearchIncluded;
-- (id)initWithPath:(NSString *)path index:(NSUInteger)index;
+- (id)initWithPath:(NSString *)path;
 - (NSString *)imagePath;
 - (NSArray *)allPackages;
 - (NSArray *)allClasses;

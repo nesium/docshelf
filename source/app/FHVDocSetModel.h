@@ -51,7 +51,7 @@
 - (NSString *)anchorForItem:(id)item;
 - (void)setSearchTerm:(NSString *)filter;
 - (void)setSearchMode:(FHVDocSetSearchMode)mode;
-- (void)setDocSetWithIndex:(NSUInteger)index inSearchIncluded:(BOOL)bFlag;
+- (void)setDocSetWithDocSetId:(NSString *)docSetId inSearchIncluded:(BOOL)bFlag;
 - (NSImage *)imageForItem:(id)item;
 - (void)loadChildrenOfPackage:(NSDictionary *)package;
 - (void)selectItemWithURLInCurrentDocSet:(NSURL *)anURL;
@@ -59,7 +59,6 @@
 - (BOOL)selectItemWithURL:(NSURL *)anURL inDocSet:(FHVDocSet *)aDocSet;
 - (NSDictionary *)docSetItemForItem:(id)item;
 - (FHVDocSet *)docSetForItem:(id)item;
-- (FHVDocSet *)docSetForIndex:(NSInteger)docSetId;
 - (FHVDocSet *)docSetForDocSetId:(NSString *)docSetId;
 - (NSDictionary *)docSetItemForDocSetId:(NSString *)docSetId;
 @end

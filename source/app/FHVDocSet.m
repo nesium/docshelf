@@ -34,11 +34,10 @@ NSString *sqlite3_column_nsstring(sqlite3_stmt *stmt, int col){
 #pragma mark -
 #pragma mark Initialization & Deallocation
 
-- (id)initWithPath:(NSString *)path index:(NSUInteger)index{
+- (id)initWithPath:(NSString *)path{
 	if (self = [super init]){
 		m_db = 0x0;
 		m_path = [path retain];
-		m_index = [[NSNumber numberWithInt:index] retain];
 		m_infoPlist = [[NSDictionary dictionaryWithContentsOfFile:
 			[m_path stringByAppendingPathComponent:@"Info.plist"]] retain];
 		m_name = [[m_infoPlist objectForKey:(NSString *)kCFBundleNameKey] retain];
@@ -53,8 +52,6 @@ NSString *sqlite3_column_nsstring(sqlite3_stmt *stmt, int col){
 	[self _close];
 	[m_path release];
 	m_path = nil;
-	[m_index release];
-	m_index = nil;
 	[m_name release];
 	m_name = nil;
 	[m_docSetId release];
@@ -79,7 +76,7 @@ NSString *sqlite3_column_nsstring(sqlite3_stmt *stmt, int col){
 	sqlite3_prepare(m_db, "SELECT * FROM `fhv_packages`", -1, &stmt, 0);
 	while (sqlite3_step(stmt) == SQLITE_ROW){
 		NSMutableDictionary *package = [NSMutableDictionary dictionaryWithObjectsAndKeys: 
-			m_index, @"docSetId", 
+			m_docSetId, @"docSetId", 
 			[NSNumber numberWithInt:kItemTypePackage], @"itemType", 
 			[NSNumber numberWithLongLong:sqlite3_column_int64(stmt, 0)], @"dbId", 
 			[NSNumber numberWithBool:NO], @"leaf", 
@@ -151,10 +148,6 @@ NSString *sqlite3_column_nsstring(sqlite3_stmt *stmt, int col){
 		cancelCondition:cancelCondition preventSorting:YES];
 }
 
-- (NSUInteger)index{
-	return [m_index intValue];
-}
-
 - (void)setInSearchIncluded:(BOOL)bFlag{
 	[m_infoPlist setObject:[NSNumber numberWithBool:bFlag] forKey:@"FHVInSearchIncluded"];
 	[self _saveInfoPlist];
@@ -181,7 +174,7 @@ NSString *sqlite3_column_nsstring(sqlite3_stmt *stmt, int col){
 	sqlite3_prepare(m_db, [sql UTF8String], -1, &stmt, 0);
 	while (sqlite3_step(stmt) == SQLITE_ROW && (cancelCondition == NULL || *cancelCondition != YES)){
 		NSDictionary *clazz = [NSDictionary dictionaryWithObjectsAndKeys: 
-			m_index, @"docSetId", 
+			m_docSetId, @"docSetId", 
 			[NSNumber numberWithInt:kItemTypeClass], @"itemType", 
 			[NSNumber numberWithLongLong:sqlite3_column_int64(stmt, 0)], @"dbId", 
 			[NSNumber numberWithLongLong:sqlite3_column_int64(stmt, 1)], @"packageDbId", 
@@ -212,7 +205,7 @@ NSString *sqlite3_column_nsstring(sqlite3_stmt *stmt, int col){
 	sqlite3_prepare(m_db, [sql UTF8String], -1, &stmt, 0);
 	while (sqlite3_step(stmt) == SQLITE_ROW && (cancelCondition == NULL || *cancelCondition != YES)){
 		NSDictionary *sig = [NSDictionary dictionaryWithObjectsAndKeys: 
-			m_index, @"docSetId", 
+			m_docSetId, @"docSetId", 
 			[NSNumber numberWithInt:kItemTypeSignature], @"itemType", 
 			[NSNumber numberWithLongLong:sqlite3_column_int64(stmt, 0)], @"dbId", 
 			[NSNumber numberWithLongLong:sqlite3_column_int64(stmt, 1)], @"parentDbId", 

@@ -508,11 +508,10 @@ static HeadlineCell *g_headlineCell = nil;
 	if ([groupIdentifier isEqualToString:@"matchingMode"]){
 		return [NSArray arrayWithObjects:@"Contains", @"Prefix", @"Exact", nil];
 	}else if ([groupIdentifier isEqualToString:@"docSetsList"]){
-		NSMutableArray *indexes = [NSMutableArray array];
-		for (FHVDocSet *docSet in m_docSetModel.docSets){
-			[indexes addObject:[[NSNumber numberWithInt:docSet.index] stringValue]];
-		}
-		return indexes;
+		NSMutableArray *ids = [NSMutableArray array];
+		for (FHVDocSet *docSet in m_docSetModel.docSets)
+			[ids addObject:docSet.docSetId];
+		return ids;
 	}
 	return nil;
 }
@@ -520,11 +519,7 @@ static HeadlineCell *g_headlineCell = nil;
 - (NSString *)filterbar:(Filterbar *)filterBar labelForItemIdentifier:(NSString *)itemIdentifier 
 	groupIdentifier:(NSString *)groupIdentifier{
 	if ([groupIdentifier isEqualToString:@"docSetsList"]){
-		for (FHVDocSet *docSet in m_docSetModel.docSets)
-			if (docSet.index == [itemIdentifier intValue]){
-				return docSet.name;
-			}
-		return @"ERROR";
+		return [m_docSetModel docSetForDocSetId:itemIdentifier].name;
 	}
 	return itemIdentifier;
 }
@@ -534,7 +529,7 @@ static HeadlineCell *g_headlineCell = nil;
 	if ([groupIdentifier isEqualToString:@"matchingMode"]){
 		if (selected) m_docSetModel.searchMode = [self _searchModeForIdentifier:itemIdentifier];
 	}else if ([groupIdentifier isEqualToString:@"docSetsList"]){
-		[m_docSetModel setDocSetWithIndex:[itemIdentifier intValue] inSearchIncluded:selected];
+		[m_docSetModel setDocSetWithDocSetId:itemIdentifier inSearchIncluded:selected];
 	}
 }
 
@@ -625,7 +620,7 @@ static HeadlineCell *g_headlineCell = nil;
 	NSMutableArray *docSetsListSelection = [NSMutableArray array];
 	for (FHVDocSet *docSet in m_docSetModel.docSets){
 		if (docSet.inSearchIncluded) 
-			[docSetsListSelection addObject:[[NSNumber numberWithInt:docSet.index] stringValue]];
+			[docSetsListSelection addObject:docSet.docSetId];
 	}
 	[m_filterBar selectItems:docSetsListSelection inGroup:@"docSetsList" selected:YES];
 }
