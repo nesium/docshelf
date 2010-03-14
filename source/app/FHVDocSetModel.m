@@ -262,12 +262,19 @@ static BOOL g_initialLoad = YES;
 	// resulting url will then look like fhelpv://#escape()
 	// thus in this method searchedIdent is checked for nil multiple times
 	NSString *searchedIdent = [anURL host];
+	NSString *searchedPackageIdent = searchedIdent;
+	NSArray *identComponents = [searchedIdent componentsSeparatedByString:@"."];
+	if ([identComponents count] > 1){
+		searchedPackageIdent = [[identComponents subarrayWithRange:
+			(NSRange){0, [identComponents count] - 1}] componentsJoinedByString:@"."];
+	}
+	
 	NSDictionary *searchedPackage = nil;
 	NSDictionary *topLevelPackage = nil;
 	NSArray *packages = [[self docSetItemForDocSetId:aDocSet.docSetId] objectForKey:@"children"];
 	for (NSDictionary *package in packages){
 		NSString *packageIdent = [package objectForKey:@"ident"];
-		if ([searchedIdent hasPrefix:packageIdent]){
+		if ([searchedPackageIdent isEqualToString:packageIdent]){
 			searchedPackage = package;
 			break;
 		}else if ([packageIdent isEqualToString:@"Top Level"]){
@@ -281,6 +288,7 @@ static BOOL g_initialLoad = YES;
 	if (searchedPackage == nil)
 		searchedPackage = topLevelPackage;
 	if ([[searchedPackage objectForKey:@"ident"] isEqualToString:searchedIdent]){
+		NDCLog(@"select package");
 		[m_firstLevelController setSelectedObject:searchedPackage];
 		return YES;
 	}
@@ -301,6 +309,7 @@ static BOOL g_initialLoad = YES;
 	}
 	
 	if (!searchedItem){
+		NDCLog(@"Could not find item");
 		return NO;
 	}
 	
@@ -311,6 +320,7 @@ static BOOL g_initialLoad = YES;
 	// is active it may be the case that the searched item isn't contained, so we simply load 
 	// the required html
 	NSIndexPath *searchedItemIndexPath = [m_firstLevelController indexPathForObject:searchedItem];
+	NDCLog(@"indexpath: %@", searchedItemIndexPath);
 	if (searchedItemIndexPath){
 		[m_firstLevelController setSelectionIndexPath:searchedItemIndexPath];
 		[self _selectFirstLevelItem:searchedItem];
