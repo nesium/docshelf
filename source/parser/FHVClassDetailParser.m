@@ -16,9 +16,10 @@
 
 @implementation FHVClassDetailParser
 
-- (id)initWithData:(NSData *)data fromURL:(NSURL *)anURL context:(FHVImportContext *)context{
+- (id)initWithData:(NSData *)data fromURL:(NSURL *)anURL context:(FHVImportContext *)context 
+	error:(NSError **)error{
 	m_name = nil;
-	if (self = [super initWithData:data fromURL:anURL context:context]){
+	if (self = [super initWithData:data fromURL:anURL context:context error:error]){
 		// parsing global functions and constants
 		if ([[[anURL lastPathComponent] lowercaseString] isEqualToString:@"package.html"])
 			m_name = nil;

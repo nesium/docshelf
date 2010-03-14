@@ -30,6 +30,7 @@ typedef enum _FHVClassType{
 } FHVClassType;
 
 extern NSString *const FHVErrorDomain;
+extern NSString *const FHVSQLiteErrorDomain;
 extern OSStatus const FHVMissingSummaryFileError;
 
 NSString *FHVApplicationSupportFolder();

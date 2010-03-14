@@ -59,6 +59,7 @@
 		2C85E6AE1107E585001920A7 /* interface.png in Resources */ = {isa = PBXBuildFile; fileRef = 2C85E6A71107E585001920A7 /* interface.png */; };
 		2C85E6AF1107E585001920A7 /* package.png in Resources */ = {isa = PBXBuildFile; fileRef = 2C85E6A81107E585001920A7 /* package.png */; };
 		2C85E6B01107E585001920A7 /* property.png in Resources */ = {isa = PBXBuildFile; fileRef = 2C85E6A91107E585001920A7 /* property.png */; };
+		2C8A4E72114D268200043E59 /* NSError+NSMAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C8A4E71114D268200043E59 /* NSError+NSMAdditions.m */; };
 		2C8DC60E10FFF5D000DA41C9 /* FHVPackageSummaryParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CFCB4510DD4F4FB0090049E /* FHVPackageSummaryParser.m */; };
 		2C910165110646790031698D /* FHVDocSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C910164110646790031698D /* FHVDocSet.m */; };
 		2C910259110659C60031698D /* FHVMainWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C910258110659C60031698D /* FHVMainWindowController.m */; };
@@ -191,6 +192,9 @@
 		2C85E6A71107E585001920A7 /* interface.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = interface.png; sourceTree = "<group>"; };
 		2C85E6A81107E585001920A7 /* package.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = package.png; sourceTree = "<group>"; };
 		2C85E6A91107E585001920A7 /* property.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = property.png; sourceTree = "<group>"; };
+		2C8A4E70114D268200043E59 /* NSError+NSMAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSError+NSMAdditions.h"; sourceTree = "<group>"; };
+		2C8A4E71114D268200043E59 /* NSError+NSMAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSError+NSMAdditions.m"; sourceTree = "<group>"; };
+		2C8A4F99114D583E00043E59 /* FlexDocsParserConnectionDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlexDocsParserConnectionDelegate.h; sourceTree = "<group>"; };
 		2C910163110646790031698D /* FHVDocSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FHVDocSet.h; sourceTree = "<group>"; };
 		2C910164110646790031698D /* FHVDocSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FHVDocSet.m; sourceTree = "<group>"; };
 		2C910257110659C60031698D /* FHVMainWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FHVMainWindowController.h; sourceTree = "<group>"; };
@@ -400,6 +404,8 @@
 				2C02E800114BB27700EB788F /* NSNumber+NSMAdditions.m */,
 				2C02E801114BB27700EB788F /* NSString+NSMAdditions.h */,
 				2C02E802114BB27700EB788F /* NSString+NSMAdditions.m */,
+				2C8A4E70114D268200043E59 /* NSError+NSMAdditions.h */,
+				2C8A4E71114D268200043E59 /* NSError+NSMAdditions.m */,
 			);
 			path = Foundation;
 			sourceTree = "<group>";
@@ -570,6 +576,7 @@
 				2C1987831101F1FC00C3A1BD /* FHVImportContext.m */,
 				2CCFC1B0110512990019F014 /* FHVSQLiteImporter.h */,
 				2CCFC1B1110512990019F014 /* FHVSQLiteImporter.m */,
+				2C8A4F99114D583E00043E59 /* FlexDocsParserConnectionDelegate.h */,
 			);
 			path = parser;
 			sourceTree = "<group>";
@@ -703,6 +710,7 @@
 				2C02E836114BB27700EB788F /* NSNumber+NSMAdditions.m in Sources */,
 				2C02E837114BB27700EB788F /* NSString+NSMAdditions.m in Sources */,
 				2C02E838114BB27700EB788F /* RegexKitLite.m in Sources */,
+				2C8A4E72114D268200043E59 /* NSError+NSMAdditions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -15,7 +15,8 @@
 	NSArray *m_classes;
 	void (^m_notifier)(void);
 	FHVImportContext *m_context;
+	NSError *m_error;
 }
-- (id)initWithClasses:(NSArray *)classes notifier:(void (^)(void))block 
-	context:(FHVImportContext *)context;
+@property (nonatomic, readonly) NSError *error;
+- (id)initWithClasses:(NSArray *)classes context:(FHVImportContext *)context;
 @end

@@ -12,7 +12,6 @@
 		</dictionary>
 		<array class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<integer value="281"/>
-			<integer value="230"/>
 		</array>
 		<array key="IBDocument.PluginDependencies">
 			<string>com.brandonwalkin.BWToolkit</string>
@@ -568,6 +567,7 @@
 										<int key="NSvFlags">256</int>
 										<string key="NSFrameSize">{472, 190}</string>
 										<reference key="NSSuperview" ref="802410172"/>
+										<reference key="NSWindow"/>
 										<bool key="NSEnabled">YES</bool>
 										<object class="_NSCornerView" key="NSCornerView">
 											<nil key="NSNextResponder"/>
@@ -639,6 +639,7 @@
 								</array>
 								<string key="NSFrameSize">{472, 190}</string>
 								<reference key="NSSuperview" ref="428214766"/>
+								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="154055388"/>
 								<reference key="NSDocView" ref="154055388"/>
 								<reference key="NSBGColor" ref="6582017"/>
@@ -649,6 +650,7 @@
 								<int key="NSvFlags">-2147483392</int>
 								<string key="NSFrame">{{224, 17}, {15, 102}}</string>
 								<reference key="NSSuperview" ref="428214766"/>
+								<reference key="NSWindow"/>
 								<reference key="NSTarget" ref="428214766"/>
 								<string key="NSAction">_doScroller:</string>
 								<double key="NSPercent">0.99613898992538452</double>
@@ -658,6 +660,7 @@
 								<int key="NSvFlags">-2147483392</int>
 								<string key="NSFrame">{{-100, -100}, {223, 15}}</string>
 								<reference key="NSSuperview" ref="428214766"/>
+								<reference key="NSWindow"/>
 								<int key="NSsFlags">1</int>
 								<reference key="NSTarget" ref="428214766"/>
 								<string key="NSAction">_doScroller:</string>
@@ -666,6 +669,7 @@
 						</array>
 						<string key="NSFrameSize">{472, 190}</string>
 						<reference key="NSSuperview" ref="625676322"/>
+						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="802410172"/>
 						<int key="NSsFlags">528</int>
 						<reference key="NSVScroller" ref="976029863"/>
@@ -676,6 +680,7 @@
 				</array>
 				<string key="NSFrameSize">{472, 190}</string>
 				<reference key="NSSuperview"/>
+				<reference key="NSWindow"/>
 				<string key="NSClassName">NSView</string>
 			</object>
 			<object class="NSArrayController" id="881988300">
@@ -1151,6 +1156,14 @@
 					</object>
 					<int key="connectionID">292</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">m_cancelButton</string>
+						<reference key="source" ref="1001"/>
+						<reference key="destination" ref="372753836"/>
+					</object>
+					<int key="connectionID">294</int>
+				</object>
 			</array>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<array key="orderedObjects">
@@ -1198,9 +1211,9 @@
 								</dictionary>
 								<object class="NSMutableData" key="BWSTHWindowSizesByIdentifier">
 									<bytes key="NS.bytes">BAtzdHJlYW10eXBlZIHoA4QBQISEhAxOU0RpY3Rpb25hcnkAhIQITlNPYmplY3QAhYQBaQKShISECE5T
-U3RyaW5nAZSEASskODIzMEU3RDYtNUNEOC00OEVDLTlERUYtNERGQUQzMTdEMzA1hpKEhIQHTlNWYWx1
-ZQCUhAEqhIQMe19OU1NpemU9ZmZ9moMw/EoXg5iqN5aGkoSWlyQwRDU5NTBEMS1ENEE4LTQ0QzYtOURC
-Qy0yNTFDRkVGODUyRTKGkoSYmZmagdgBgesAhoY</bytes>
+U3RyaW5nAZSEASskMEQ1OTUwRDEtRDRBOC00NEM2LTlEQkMtMjUxQ0ZFRjg1MkUyhpKEhIQHTlNWYWx1
+ZQCUhAEqhIQMe19OU1NpemU9ZmZ9moHYAYHrAIaShJaXJDgyMzBFN0Q2LTVDRDgtNDhFQy05REVGLTRE
+RkFEMzE3RDMwNYaShJiZmZqDMPxKF4OYqjeWhoY</bytes>
 								</object>
 								<string key="BWSTHSelectedIdentifier">0D5950D1-D4A8-44C6-9DBC-251CFEF852E2</string>
 								<string key="BWSTHOldWindowTitle">DocSet Assistant</string>
@@ -1815,7 +1828,7 @@ Qy0yNTFDRkVGODUyRTKGkoSYmZmagdgBgesAhoY</bytes>
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">293</int>
+			<int key="maxID">294</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -1837,6 +1850,7 @@ Qy0yNTFDRkVGODUyRTKGkoSYmZmagdgBgesAhoY</bytes>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="outlets">
 						<string key="m_activityIndicator">NSProgressIndicator</string>
+						<string key="m_cancelButton">NSButton</string>
 						<string key="m_localPickerController">FHVLocalImportPickerViewController</string>
 						<string key="m_presetsPickerController">FHVPresetsImportPickerViewController</string>
 						<string key="m_progressIndicator">NSProgressIndicator</string>
@@ -1901,7 +1915,7 @@ Qy0yNTFDRkVGODUyRTKGkoSYmZmagdgBgesAhoY</bytes>
 					<string key="className">NSObject</string>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">Libraries/NSMUtils/NSMPreferencesWindowController.h</string>
+						<string key="minorKey">Libraries/NSMUtils/AppKit/NSMPreferencesWindowController.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
@@ -1915,7 +1929,7 @@ Qy0yNTFDRkVGODUyRTKGkoSYmZmagdgBgesAhoY</bytes>
 					<string key="className">NSWindow</string>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">Libraries/NSMUtils/NSWindow+NSMAdditions.h</string>
+						<string key="minorKey">Libraries/NSMUtils/AppKit/NSWindow+NSMAdditions.h</string>
 					</object>
 				</object>
 			</array>

@@ -10,6 +10,8 @@
 #import "FHVImportContext.h"
 #import "NSString+FHVUtils.h"
 #import "NSURL+FHVUtils.h"
+#import "NSMURLConnection.h"
+#import "NSError+NSMAdditions.h"
 #import "utils.h"
 
 
@@ -18,8 +20,9 @@
 	NSXMLDocument *m_xmlTree;
 	FHVImportContext *m_context;
 }
-- (id)initWithURL:(NSURL *)url context:(FHVImportContext *)context;
-- (id)initWithData:(NSData *)data fromURL:(NSURL *)anURL context:(FHVImportContext *)context;
+- (id)initWithURL:(NSURL *)url context:(FHVImportContext *)context error:(NSError **)error;
+- (id)initWithData:(NSData *)data fromURL:(NSURL *)anURL context:(FHVImportContext *)context 
+	error:(NSError **)error;
 @end
 
 @interface FHVAbstractXMLTreeParser (Protected)

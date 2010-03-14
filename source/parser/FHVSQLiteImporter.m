@@ -28,26 +28,37 @@
 	[super dealloc];
 }
 
-- (BOOL)open{
+- (BOOL)open:(NSError **)error{
 	int result = sqlite3_open_v2([m_path fileSystemRepresentation], &m_db, 
 		SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE | SQLITE_OPEN_FULLMUTEX, NULL);
 	if (result != SQLITE_OK){
-		NSLog(@"Could not open database");
+		*error = [NSError 
+			errorWithDomain:FHVSQLiteErrorDomain 
+			code:-1 
+			description:[NSString stringWithFormat:@"Could not create SQLite Database at %@", 
+				m_path]];
 		return NO;
 	}
 	
-	NSError *error = nil;
+	NSError *readError = nil;
 	NSString *schema = [NSString stringWithContentsOfFile:[[NSBundle mainBundle] 
-		pathForResource:@"schema" ofType:@"sql"] encoding:NSUTF8StringEncoding error:&error];
-	if (error){
-		NSLog(@"Could not read schema");
+		pathForResource:@"schema" ofType:@"sql"] encoding:NSUTF8StringEncoding error:&readError];
+	if (readError){
+		*error = [NSError 
+			errorWithDomain:[readError domain] 
+			code:[readError code] 
+			description:[NSString stringWithFormat:@"Could not read schema. %@", 
+				[readError localizedDescription]]];
 		[self close];
 		return NO;
 	}
 	
 	result = sqlite3_exec(m_db, [schema UTF8String], NULL, NULL, NULL);
 	if (result != SQLITE_OK){
-		NSLog(@"Could not create tables");
+		*error = [NSError 
+			errorWithDomain:FHVSQLiteErrorDomain 
+			code:-1 
+			description:@"Could not import schema."];
 		[self close];
 		return NO;
 	}
@@ -76,17 +87,24 @@
 	return YES;
 }
 
-- (BOOL)createIndexes{
-	NSError *error = nil;
+- (BOOL)createIndexes:(NSError **)error{
+	NSError *readError = nil;
 	NSString *sql = [NSString stringWithContentsOfFile:[[NSBundle mainBundle] 
-		pathForResource:@"index" ofType:@"sql"] encoding:NSUTF8StringEncoding error:&error];
-	if (error){
-		NSLog(@"Could not read sql");
+		pathForResource:@"index" ofType:@"sql"] encoding:NSUTF8StringEncoding error:&readError];
+	if (readError){
+		*error = [NSError 
+			errorWithDomain:[readError domain] 
+			code:[readError code] 
+			description:[NSString stringWithFormat:@"Could not read indexes file. %@", 
+				[readError localizedDescription]]];
 		return NO;
 	}
 	int result = sqlite3_exec(m_db, [sql UTF8String], NULL, NULL, NULL);
 	if (result != SQLITE_OK){
-		NSLog(@"Could not create indexes");
+		*error = [NSError 
+			errorWithDomain:FHVSQLiteErrorDomain 
+			code:-1 
+			description:@"Could not create indexes"];
 		[self close];
 		return NO;
 	}

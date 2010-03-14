@@ -10,22 +10,89 @@
 
 @implementation FHVAbstractXMLTreeParser
 
-- (id)initWithURL:(NSURL *)url context:(FHVImportContext *)context{
-	NSData *data = [NSData dataWithContentsOfURL:url];
-	if (self = [self initWithData:data fromURL:url context:context]){
+- (id)initWithURL:(NSURL *)url context:(FHVImportContext *)context error:(NSError **)error{
+	NSData *data = nil;
+	BOOL success = NO;
+	if (![url isFileURL]){
+		NSMURLConnection *conn = [[NSMURLConnection alloc] 
+			initWithURLRequest:[NSURLRequest requestWithURL:url]];
+		conn.allowedMIMETypes = [NSArray arrayWithObject:@"text/html"];
+		[conn startSynchronously];
+		if (conn.success){
+			data = [conn.data retain];
+			success = YES;
+		}else{
+			*error = [NSError 
+				errorWithDomain:[conn.error domain] 
+				code:[conn.error code] 
+				description:[NSString stringWithFormat:@"Could not load data from %@. %@", 
+					url, [conn.error localizedDescription]]];
+		}
+		[conn release];
+	}else{
+		if ([[NSFileManager defaultManager] fileExistsAtPath:[url path]]){
+			NSError *dataError = nil;
+			data = [[NSData alloc] initWithContentsOfURL:url options:NSDataReadingUncached 
+				error:&dataError];
+			if (dataError){
+				*error = [NSError 
+					errorWithDomain:[dataError domain] 
+					code:[dataError code] 
+					description:[NSString stringWithFormat:@"Could not load data from %@. %@", 
+						[url path], [dataError localizedDescription]]];
+			}else{
+				success = YES;
+			}
+		}else{
+			*error = [NSError 
+				errorWithDomain:NSPOSIXErrorDomain 
+				code:-1 
+				description:[NSString stringWithFormat:@"The file %@ does not exist.", [url path]]];
+		}
 	}
+	
+	if (success && ![data length]){
+		*error = [NSError 
+			errorWithDomain:NSPOSIXErrorDomain 
+			code:-1 
+			description:[NSString stringWithFormat:@"Read zero data from %@", [url path]]];
+		success = NO;
+	}
+	
+	if (!success){
+		[self release];
+		[data release];
+		return nil;
+	}
+	
+	self = [self initWithData:data fromURL:url context:context error:error];
+	[data release];
 	return self;
 }
 
-- (id)initWithData:(NSData *)data fromURL:(NSURL *)anURL context:(FHVImportContext *)context{
+- (id)initWithData:(NSData *)data fromURL:(NSURL *)anURL context:(FHVImportContext *)context 
+	error:(NSError **)error{
+	if (!data || ![data length]){
+		*error = [NSError 
+			errorWithDomain:NSPOSIXErrorDomain 
+			code:-1 
+			description:[NSString stringWithFormat:@"Zero data was passed to %@", 
+				[self className]]];
+		[self release];
+		return nil;
+	}
 	if (self = [super init]){
 		m_url = [anURL retain];
 		m_context = [context retain];
-		NSError *error = nil;
+		NSError *parsingError = nil;
 		m_xmlTree = [[NSXMLDocument alloc] initWithData:data options:NSXMLDocumentTidyHTML 
-			error:&error];
+			error:&parsingError];
 		if (!m_xmlTree){
-			NSLog(@"error while parsing file %@: %@", m_url, error);
+			*error = [NSError 
+				errorWithDomain:[parsingError domain] 
+				code:[parsingError code] 
+				description:[NSString stringWithFormat:@"Could not parse file %@. %@", 
+					[anURL path], [parsingError localizedDescription]]];
 			[self release];
 			return nil;
 		}

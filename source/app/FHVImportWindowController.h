@@ -24,6 +24,7 @@
 	IBOutlet NSView *m_titleView;
 	IBOutlet NSProgressIndicator *m_activityIndicator;
 	IBOutlet NSButton *m_startImportButton;
+	IBOutlet NSButton *m_cancelButton;
 	
 	IBOutlet NSWindow *m_progressWindow;
 	IBOutlet NSTextField *m_statusLabel;

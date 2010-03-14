@@ -99,16 +99,18 @@
 			[m_warningIcon setHidden:NO];
 			[m_warningIcon setToolTip:@"No valid ASDocs at path!"];
 		}else{
+			NSError *error = nil;
 			FHVPackageSummaryParser *parser = [[FHVPackageSummaryParser alloc] 
 				initWithURL:[NSURL fileURLWithPath:[aPath stringByAppendingPathComponent:@"package-summary.html"]] 
-				context:nil];
+				context:nil 
+				error:&error];
 			NSString *title = parser.title;
 			if (!title){
 				m_pathIsValid = NO;
 				[m_warningIcon setHidden:NO];
 				[m_warningIcon setToolTip:@"No valid ASDocs at path!"];
+				NDCLog(@"%@", [error localizedDescription]);
 			}else{
-			
 				[m_nameTextField setStringValue:title];
 				[self _setDocSetName:title];
 				[m_warningIcon setHidden:YES];

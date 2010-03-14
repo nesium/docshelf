@@ -104,6 +104,7 @@
 	for (FHVAbstractImportPickerViewController *controller in m_pickerControllers){
 		[controller reset];
 	}
+	[m_cancelButton setEnabled:YES];
 	[self setStatusMessage:@"Starting import ..."];
 	[self setProgress:0.0];
 	[self _updateToolbarSelection:NO];
@@ -228,7 +229,7 @@
 	[m_importConnection release];
 	m_importConnection = nil;
 	if (error){
-		NSRunAlertPanel(@"Error creating DocSet", @"The selected folder does not contain ASDoc files.", 
+		NSRunAlertPanel(@"Error creating DocSet", [error localizedDescription], 
 			@"OK", nil, nil);
 	}else{
 		if (!m_parser.isCancelled)

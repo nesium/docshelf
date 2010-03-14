@@ -9,6 +9,7 @@
 #import <Cocoa/Cocoa.h>
 #import "sqlite3.h"
 #import "FHVConstants.h"
+#import "NSError+NSMAdditions.h"
 
 enum {HAS_DATA, NO_DATA};
 
@@ -20,10 +21,10 @@ enum {HAS_DATA, NO_DATA};
 	sqlite3_stmt *m_signatureInsertStmt;
 }
 - (id)initWithDBPath:(NSString *)aPath;
-- (BOOL)open;
+- (BOOL)open:(NSError **)error;
 - (void)commit;
 - (BOOL)close;
-- (BOOL)createIndexes;
+- (BOOL)createIndexes:(NSError **)error;
 - (NSNumber *)savePackageWithName:(NSString *)name summary:(NSString *)summary;
 - (NSNumber *)saveClassWithName:(NSString *)name summary:(NSString *)summary ident:(NSString *)ident 
 	detail:(NSString *)detail type:(FHVClassType)type packageId:(NSNumber *)packageId;

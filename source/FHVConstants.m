@@ -1,6 +1,7 @@
 #import "FHVConstants.h"
 
 NSString *const FHVErrorDomain = @"FHVErrorDomain";
+NSString *const FHVSQLiteErrorDomain = @"FHVSQLiteErrorDomain";
 
 OSStatus const FHVMissingSummaryFileError = 1001;
 

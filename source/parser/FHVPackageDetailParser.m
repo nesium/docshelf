@@ -10,8 +10,9 @@
 
 @implementation FHVPackageDetailParser
 
-- (id)initWithData:(NSData *)data fromURL:(NSURL *)anURL context:(FHVImportContext *)context{
-	if (self = [super initWithData:data fromURL:anURL context:context]){
+- (id)initWithData:(NSData *)data fromURL:(NSURL *)anURL context:(FHVImportContext *)context 
+	error:(NSError **)error{
+	if (self = [super initWithData:data fromURL:anURL context:context error:error]){
 		m_name = [[[self firstNodeForXPath:@"/html/body/div[@id='banner'][1]/table[@class='titleTable'][1]//h1[1]" 
 			ofElement:nil] stringValue] retain];
 	}

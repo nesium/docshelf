@@ -101,16 +101,22 @@
 
 - (void)connectionDidFinishLoading:(NSMURLConnection *)connection success:(BOOL)success{
 	if (!success){
+		if ([m_connection.error code] == NSMURLConnectionIllegalMIMETypeError){
+			[m_warningIcon setToolTip:@"No valid ASDocs found"];
+		}else{
+			[m_warningIcon setToolTip:@"Could not load data from URL!"];
+		}
+		NDCLog(@"%@", m_connection.error);
 		[m_warningIcon setHidden:NO];
-		[m_warningIcon setToolTip:@"Could not load data from URL!"];
 		m_urlIsValid = NO;
 		[self _updateValidity];
 		[self _setBusy:NO];
 		return;
 	}
 	
+	NSError *error = nil;
 	FHVPackageSummaryParser *parser = [[FHVPackageSummaryParser alloc] initWithData:connection.data 
-		fromURL:[connection.request URL] context:nil];
+		fromURL:[connection.request URL] context:nil error:&error];
 	NSString *title = parser.title;
 	if (title){
 		[m_warningIcon setHidden:YES];
@@ -119,9 +125,10 @@
 		[self _updateValidity];
 	}else{
 		[m_warningIcon setHidden:NO];
-		[m_warningIcon setToolTip:@"No valid ASDocs found at path"];
+		[m_warningIcon setToolTip:@"No valid ASDocs found"];
 		m_urlIsValid = NO;
 		[self _updateValidity];
+		NDCLog(@"%@", [error localizedDescription]);
 	}
 	[self _cancelURLSanityCheck];
 }
@@ -157,6 +164,8 @@
 	[self _cancelURLSanityCheck];
 	m_connection = [[NSMURLConnection alloc] initWithURLRequest:[NSURLRequest requestWithURL:url] 
 		delegate:self];
+	m_connection.allowedMIMETypes = [NSArray arrayWithObject:@"text/html"];
+	[m_connection start];
 	[self _setBusy:YES];
 }
 
