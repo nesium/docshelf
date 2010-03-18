@@ -171,6 +171,7 @@
 		2C53676410B9C38300D9C0E4 /* inherit-arrow.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "inherit-arrow.gif"; sourceTree = "<group>"; };
 		2C53681010B9D14600D9C0E4 /* RSVerticallyCenteredTextFieldCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSVerticallyCenteredTextFieldCell.h; sourceTree = "<group>"; };
 		2C53681110B9D14600D9C0E4 /* RSVerticallyCenteredTextFieldCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSVerticallyCenteredTextFieldCell.m; sourceTree = "<group>"; };
+		2C547B8F1152DDD200A3E4C5 /* NSMMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSMMacros.h; sourceTree = "<group>"; };
 		2C5EB63B110E56E700BE8F30 /* BWToolkitFramework.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BWToolkitFramework.framework; path = /Users/mb/Library/Frameworks/BWToolkitFramework.framework; sourceTree = "<absolute>"; };
 		2C63E8CF11184EC800B5E938 /* FHVImportWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FHVImportWindowController.h; sourceTree = "<group>"; };
 		2C63E8D011184EC800B5E938 /* FHVImportWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FHVImportWindowController.m; sourceTree = "<group>"; };
@@ -367,6 +368,7 @@
 		2C02E7A6114BB27700EB788F /* NSMUtils */ = {
 			isa = PBXGroup;
 			children = (
+				2C547B8F1152DDD200A3E4C5 /* NSMMacros.h */,
 				2C02E7ED114BB27700EB788F /* AppKit */,
 				2C02E7F4114BB27700EB788F /* Foundation */,
 				2C02E803114BB27700EB788F /* RegexKitLite */,
