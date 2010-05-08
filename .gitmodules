@@ -1,3 +1,0 @@
-[submodule "Libraries/NSMUtils"]
-	path = Libraries/NSMUtils
-	url = git@nesium.net:cocoa/nsm_utils.git

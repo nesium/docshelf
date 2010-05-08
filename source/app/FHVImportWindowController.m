@@ -1,6 +1,5 @@
 //
 //  FHVImportWindowController.m
-//  EarthDocs
 //
 //  Created by Marc Bauer on 02.02.10.
 //  Copyright 2010 nesiumdotcom. All rights reserved.

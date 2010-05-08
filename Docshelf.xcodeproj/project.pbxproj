@@ -246,9 +246,9 @@
 		2CFCB4510DD4F4FB0090049E /* FHVPackageSummaryParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FHVPackageSummaryParser.m; sourceTree = "<group>"; };
 		2CFCB7BC0DD52CDA0090049E /* FHVAbstractXMLTreeParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FHVAbstractXMLTreeParser.h; sourceTree = "<group>"; };
 		2CFCB7BD0DD52CDA0090049E /* FHVAbstractXMLTreeParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FHVAbstractXMLTreeParser.m; sourceTree = "<group>"; };
-		32CA4F630368D1EE00C91783 /* EarthDoc_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EarthDoc_Prefix.pch; sourceTree = "<group>"; };
+		32CA4F630368D1EE00C91783 /* Docshelf_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Docshelf_Prefix.pch; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		8D1107320486CEB800E47090 /* EarthDoc.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EarthDoc.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8D1107320486CEB800E47090 /* Docshelf.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Docshelf.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -310,7 +310,7 @@
 		19C28FACFE9D520D11CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				8D1107320486CEB800E47090 /* EarthDoc.app */,
+				8D1107320486CEB800E47090 /* Docshelf.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -331,7 +331,7 @@
 		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
 			isa = PBXGroup;
 			children = (
-				32CA4F630368D1EE00C91783 /* EarthDoc_Prefix.pch */,
+				32CA4F630368D1EE00C91783 /* Docshelf_Prefix.pch */,
 				29B97316FDCFA39411CA2CEA /* main.m */,
 			);
 			name = "Other Sources";
@@ -586,9 +586,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		8D1107260486CEB800E47090 /* EarthDoc */ = {
+		8D1107260486CEB800E47090 /* Docshelf */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "EarthDoc" */;
+			buildConfigurationList = C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "Docshelf" */;
 			buildPhases = (
 				8D1107290486CEB800E47090 /* Resources */,
 				8D11072C0486CEB800E47090 /* Sources */,
@@ -599,10 +599,10 @@
 			);
 			dependencies = (
 			);
-			name = EarthDoc;
+			name = Docshelf;
 			productInstallPath = "$(HOME)/Applications";
 			productName = FlexHelpViewer;
-			productReference = 8D1107320486CEB800E47090 /* EarthDoc.app */;
+			productReference = 8D1107320486CEB800E47090 /* Docshelf.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -610,14 +610,14 @@
 /* Begin PBXProject section */
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
-			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "EarthDoc" */;
+			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "Docshelf" */;
 			compatibilityVersion = "Xcode 3.1";
 			hasScannedForEncodings = 1;
 			mainGroup = 29B97314FDCFA39411CA2CEA /* FlexHelpViewer */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				8D1107260486CEB800E47090 /* EarthDoc */,
+				8D1107260486CEB800E47090 /* Docshelf */,
 			);
 		};
 /* End PBXProject section */
@@ -784,10 +784,10 @@
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = EarthDoc_Prefix.pch;
+				GCC_PREFIX_HEADER = Docshelf_Prefix.pch;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
-				PRODUCT_NAME = EarthDoc;
+				PRODUCT_NAME = Docshelf;
 			};
 			name = Debug;
 		};
@@ -803,10 +803,10 @@
 				);
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = EarthDoc_Prefix.pch;
+				GCC_PREFIX_HEADER = Docshelf_Prefix.pch;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
-				PRODUCT_NAME = EarthDoc;
+				PRODUCT_NAME = Docshelf;
 			};
 			name = Release;
 		};
@@ -850,7 +850,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "EarthDoc" */ = {
+		C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "Docshelf" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C01FCF4B08A954540054247B /* Debug */,
@@ -859,7 +859,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "EarthDoc" */ = {
+		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "Docshelf" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C01FCF4F08A954540054247B /* Debug */,

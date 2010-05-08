@@ -1,6 +1,5 @@
 //
 //  FHVRemoteImportPickerViewController.m
-//  EarthDoc
 //
 //  Created by Marc Bauer on 06.03.10.
 //  Copyright 2010 nesiumdotcom. All rights reserved.

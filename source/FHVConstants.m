@@ -9,7 +9,7 @@ NSString *FHVApplicationSupportFolder(){
 	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, 
 		NSUserDomainMask, YES);
 	NSString *basePath = ([paths count] > 0) ? [paths objectAtIndex:0] : NSTemporaryDirectory();
-	return [basePath stringByAppendingPathComponent:@"EarthDoc"];
+	return [basePath stringByAppendingPathComponent:@"Docshelf"];
 }
 
 NSString *FHVDocSetsFolder(){

@@ -1,6 +1,5 @@
 //
 //  FHVNiceIndentationOutlineView.m
-//  EarthDocs
 //
 //  Created by Marc Bauer on 22.01.10.
 //  Copyright 2010 nesiumdotcom. All rights reserved.
