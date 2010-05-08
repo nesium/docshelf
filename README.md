@@ -1,1 +1,1 @@
-![Screenshot](screenshot.png "Screenshot")
+![Screenshot](http://github.com/nesium/docshelf/raw/master/screenshot.png "Screenshot")
