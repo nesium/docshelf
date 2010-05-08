@@ -7,17 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2C02E82E114BB27700EB788F /* NSMPreferencesWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C02E7EF114BB27700EB788F /* NSMPreferencesWindowController.m */; };
-		2C02E82F114BB27700EB788F /* NSTreeController+NSMAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C02E7F1114BB27700EB788F /* NSTreeController+NSMAdditions.m */; };
-		2C02E830114BB27700EB788F /* NSWindow+NSMAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C02E7F3114BB27700EB788F /* NSWindow+NSMAdditions.m */; };
-		2C02E831114BB27700EB788F /* NSColor+NSMAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C02E7F6114BB27700EB788F /* NSColor+NSMAdditions.m */; };
-		2C02E832114BB27700EB788F /* NSDate+NSMAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C02E7F8114BB27700EB788F /* NSDate+NSMAdditions.m */; };
-		2C02E833114BB27700EB788F /* NSFileManager+NSMAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C02E7FA114BB27700EB788F /* NSFileManager+NSMAdditions.m */; };
-		2C02E834114BB27700EB788F /* NSIndexPath+NSMAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C02E7FC114BB27700EB788F /* NSIndexPath+NSMAdditions.m */; };
-		2C02E835114BB27700EB788F /* NSMURLConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C02E7FE114BB27700EB788F /* NSMURLConnection.m */; };
-		2C02E836114BB27700EB788F /* NSNumber+NSMAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C02E800114BB27700EB788F /* NSNumber+NSMAdditions.m */; };
-		2C02E837114BB27700EB788F /* NSString+NSMAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C02E802114BB27700EB788F /* NSString+NSMAdditions.m */; };
-		2C02E838114BB27700EB788F /* RegexKitLite.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C02E805114BB27700EB788F /* RegexKitLite.m */; };
 		2C066F9E111752AC00AB755C /* DropView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C066F9D111752AC00AB755C /* DropView.m */; };
 		2C1987841101F1FC00C3A1BD /* FHVImportContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C1987831101F1FC00C3A1BD /* FHVImportContext.m */; };
 		2C1987AD1101F4E000C3A1BD /* NSString+FHVUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C1987AC1101F4E000C3A1BD /* NSString+FHVUtils.m */; };
@@ -59,7 +48,6 @@
 		2C85E6AE1107E585001920A7 /* interface.png in Resources */ = {isa = PBXBuildFile; fileRef = 2C85E6A71107E585001920A7 /* interface.png */; };
 		2C85E6AF1107E585001920A7 /* package.png in Resources */ = {isa = PBXBuildFile; fileRef = 2C85E6A81107E585001920A7 /* package.png */; };
 		2C85E6B01107E585001920A7 /* property.png in Resources */ = {isa = PBXBuildFile; fileRef = 2C85E6A91107E585001920A7 /* property.png */; };
-		2C8A4E72114D268200043E59 /* NSError+NSMAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C8A4E71114D268200043E59 /* NSError+NSMAdditions.m */; };
 		2C8DC60E10FFF5D000DA41C9 /* FHVPackageSummaryParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CFCB4510DD4F4FB0090049E /* FHVPackageSummaryParser.m */; };
 		2C910165110646790031698D /* FHVDocSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C910164110646790031698D /* FHVDocSet.m */; };
 		2C910259110659C60031698D /* FHVMainWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C910258110659C60031698D /* FHVMainWindowController.m */; };
@@ -87,6 +75,16 @@
 		2CEE304B0DD65FC700CC762E /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2CEE304A0DD65FC700CC762E /* WebKit.framework */; };
 		2CEE30BA0DD6698100CC762E /* NodeClassToIconTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CEE30B90DD6698100CC762E /* NodeClassToIconTransformer.m */; };
 		2CEFC3CC0DDF3B3100F92DC6 /* FHVAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CEFC3CB0DDF3B3100F92DC6 /* FHVAppDelegate.m */; };
+		2CF05BF811961BE000C576C2 /* NSError+NSMAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CF05BF511961BE000C576C2 /* NSError+NSMAdditions.m */; };
+		2CF05BF911961BE000C576C2 /* NSMURLConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CF05BF711961BE000C576C2 /* NSMURLConnection.m */; };
+		2CF05C0911961BF600C576C2 /* NSDate+NSMAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CF05C0411961BF600C576C2 /* NSDate+NSMAdditions.m */; };
+		2CF05C0A11961BF600C576C2 /* NSFileManager+NSMAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CF05C0611961BF600C576C2 /* NSFileManager+NSMAdditions.m */; };
+		2CF05C0B11961BF600C576C2 /* NSString+NSMAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CF05C0811961BF600C576C2 /* NSString+NSMAdditions.m */; };
+		2CF05C1811961C0A00C576C2 /* RegexKitLite.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CF05C1711961C0A00C576C2 /* RegexKitLite.m */; };
+		2CF05C2811961C2C00C576C2 /* NSMPreferencesWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CF05C2311961C2C00C576C2 /* NSMPreferencesWindowController.m */; };
+		2CF05C2911961C2C00C576C2 /* NSTreeController+NSMAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CF05C2511961C2C00C576C2 /* NSTreeController+NSMAdditions.m */; };
+		2CF05C2A11961C2C00C576C2 /* NSWindow+NSMAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CF05C2711961C2C00C576C2 /* NSWindow+NSMAdditions.m */; };
+		2CF05C2F11961C4300C576C2 /* NSIndexPath+NSMAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CF05C2E11961C4300C576C2 /* NSIndexPath+NSMAdditions.m */; };
 		2CF5FB860DD5BCB40049C53D /* FHVDocParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CF5FB850DD5BCB40049C53D /* FHVDocParser.m */; };
 		2CFCB7BE0DD52CDA0090049E /* FHVAbstractXMLTreeParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CFCB7BD0DD52CDA0090049E /* FHVAbstractXMLTreeParser.m */; };
 		8D11072A0486CEB800E47090 /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 29B97318FDCFA39411CA2CEA /* MainMenu.nib */; };
@@ -118,28 +116,6 @@
 		29B97319FDCFA39411CA2CEA /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/MainMenu.nib; sourceTree = "<group>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
-		2C02E7EE114BB27700EB788F /* NSMPreferencesWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSMPreferencesWindowController.h; sourceTree = "<group>"; };
-		2C02E7EF114BB27700EB788F /* NSMPreferencesWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSMPreferencesWindowController.m; sourceTree = "<group>"; };
-		2C02E7F0114BB27700EB788F /* NSTreeController+NSMAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSTreeController+NSMAdditions.h"; sourceTree = "<group>"; };
-		2C02E7F1114BB27700EB788F /* NSTreeController+NSMAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSTreeController+NSMAdditions.m"; sourceTree = "<group>"; };
-		2C02E7F2114BB27700EB788F /* NSWindow+NSMAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSWindow+NSMAdditions.h"; sourceTree = "<group>"; };
-		2C02E7F3114BB27700EB788F /* NSWindow+NSMAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSWindow+NSMAdditions.m"; sourceTree = "<group>"; };
-		2C02E7F5114BB27700EB788F /* NSColor+NSMAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSColor+NSMAdditions.h"; sourceTree = "<group>"; };
-		2C02E7F6114BB27700EB788F /* NSColor+NSMAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSColor+NSMAdditions.m"; sourceTree = "<group>"; };
-		2C02E7F7114BB27700EB788F /* NSDate+NSMAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+NSMAdditions.h"; sourceTree = "<group>"; };
-		2C02E7F8114BB27700EB788F /* NSDate+NSMAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+NSMAdditions.m"; sourceTree = "<group>"; };
-		2C02E7F9114BB27700EB788F /* NSFileManager+NSMAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSFileManager+NSMAdditions.h"; sourceTree = "<group>"; };
-		2C02E7FA114BB27700EB788F /* NSFileManager+NSMAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSFileManager+NSMAdditions.m"; sourceTree = "<group>"; };
-		2C02E7FB114BB27700EB788F /* NSIndexPath+NSMAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSIndexPath+NSMAdditions.h"; sourceTree = "<group>"; };
-		2C02E7FC114BB27700EB788F /* NSIndexPath+NSMAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSIndexPath+NSMAdditions.m"; sourceTree = "<group>"; };
-		2C02E7FD114BB27700EB788F /* NSMURLConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSMURLConnection.h; sourceTree = "<group>"; };
-		2C02E7FE114BB27700EB788F /* NSMURLConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSMURLConnection.m; sourceTree = "<group>"; };
-		2C02E7FF114BB27700EB788F /* NSNumber+NSMAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSNumber+NSMAdditions.h"; sourceTree = "<group>"; };
-		2C02E800114BB27700EB788F /* NSNumber+NSMAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSNumber+NSMAdditions.m"; sourceTree = "<group>"; };
-		2C02E801114BB27700EB788F /* NSString+NSMAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+NSMAdditions.h"; sourceTree = "<group>"; };
-		2C02E802114BB27700EB788F /* NSString+NSMAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+NSMAdditions.m"; sourceTree = "<group>"; };
-		2C02E804114BB27700EB788F /* RegexKitLite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegexKitLite.h; sourceTree = "<group>"; };
-		2C02E805114BB27700EB788F /* RegexKitLite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegexKitLite.m; sourceTree = "<group>"; };
 		2C066F9C111752AC00AB755C /* DropView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DropView.h; path = ../../4_AS3_Parser/project/DropView.h; sourceTree = SOURCE_ROOT; };
 		2C066F9D111752AC00AB755C /* DropView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DropView.m; path = ../../4_AS3_Parser/project/DropView.m; sourceTree = SOURCE_ROOT; };
 		2C1987821101F1FC00C3A1BD /* FHVImportContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FHVImportContext.h; sourceTree = "<group>"; };
@@ -172,7 +148,7 @@
 		2C53681010B9D14600D9C0E4 /* RSVerticallyCenteredTextFieldCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSVerticallyCenteredTextFieldCell.h; sourceTree = "<group>"; };
 		2C53681110B9D14600D9C0E4 /* RSVerticallyCenteredTextFieldCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSVerticallyCenteredTextFieldCell.m; sourceTree = "<group>"; };
 		2C547B8F1152DDD200A3E4C5 /* NSMMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSMMacros.h; sourceTree = "<group>"; };
-		2C5EB63B110E56E700BE8F30 /* BWToolkitFramework.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BWToolkitFramework.framework; path = /Users/mb/Library/Frameworks/BWToolkitFramework.framework; sourceTree = "<absolute>"; };
+		2C5EB63B110E56E700BE8F30 /* BWToolkitFramework.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BWToolkitFramework.framework; path = Frameworks/BWToolkitFramework.framework; sourceTree = SOURCE_ROOT; };
 		2C63E8CF11184EC800B5E938 /* FHVImportWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FHVImportWindowController.h; sourceTree = "<group>"; };
 		2C63E8D011184EC800B5E938 /* FHVImportWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FHVImportWindowController.m; sourceTree = "<group>"; };
 		2C63E8DF1118829900B5E938 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/ImportWindow.xib; sourceTree = "<group>"; };
@@ -193,8 +169,6 @@
 		2C85E6A71107E585001920A7 /* interface.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = interface.png; sourceTree = "<group>"; };
 		2C85E6A81107E585001920A7 /* package.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = package.png; sourceTree = "<group>"; };
 		2C85E6A91107E585001920A7 /* property.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = property.png; sourceTree = "<group>"; };
-		2C8A4E70114D268200043E59 /* NSError+NSMAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSError+NSMAdditions.h"; sourceTree = "<group>"; };
-		2C8A4E71114D268200043E59 /* NSError+NSMAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSError+NSMAdditions.m"; sourceTree = "<group>"; };
 		2C8A4F99114D583E00043E59 /* FlexDocsParserConnectionDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlexDocsParserConnectionDelegate.h; sourceTree = "<group>"; };
 		2C910163110646790031698D /* FHVDocSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FHVDocSet.h; sourceTree = "<group>"; };
 		2C910164110646790031698D /* FHVDocSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FHVDocSet.m; sourceTree = "<group>"; };
@@ -236,6 +210,26 @@
 		2CEE30B90DD6698100CC762E /* NodeClassToIconTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NodeClassToIconTransformer.m; sourceTree = "<group>"; };
 		2CEFC3CA0DDF3B3100F92DC6 /* FHVAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FHVAppDelegate.h; sourceTree = "<group>"; };
 		2CEFC3CB0DDF3B3100F92DC6 /* FHVAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FHVAppDelegate.m; sourceTree = "<group>"; };
+		2CF05BF411961BE000C576C2 /* NSError+NSMAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSError+NSMAdditions.h"; sourceTree = "<group>"; };
+		2CF05BF511961BE000C576C2 /* NSError+NSMAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSError+NSMAdditions.m"; sourceTree = "<group>"; };
+		2CF05BF611961BE000C576C2 /* NSMURLConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSMURLConnection.h; sourceTree = "<group>"; };
+		2CF05BF711961BE000C576C2 /* NSMURLConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSMURLConnection.m; sourceTree = "<group>"; };
+		2CF05C0311961BF600C576C2 /* NSDate+NSMAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+NSMAdditions.h"; sourceTree = "<group>"; };
+		2CF05C0411961BF600C576C2 /* NSDate+NSMAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+NSMAdditions.m"; sourceTree = "<group>"; };
+		2CF05C0511961BF600C576C2 /* NSFileManager+NSMAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSFileManager+NSMAdditions.h"; sourceTree = "<group>"; };
+		2CF05C0611961BF600C576C2 /* NSFileManager+NSMAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSFileManager+NSMAdditions.m"; sourceTree = "<group>"; };
+		2CF05C0711961BF600C576C2 /* NSString+NSMAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+NSMAdditions.h"; sourceTree = "<group>"; };
+		2CF05C0811961BF600C576C2 /* NSString+NSMAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+NSMAdditions.m"; sourceTree = "<group>"; };
+		2CF05C1611961C0A00C576C2 /* RegexKitLite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegexKitLite.h; sourceTree = "<group>"; };
+		2CF05C1711961C0A00C576C2 /* RegexKitLite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegexKitLite.m; sourceTree = "<group>"; };
+		2CF05C2211961C2C00C576C2 /* NSMPreferencesWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSMPreferencesWindowController.h; sourceTree = "<group>"; };
+		2CF05C2311961C2C00C576C2 /* NSMPreferencesWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSMPreferencesWindowController.m; sourceTree = "<group>"; };
+		2CF05C2411961C2C00C576C2 /* NSTreeController+NSMAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSTreeController+NSMAdditions.h"; sourceTree = "<group>"; };
+		2CF05C2511961C2C00C576C2 /* NSTreeController+NSMAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSTreeController+NSMAdditions.m"; sourceTree = "<group>"; };
+		2CF05C2611961C2C00C576C2 /* NSWindow+NSMAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSWindow+NSMAdditions.h"; sourceTree = "<group>"; };
+		2CF05C2711961C2C00C576C2 /* NSWindow+NSMAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSWindow+NSMAdditions.m"; sourceTree = "<group>"; };
+		2CF05C2D11961C4300C576C2 /* NSIndexPath+NSMAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSIndexPath+NSMAdditions.h"; sourceTree = "<group>"; };
+		2CF05C2E11961C4300C576C2 /* NSIndexPath+NSMAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSIndexPath+NSMAdditions.m"; sourceTree = "<group>"; };
 		2CF55D480DD6FFAC00FB13C7 /* FHVClassDetailParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FHVClassDetailParser.h; sourceTree = "<group>"; };
 		2CF55D490DD6FFAC00FB13C7 /* FHVClassDetailParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FHVClassDetailParser.m; sourceTree = "<group>"; };
 		2CF5FB840DD5BCB40049C53D /* FHVDocParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FHVDocParser.h; sourceTree = "<group>"; };
@@ -369,56 +363,26 @@
 			isa = PBXGroup;
 			children = (
 				2C547B8F1152DDD200A3E4C5 /* NSMMacros.h */,
-				2C02E7ED114BB27700EB788F /* AppKit */,
-				2C02E7F4114BB27700EB788F /* Foundation */,
-				2C02E803114BB27700EB788F /* RegexKitLite */,
+				2CF05C0311961BF600C576C2 /* NSDate+NSMAdditions.h */,
+				2CF05C0411961BF600C576C2 /* NSDate+NSMAdditions.m */,
+				2CF05C0511961BF600C576C2 /* NSFileManager+NSMAdditions.h */,
+				2CF05C0611961BF600C576C2 /* NSFileManager+NSMAdditions.m */,
+				2CF05C2211961C2C00C576C2 /* NSMPreferencesWindowController.h */,
+				2CF05C2311961C2C00C576C2 /* NSMPreferencesWindowController.m */,
+				2CF05C2411961C2C00C576C2 /* NSTreeController+NSMAdditions.h */,
+				2CF05C2511961C2C00C576C2 /* NSTreeController+NSMAdditions.m */,
+				2CF05C2611961C2C00C576C2 /* NSWindow+NSMAdditions.h */,
+				2CF05C2711961C2C00C576C2 /* NSWindow+NSMAdditions.m */,
+				2CF05C2D11961C4300C576C2 /* NSIndexPath+NSMAdditions.h */,
+				2CF05C2E11961C4300C576C2 /* NSIndexPath+NSMAdditions.m */,
+				2CF05C0711961BF600C576C2 /* NSString+NSMAdditions.h */,
+				2CF05C0811961BF600C576C2 /* NSString+NSMAdditions.m */,
+				2CF05BF411961BE000C576C2 /* NSError+NSMAdditions.h */,
+				2CF05BF511961BE000C576C2 /* NSError+NSMAdditions.m */,
+				2CF05BF611961BE000C576C2 /* NSMURLConnection.h */,
+				2CF05BF711961BE000C576C2 /* NSMURLConnection.m */,
 			);
 			path = NSMUtils;
-			sourceTree = "<group>";
-		};
-		2C02E7ED114BB27700EB788F /* AppKit */ = {
-			isa = PBXGroup;
-			children = (
-				2C02E7EE114BB27700EB788F /* NSMPreferencesWindowController.h */,
-				2C02E7EF114BB27700EB788F /* NSMPreferencesWindowController.m */,
-				2C02E7F0114BB27700EB788F /* NSTreeController+NSMAdditions.h */,
-				2C02E7F1114BB27700EB788F /* NSTreeController+NSMAdditions.m */,
-				2C02E7F2114BB27700EB788F /* NSWindow+NSMAdditions.h */,
-				2C02E7F3114BB27700EB788F /* NSWindow+NSMAdditions.m */,
-			);
-			path = AppKit;
-			sourceTree = "<group>";
-		};
-		2C02E7F4114BB27700EB788F /* Foundation */ = {
-			isa = PBXGroup;
-			children = (
-				2C02E7F5114BB27700EB788F /* NSColor+NSMAdditions.h */,
-				2C02E7F6114BB27700EB788F /* NSColor+NSMAdditions.m */,
-				2C02E7F7114BB27700EB788F /* NSDate+NSMAdditions.h */,
-				2C02E7F8114BB27700EB788F /* NSDate+NSMAdditions.m */,
-				2C02E7F9114BB27700EB788F /* NSFileManager+NSMAdditions.h */,
-				2C02E7FA114BB27700EB788F /* NSFileManager+NSMAdditions.m */,
-				2C02E7FB114BB27700EB788F /* NSIndexPath+NSMAdditions.h */,
-				2C02E7FC114BB27700EB788F /* NSIndexPath+NSMAdditions.m */,
-				2C02E7FD114BB27700EB788F /* NSMURLConnection.h */,
-				2C02E7FE114BB27700EB788F /* NSMURLConnection.m */,
-				2C02E7FF114BB27700EB788F /* NSNumber+NSMAdditions.h */,
-				2C02E800114BB27700EB788F /* NSNumber+NSMAdditions.m */,
-				2C02E801114BB27700EB788F /* NSString+NSMAdditions.h */,
-				2C02E802114BB27700EB788F /* NSString+NSMAdditions.m */,
-				2C8A4E70114D268200043E59 /* NSError+NSMAdditions.h */,
-				2C8A4E71114D268200043E59 /* NSError+NSMAdditions.m */,
-			);
-			path = Foundation;
-			sourceTree = "<group>";
-		};
-		2C02E803114BB27700EB788F /* RegexKitLite */ = {
-			isa = PBXGroup;
-			children = (
-				2C02E804114BB27700EB788F /* RegexKitLite.h */,
-				2C02E805114BB27700EB788F /* RegexKitLite.m */,
-			);
-			path = RegexKitLite;
 			sourceTree = "<group>";
 		};
 		2C2EFA981142F1400020A08C /* Import Window */ = {
@@ -449,6 +413,7 @@
 		2CB33D37110B3ADC00A7C238 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				2CF05C1511961C0A00C576C2 /* RegexKitLite */,
 				2C02E7A6114BB27700EB788F /* NSMUtils */,
 				2CB33D38110B3ADC00A7C238 /* Filterbar */,
 			);
@@ -557,6 +522,15 @@
 				2C2EFA981142F1400020A08C /* Import Window */,
 			);
 			path = app;
+			sourceTree = "<group>";
+		};
+		2CF05C1511961C0A00C576C2 /* RegexKitLite */ = {
+			isa = PBXGroup;
+			children = (
+				2CF05C1611961C0A00C576C2 /* RegexKitLite.h */,
+				2CF05C1711961C0A00C576C2 /* RegexKitLite.m */,
+			);
+			path = RegexKitLite;
 			sourceTree = "<group>";
 		};
 		2CFCB44F0DD4F4FB0090049E /* parser */ = {
@@ -701,18 +675,16 @@
 				2C2EFABC1142F6B20020A08C /* FHVPresetsImportPickerViewController.m in Sources */,
 				2C2DA4A211441235007DD313 /* NSURL+FHVUtils.m in Sources */,
 				2CDA76E41147EFCA00A62860 /* FHVManageDocSetsPreferencesViewController.m in Sources */,
-				2C02E82E114BB27700EB788F /* NSMPreferencesWindowController.m in Sources */,
-				2C02E82F114BB27700EB788F /* NSTreeController+NSMAdditions.m in Sources */,
-				2C02E830114BB27700EB788F /* NSWindow+NSMAdditions.m in Sources */,
-				2C02E831114BB27700EB788F /* NSColor+NSMAdditions.m in Sources */,
-				2C02E832114BB27700EB788F /* NSDate+NSMAdditions.m in Sources */,
-				2C02E833114BB27700EB788F /* NSFileManager+NSMAdditions.m in Sources */,
-				2C02E834114BB27700EB788F /* NSIndexPath+NSMAdditions.m in Sources */,
-				2C02E835114BB27700EB788F /* NSMURLConnection.m in Sources */,
-				2C02E836114BB27700EB788F /* NSNumber+NSMAdditions.m in Sources */,
-				2C02E837114BB27700EB788F /* NSString+NSMAdditions.m in Sources */,
-				2C02E838114BB27700EB788F /* RegexKitLite.m in Sources */,
-				2C8A4E72114D268200043E59 /* NSError+NSMAdditions.m in Sources */,
+				2CF05BF811961BE000C576C2 /* NSError+NSMAdditions.m in Sources */,
+				2CF05BF911961BE000C576C2 /* NSMURLConnection.m in Sources */,
+				2CF05C0911961BF600C576C2 /* NSDate+NSMAdditions.m in Sources */,
+				2CF05C0A11961BF600C576C2 /* NSFileManager+NSMAdditions.m in Sources */,
+				2CF05C0B11961BF600C576C2 /* NSString+NSMAdditions.m in Sources */,
+				2CF05C1811961C0A00C576C2 /* RegexKitLite.m in Sources */,
+				2CF05C2811961C2C00C576C2 /* NSMPreferencesWindowController.m in Sources */,
+				2CF05C2911961C2C00C576C2 /* NSTreeController+NSMAdditions.m in Sources */,
+				2CF05C2A11961C2C00C576C2 /* NSWindow+NSMAdditions.m in Sources */,
+				2CF05C2F11961C4300C576C2 /* NSIndexPath+NSMAdditions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -776,7 +748,6 @@
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../../../../Library/Frameworks\"",
 					"\"$(SRCROOT)/Frameworks\"",
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
